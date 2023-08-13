@@ -13,7 +13,6 @@ class _Start_PageState extends State<Start_Page> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Colors.blueGrey.shade800,
       body: Container(
         decoration: BoxDecoration(
           gradient: LinearGradient(
@@ -32,11 +31,11 @@ class _Start_PageState extends State<Start_Page> {
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 crossAxisAlignment: CrossAxisAlignment.center,
                 children: [
-                  Text('Meet your favorite pets and \ntheir food here !',
+                  Text('Meet your favorite pets \nand their food here !',
                     textAlign: TextAlign.center,
                     style: TextStyle(
-                      letterSpacing: 2,
-                      fontSize: 31,
+                      //letterSpacing: 2,
+                      fontSize: 35,
                       fontWeight: FontWeight.w700,
                       color: Colors.white,
                       fontFamily: 'EBGaramond',
@@ -44,12 +43,13 @@ class _Start_PageState extends State<Start_Page> {
                   ),
                   new Image.asset(
                     "images/pets.png",
-                    height: MediaQuery.of(context).size.height*.55,
+                    width: MediaQuery.of(context).size.width*2,
+                    height: MediaQuery.of(context).size.height*.5,
                     fit: BoxFit.fill,
                   ),
                   Container(
-                    height: 43,
-                    margin: EdgeInsets.symmetric(horizontal: 180),
+                    height: 50,
+                    margin: EdgeInsets.symmetric(horizontal: 100),
                     decoration: BoxDecoration(
                       borderRadius: BorderRadius.circular(10,),
                       gradient: LinearGradient(
@@ -64,7 +64,8 @@ class _Start_PageState extends State<Start_Page> {
                         },
                       ),
                     ),
-                  ),                ],
+                  ),
+                ],
               ),
             ),
           ),

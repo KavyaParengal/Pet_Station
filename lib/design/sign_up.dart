@@ -24,7 +24,7 @@ class _Sign_UpState extends State<Sign_Up> {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            SizedBox(height: 20,),
+            SizedBox(height: 30,),
             Padding(
               padding: const EdgeInsets.all(20.0),
               child: Column(
@@ -116,10 +116,10 @@ class _Sign_UpState extends State<Sign_Up> {
                           ],
                         ),
                       ),
-                      SizedBox(height: 40,),
+                      SizedBox(height: 60,),
                       Container(
                         height: 50,
-                        margin: EdgeInsets.symmetric(horizontal: 150),
+                        margin: EdgeInsets.symmetric(horizontal: 100),
                         decoration: BoxDecoration(
                           borderRadius: BorderRadius.circular(10,),
                           gradient: LinearGradient(
@@ -141,8 +141,8 @@ class _Sign_UpState extends State<Sign_Up> {
                       Row(
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: [
-                          Text("Already have an Account?",style: TextStyle(color: Colors.grey),),
-                          TextButton(child: Text('Login',style: TextStyle(color: Colors.grey.shade600),),
+                          Text("Already have an Account?",style: TextStyle(color: Colors.grey,fontSize: 16),),
+                          TextButton(child: Text('Login',style: TextStyle(color: Colors.grey.shade600,fontSize: 16),),
                             onPressed: (){
                               Navigator.push(context, MaterialPageRoute(builder: (context)=>Login_Page()));
                             },

@@ -2,6 +2,7 @@
 import 'package:flutter/material.dart';
 import 'package:pet_station/design/home_page.dart';
 import 'package:pet_station/design/sign_up.dart';
+import 'package:pet_station/main.dart';
 
 class Login_Page extends StatefulWidget {
   const Login_Page({Key? key}) : super(key: key);
@@ -50,7 +51,7 @@ class _Login_PageState extends State<Login_Page> {
                     padding: EdgeInsets.all(20),
                     child: Column(
                       children: [
-                        SizedBox(height: 40,),
+                        SizedBox(height: 60,),
                         Container(
                           padding: EdgeInsets.all(30),
                           decoration: BoxDecoration(
@@ -94,13 +95,13 @@ class _Login_PageState extends State<Login_Page> {
                           ),
                         ),
                         SizedBox(height: 40,),
-                        TextButton(child: Text('Forgot Password?',style: TextStyle(color: Colors.grey.shade600),),
+                        TextButton(child: Text('Forgot Password?',style: TextStyle(color: Colors.grey.shade600,fontSize: 16),),
                           onPressed: (){},
                         ),
                         SizedBox(height: 25,),
                         Container(
                           height: 50,
-                          margin: EdgeInsets.symmetric(horizontal: 150),
+                          margin: EdgeInsets.symmetric(horizontal: 100),
                           decoration: BoxDecoration(
                             borderRadius: BorderRadius.circular(10,),
                             gradient: LinearGradient(
@@ -113,7 +114,7 @@ class _Login_PageState extends State<Login_Page> {
                             child: TextButton(
                               child: Text('Login',style: TextStyle(color: Colors.white,fontWeight: FontWeight.bold,fontSize: 18),),
                               onPressed: (){
-                                Navigator.push(context, MaterialPageRoute(builder: (context)=>Home_Page()));
+                                Navigator.push(context, MaterialPageRoute(builder: (context)=>HomePage()));
                               },
                             ),
                           ),
@@ -122,8 +123,8 @@ class _Login_PageState extends State<Login_Page> {
                         Row(
                           mainAxisAlignment: MainAxisAlignment.center,
                           children: [
-                            Text("Don't have an Account?",style: TextStyle(color: Colors.grey),),
-                            TextButton(child: Text('Sign UP',style: TextStyle(color: Colors.grey.shade600),),
+                            Text("Don't have an Account?",style: TextStyle(fontSize: 16,color: Colors.grey),),
+                            TextButton(child: Text('Sign UP',style: TextStyle(color: Colors.grey.shade600,fontSize: 16),),
                               onPressed: (){
                                 Navigator.push(context, MaterialPageRoute(builder: (context)=>Sign_Up()));
                               },
