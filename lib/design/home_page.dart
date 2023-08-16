@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:pet_station/design/notification.dart';
 import 'package:pet_station/design/single_pet.dart';
 
 class HomeScreen extends StatefulWidget {
@@ -37,6 +38,12 @@ class _HomeScreenState extends State<HomeScreen> {
       transform: Matrix4.translationValues(xOffset, yOffset, 0)..scale(scaleFactor),
       color: Colors.grey.shade200,
       duration: Duration(milliseconds: 250),
+
+      // decoration: BoxDecoration(
+      //     color: Colors.grey.shade200,
+      //   borderRadius: BorderRadius.circular(40),
+      // ),
+
       child: SingleChildScrollView(
         child: Column(
           children: [
@@ -69,9 +76,21 @@ class _HomeScreenState extends State<HomeScreen> {
                       },
                       icon: Icon(Icons.menu,size: 30,)
                   ),
-                  CircleAvatar(
-                    radius: 22,
-                    backgroundColor: Color.fromRGBO(480, 89, 10, 0.9),
+                  Row(
+                    children: [
+                      IconButton(
+                          onPressed: (){
+                            Navigator.push(context, MaterialPageRoute(builder: (context)=>NotificationPage()));
+                          },
+                          icon: Icon(Icons.notifications_outlined,size: 30,)
+                      ),
+                      IconButton(
+                          onPressed: (){
+                            Navigator.pop(context);
+                          },
+                          icon: Icon(Icons.shopping_cart_outlined,size: 30,)
+                      )
+                    ],
                   )
                 ],
               ),
@@ -178,7 +197,9 @@ class _HomeScreenState extends State<HomeScreen> {
                                 margin: EdgeInsets.only(top: 40),
                               ),
                               Align(
-                                child: Image.asset(pets[index]['imagePath'],fit: BoxFit.fitWidth,height: 500,width: 600,),
+                                child: Image.asset(pets[index]['imagePath'],
+                                  //fit: BoxFit.fitWidth,height: 500,width: 600,
+                                ),
                               )
                             ],
                           )),
@@ -204,18 +225,18 @@ class _HomeScreenState extends State<HomeScreen> {
                                   child: Row(
                                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                                     children: [
-                                      Text(pets[index]['name'],style: TextStyle(fontSize: 30,fontWeight: FontWeight.bold,color: Colors.grey.shade800),),
+                                      Text(pets[index]['name'],style: TextStyle(fontSize: 25,fontWeight: FontWeight.bold,color: Colors.grey.shade800),),
                                       pets[index]['imagePath']=="male" ? Icon(Icons.male,color: Colors.grey.shade600,size: 28,) : Icon(Icons.female,color: Colors.grey.shade600,size: 28,)
                                     ],
                                   ),
                                 ),
                                 Padding(
                                   padding: const EdgeInsets.only(left: 8,right: 8),
-                                  child: Text(pets[index]['family'],style: TextStyle(fontSize: 25,fontWeight: FontWeight.w500,color: Colors.grey.shade600),),
+                                  child: Text(pets[index]['family'],style: TextStyle(fontSize: 20,fontWeight: FontWeight.w500,color: Colors.grey.shade600),),
                                 ),
                                 Padding(
                                   padding: const EdgeInsets.only(left: 8,right: 8, top: 40),
-                                  child: Text('₨. ${pets[index]['price']}',style: TextStyle(fontSize: 22,fontWeight: FontWeight.w500,color: Colors.grey.shade600),),
+                                  child: Text('₨. ${pets[index]['price']}',style: TextStyle(fontSize: 18,fontWeight: FontWeight.w500,color: Colors.grey.shade600),),
                                 )
                               ],
                             ),

@@ -43,8 +43,8 @@ class _Start_PageState extends State<Start_Page> {
                   ),
                   new Image.asset(
                     "images/pets.png",
-                    width: MediaQuery.of(context).size.width*2,
-                    height: MediaQuery.of(context).size.height*.5,
+                   width: MediaQuery.of(context).size.width*3,
+                    height: MediaQuery.of(context).size.height*.45,
                     fit: BoxFit.fill,
                   ),
                   Container(
