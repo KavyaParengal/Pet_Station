@@ -1,5 +1,7 @@
 
 import 'package:flutter/material.dart';
+import 'package:flutter_image_slideshow/flutter_image_slideshow.dart';
+import 'package:flutter_rating_bar/flutter_rating_bar.dart';
 
 class SinglePet extends StatefulWidget {
   const SinglePet({Key? key}) : super(key: key);
@@ -12,165 +14,164 @@ class _SinglePetState extends State<SinglePet> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: Stack(
-        children: [
-          Positioned.fill(
-              child: Column(
-                children: [
-                  Expanded(
-                      child: Container(
-                        decoration: BoxDecoration(
-                          gradient: LinearGradient(
-                            begin: Alignment.topLeft,
-                            end: Alignment.bottomRight,
-                            colors: [Colors.red, Colors.yellow, Colors.green],
-                          ),
-                        ),
-                      )
-                  ),
-                  Expanded(
-                      child: Container(
-                        color: Colors.white,
-                      )
-                  )
-                ],
-              )
-          ),
-          Container(
-            margin: EdgeInsets.only(top: 22),
-            child: Align(
-              alignment: Alignment.topCenter,
-              child: Row(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  IconButton(
-                      onPressed: (){
-                        Navigator.pop(context);
-                      },
-                      icon: Icon(Icons.arrow_back_ios)
-                  ),
-                  IconButton(
-                      onPressed: (){
-                        Navigator.pop(context);
-                      },
-                      icon: Icon(Icons.ios_share_outlined)
-                  )
-                ],
-              ),
-            ),
-          ),
-          Container(
-            margin: EdgeInsets.only(top: 20),
-            child: Align(
-              alignment: Alignment.topCenter,
-              child: Hero(
-                tag: 1,
-                child: Image.asset(
-                  'images/cats/billy_cat1.png',
-                ),
-              ),
-            ),
-          ),
-          Align(
-            alignment: Alignment.center,
-            child: Container(
-              height: 140,
-              margin: EdgeInsets.symmetric(horizontal: 20),
+      appBar: AppBar(
+        backgroundColor: Colors.teal.shade800,
+        elevation: 0,
+        leading: IconButton(
+            onPressed: (){
+              Navigator.pop(context);
+            },
+            icon: Icon(Icons.arrow_back_ios)
+        ),
+        actions: [
+          IconButton(
+              onPressed: (){
+                //Navigator.pop(context);
+              },
+              icon: Icon(Icons.ios_share_outlined)
+          )
+        ],
+      ),
+
+      body: SingleChildScrollView(
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Container(
+              height: MediaQuery.of(context).size.height*.43,
+              width: MediaQuery.of(context).size.width,
               decoration: BoxDecoration(
-                borderRadius: BorderRadius.circular(20),
                 color: Colors.white,
                 boxShadow: [
                   BoxShadow(
-                      color: Colors.grey.shade600,
-                      blurRadius: 20,
-                      offset: Offset(0, 10)
+                    color: Colors.grey,
+                    blurRadius: 2,
+                    offset: Offset(0, 1)
                   )
-                ]
+                ],
+                borderRadius: BorderRadius.only(bottomRight: Radius.circular(30),bottomLeft: Radius.circular(30)),
               ),
-              child: Container(
-                margin: EdgeInsets.symmetric(horizontal: 20,vertical: 18),
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.center,
+              child: Center(
+                child: ImageSlideshow(
+                  height: 320,
+                  indicatorColor: Colors.teal.shade800,
+                  indicatorBackgroundColor: Colors.grey,
+                  autoPlayInterval: 4000,
+                  indicatorRadius: 5,
+                  indicatorBottomPadding: 2,
+                  indicatorPadding: 8,
+                  isLoop: true,
                   children: [
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        Text('Solo',style: TextStyle(fontSize: 25,fontWeight: FontWeight.bold,color: Colors.grey.shade800),),
-                        Icon(Icons.male,color: Colors.grey.shade600,size: 28,)
-                      ]
+                    Padding(padding: EdgeInsets.all(8),
+                      child: Image.asset('images/cats/billy_cat1.png'),
                     ),
-                    SizedBox(height: 16,),
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: [
-                          Text('Billy Cat',style: TextStyle(fontSize: 17,fontWeight: FontWeight.w500,color: Colors.grey.shade800),),
-                          Text('2 yrs old',style: TextStyle(fontSize: 17,fontWeight: FontWeight.w500,color: Colors.grey.shade800)),
-                        ]
-
-                    )
-                  ]
-                ),
-              ),
-            ),
-          ),
-          Align(
-            alignment: Alignment.bottomCenter,
-            child: Container(
-              height: 140,
-              decoration: BoxDecoration(
-                borderRadius: BorderRadius.only(topRight: Radius.circular(42),topLeft: Radius.circular(42)),
-                color:  Colors.grey.shade200,
-              ),
-              child: Container(
-                margin: EdgeInsets.symmetric(horizontal: 30),
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  crossAxisAlignment: CrossAxisAlignment.center,
-                  children: [
-                    Container(
-                      height: 60 ,
-                      width: 70,
-                      decoration: BoxDecoration(
-                        gradient: LinearGradient(
-                          begin: Alignment.topLeft,
-                          end: Alignment.bottomRight,
-                          colors: [Colors.red, Colors.yellow, Colors.green],
-                        ),
-                        borderRadius: BorderRadius.circular(22)
-                      ),
-                      child: IconButton(
-                        icon: Icon(Icons.favorite_outline,color: Colors.white,size: 33,),
-                        onPressed: (){},
-                      ),
+                    Padding(padding: EdgeInsets.all(8),
+                      child: Image.asset('images/cats/billy_cat1.png'),
                     ),
-                    SizedBox(width: 18,),
-                    Expanded(
-                      child: Container(
-                        height: 60,
-                        //width: MediaQuery.of(context).size.width*.6,
-                        decoration: BoxDecoration(
-                          gradient: LinearGradient(
-                            begin: Alignment.topLeft,
-                            end: Alignment.bottomRight,
-                            colors: [Colors.red, Colors.yellow, Colors.green],
-                          ),
-                            borderRadius: BorderRadius.circular(22)
-                        ),
-                        child: TextButton(
-                          child: Text('Buy Now',style: TextStyle(
-                            color: Colors.white,fontWeight: FontWeight.w600,fontSize: 20
-                          ),),
-                          onPressed: (){},
-                        ),
-                      ),
+                    Padding(padding: EdgeInsets.all(8),
+                      child: Image.asset('images/cats/billy_cat1.png'),
+                    ),
+                    Padding(padding: EdgeInsets.all(8),
+                      child: Image.asset('images/cats/billy_cat1.png'),
                     )
                   ],
                 ),
               ),
             ),
-          )
-        ],
+            Padding(padding: EdgeInsets.all(20),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      Text('Name',style: TextStyle(
+                        fontWeight: FontWeight.bold,
+                        fontSize: 22,
+                      ),),
+                      Icon(Icons.male)
+                    ],
+                  ),
+                  SizedBox(height: 10,),
+                  Text('Family Name',style: TextStyle(
+                    fontWeight: FontWeight.bold,
+                    fontSize: 22,
+                    color: Colors.grey
+                  ),),
+                  SizedBox(height: 10,),
+                  Row(
+                    children: [
+                      RatingBar.builder(
+                          initialRating: 3.5,
+                          minRating: 1,
+                          direction: Axis.horizontal,
+                          allowHalfRating: true,
+                          itemCount: 5,
+                          itemSize: 25,
+                          itemBuilder: (context, _){
+                            return Icon(Icons.star,color: Colors.amber,);
+                          },
+                          onRatingUpdate: (rating){}
+                      ),
+                      SizedBox(width: 5,),
+                      Text('(450)')
+                    ],
+                  ),
+                  SizedBox(height: 15,),
+                  Text('₨. 2000',style: TextStyle(
+                    fontWeight: FontWeight.bold,
+                    fontSize: 22,
+                  ),),
+                  SizedBox(height: 20,),
+                  Text("These are the most well-known breed of cats in India. "
+                      "They are very affectionate, playful, beautiful, and well-suited "
+                      "for the Indian climate. They live long without much attention and "
+                      "clean themselves with their tongue. Their short coat means you don’t "
+                      "have to worry about shedding.",textAlign: TextAlign.justify,style: TextStyle(
+                    fontSize: 16,
+                  ),),
+                ],
+              ),
+            )
+          ],
+        ),
+      ),
+      bottomNavigationBar: Container(
+        height: 70,
+        margin: EdgeInsets.symmetric(vertical: 10,horizontal: 20),
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: [
+            Container(
+              height: 60,
+              width: MediaQuery.of(context).size.width/5,
+              decoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(20),
+                  color: Colors.teal.shade800
+              ),
+              child: Center(
+                  child: IconButton(onPressed: (){}, icon: Icon(Icons.favorite_outline,color: Colors.white,size: 33,))
+              ),
+            ),
+            InkWell(
+              child: Container(
+                height: 60,
+                width: MediaQuery.of(context).size.width/1.5,
+                decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(20),
+                    color: Colors.teal.shade800
+                ),
+                child: Center(
+                  child: Text('Add to Cart',style: TextStyle(
+                    fontWeight: FontWeight.bold,
+                    fontSize: 20,
+                    color: Colors.white
+                  ),),
+                ),
+              ),
+            ),
+          ],
+        ),
       ),
     );
   }

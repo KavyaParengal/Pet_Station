@@ -15,11 +15,7 @@ class _Start_PageState extends State<Start_Page> {
     return Scaffold(
       body: Container(
         decoration: BoxDecoration(
-          gradient: LinearGradient(
-            begin: Alignment.topLeft,
-            end: Alignment.bottomRight,
-            colors: [Colors.red, Colors.yellow, Colors.green],
-          ),
+          color: Colors.teal.shade800
         ),
         child: Padding(
           padding: const EdgeInsets.only(left: 10,right: 10,top: 16,bottom: 16),
@@ -41,24 +37,33 @@ class _Start_PageState extends State<Start_Page> {
                       fontFamily: 'EBGaramond',
                     ),
                   ),
-                  new Image.asset(
-                    "images/pets.png",
-                   width: MediaQuery.of(context).size.width*3,
+                  Container(
+                    width: MediaQuery.of(context).size.width*1,
                     height: MediaQuery.of(context).size.height*.45,
-                    fit: BoxFit.fill,
+                    decoration: BoxDecoration(
+                      image: DecorationImage(
+                          image: AssetImage("images/pets.png"),fit: BoxFit.cover
+                      )
+                    ),
                   ),
                   Container(
                     height: 50,
                     margin: EdgeInsets.symmetric(horizontal: 100),
                     decoration: BoxDecoration(
                       borderRadius: BorderRadius.circular(10,),
-                      gradient: LinearGradient(
-                        colors: [Colors.red, Colors.yellow, Colors.green],
-                      ),
+                      color: Colors.white,
+                      boxShadow: [
+                        BoxShadow(
+                          color: Colors.grey,
+                          spreadRadius: 1,
+                          blurRadius: 0.9,
+                          offset: Offset(4, 4),
+                        )
+                      ]
                     ),
                     child: Center(
                       child: TextButton(
-                        child: Text("Let's Start",style: TextStyle(color: Colors.white,fontWeight: FontWeight.bold,fontSize: 18),),
+                        child: Text("Let's Start",style: TextStyle(color: Colors.teal.shade800,fontWeight: FontWeight.w800,fontSize: 18),),
                         onPressed: (){
                           Navigator.push(context, MaterialPageRoute(builder: (context)=>Login_Page()));
                         },

@@ -18,11 +18,7 @@ class _ProfilePageState extends State<ProfilePage> {
         width: double.infinity,
         height: MediaQuery.of(context).size.height,
         decoration: BoxDecoration(
-          gradient: LinearGradient(
-            begin: Alignment.topLeft,
-            end: Alignment.bottomRight,
-            colors: [Colors.red, Colors.yellow, Colors.green],
-          ),
+          color: Colors.teal.shade800
         ),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.center,
@@ -57,7 +53,7 @@ class _ProfilePageState extends State<ProfilePage> {
                 backgroundColor: Colors.white,
               )
             ),
-            SizedBox(height: 10,),
+            SizedBox(height: 16,),
             Expanded(
               child: Container(
                 decoration: BoxDecoration(
@@ -66,117 +62,123 @@ class _ProfilePageState extends State<ProfilePage> {
                 ),
                 child: Padding(
                   padding: EdgeInsets.all(20),
-                  child: Column(
-                    children: [
-                      SizedBox(height: 50,),
-                      Container(
-                        padding: EdgeInsets.all(10),
-                        decoration: BoxDecoration(
-                            color: Colors.white,
-                            borderRadius: BorderRadius.circular(10),
-                            boxShadow:[
-                              BoxShadow(
-                                color: Color.fromRGBO(225, 95, 27, 3),
-                                blurRadius: 20,
-                                offset: Offset(0, 10)
-                            )]
-                        ),
-                        child: Column(
-                          children: [
-                            Container(
-                              padding: EdgeInsets.all(10),
-                              decoration: BoxDecoration(
-                                  border: Border(bottom: BorderSide(color: Colors.grey.shade200))
+                  child: SingleChildScrollView(
+                    child: Column(
+                      children: [
+                        SizedBox(height: 70,),
+                        Container(
+                          padding: EdgeInsets.all(10),
+                          decoration: BoxDecoration(
+                              color: Colors.white,
+                              borderRadius: BorderRadius.circular(10),
+                              boxShadow:[
+                                BoxShadow(
+                                  color: Colors.teal.shade800,
+                                  blurRadius: 16,
+                                  offset: Offset(2, 7)
+                              )]
+                          ),
+                          child: Column(
+                            children: [
+                              Container(
+                                padding: EdgeInsets.all(10),
+                                decoration: BoxDecoration(
+                                    border: Border(bottom: BorderSide(color: Colors.grey.shade200))
+                                ),
+                                child: Column(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    Text('Name',style: TextStyle(
+                                        fontWeight: FontWeight.bold,
+                                        fontSize: 20,
+                                        color: Colors.grey.shade700
+                                    ),),
+                                    TextField(
+                                      decoration: InputDecoration(
+                                          hintText: "kavya",
+                                          hintStyle: TextStyle(color: Colors.grey),
+                                          border: InputBorder.none,
+
+                                      ),
+                                    ),
+                                  ],
+                                ),
                               ),
-                              child: Column(
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                children: [
-                                  Text('Name',style: TextStyle(
+                              Container(
+                                padding: EdgeInsets.all(10),
+                                decoration: BoxDecoration(
+                                    border: Border(bottom: BorderSide(color: Colors.grey.shade200))
+                                ),
+                                child: Column(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    Text('Phone Number',style: TextStyle(
+                                        fontWeight: FontWeight.bold,
+                                        fontSize: 20,
+                                        color: Colors.grey.shade700
+                                    ),),
+                                    TextField(
+                                      decoration: InputDecoration(
+                                          hintText: "9645713419",
+                                          hintStyle: TextStyle(color: Colors.grey),
+                                          border: InputBorder.none
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                              ),
+                              Container(
+                                padding: EdgeInsets.all(10),
+                                decoration: BoxDecoration(
+                                    border: Border(bottom: BorderSide(color: Colors.grey.shade200))
+                                ),
+                                child: Column(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    Text('Email',style: TextStyle(
                                       fontWeight: FontWeight.bold,
                                       fontSize: 20,
                                       color: Colors.grey.shade700
-                                  ),),
-                                  TextField(
-                                    decoration: InputDecoration(
-                                        hintText: "kavya",
-                                        hintStyle: TextStyle(color: Colors.grey),
-                                        border: InputBorder.none
+                                    ),),
+                                    TextField(
+                                      decoration: InputDecoration(
+                                          hintText: "kavya@gmail.com",
+                                          hintStyle: TextStyle(color: Colors.grey),
+                                          border: InputBorder.none
+                                      ),
                                     ),
-                                  ),
-                                ],
+                                  ],
+                                ),
                               ),
-                            ),
-                            Container(
-                              padding: EdgeInsets.all(10),
-                              decoration: BoxDecoration(
-                                  border: Border(bottom: BorderSide(color: Colors.grey.shade200))
-                              ),
-                              child: Column(
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                children: [
-                                  Text('Phone Number',style: TextStyle(
-                                      fontWeight: FontWeight.bold,
-                                      fontSize: 20,
-                                      color: Colors.grey.shade700
-                                  ),),
-                                  TextField(
-                                    decoration: InputDecoration(
-                                        hintText: "9645713419",
-                                        hintStyle: TextStyle(color: Colors.grey),
-                                        border: InputBorder.none
-                                    ),
-                                  ),
-                                ],
-                              ),
-                            ),
-                            Container(
-                              padding: EdgeInsets.all(10),
-                              decoration: BoxDecoration(
-                                  border: Border(bottom: BorderSide(color: Colors.grey.shade200))
-                              ),
-                              child: Column(
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                children: [
-                                  Text('Email',style: TextStyle(
-                                    fontWeight: FontWeight.bold,
-                                    fontSize: 20,
-                                    color: Colors.grey.shade700
-                                  ),),
-                                  TextField(
-                                    decoration: InputDecoration(
-                                        hintText: "kavya@gmail.com",
-                                        hintStyle: TextStyle(color: Colors.grey),
-                                        border: InputBorder.none
-                                    ),
-                                  ),
-                                ],
-                              ),
-                            ),
-                          ],
-                        ),
-                      ),
-                      SizedBox(height: 65,),
-                      Container(
-                        height: 50,
-                        margin: EdgeInsets.symmetric(horizontal: 100),
-                        decoration: BoxDecoration(
-                          borderRadius: BorderRadius.circular(10,),
-                          gradient: LinearGradient(
-                            begin: Alignment.topLeft,
-                            end: Alignment.bottomRight,
-                            colors: [Colors.red, Colors.yellow, Colors.green],
+                            ],
                           ),
                         ),
-                        child: Center(
-                          child: TextButton(
-                            child: Text('Edit Profile',style: TextStyle(color: Colors.white,fontWeight: FontWeight.bold,fontSize: 18),),
-                            onPressed: (){
-                              Navigator.push(context, MaterialPageRoute(builder: (context)=>HomePage()));
-                            },
+                        SizedBox(height: 65,),
+                        Container(
+                          height: 50,
+                          margin: EdgeInsets.symmetric(horizontal: 100),
+                          decoration: BoxDecoration(
+                            borderRadius: BorderRadius.circular(10,),
+                              color: Colors.teal.shade800,
+                              boxShadow: [
+                                BoxShadow(
+                                  color: Colors.grey.shade400,
+                                  blurRadius: 2,
+                                  offset: Offset(4,4),
+                                  spreadRadius: 1
+                              )]
+                          ),
+                          child: Center(
+                            child: TextButton(
+                              child: Text('Edit Profile',style: TextStyle(color: Colors.white,fontWeight: FontWeight.bold,fontSize: 18),),
+                              onPressed: (){
+                                Navigator.push(context, MaterialPageRoute(builder: (context)=>HomePage()));
+                              },
+                            ),
                           ),
                         ),
-                      ),
-                    ],
+                      ],
+                    ),
                   ),
                 ),
               ),

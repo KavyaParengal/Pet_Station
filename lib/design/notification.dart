@@ -21,6 +21,8 @@ class _NotificationPageState extends State<NotificationPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
+        backgroundColor: Colors.teal.shade800,
+        toolbarHeight: 60,
         title: Text('Notifications',),
         leading: IconButton(
           onPressed: (){
@@ -28,13 +30,6 @@ class _NotificationPageState extends State<NotificationPage> {
           },
           icon: Icon(Icons.arrow_back_ios),
         ),
-          flexibleSpace: Container(
-            decoration: BoxDecoration(
-                gradient: LinearGradient(
-                    begin: Alignment.topLeft,
-                    end: Alignment.bottomRight,
-                    colors: <Color>[Colors.red, Colors.yellow, Colors.green])),
-          )
       ),
       body: ListView.builder(
         shrinkWrap: true,
@@ -50,7 +45,7 @@ class _NotificationPageState extends State<NotificationPage> {
                   children: [
                     CircleAvatar(
                       backgroundColor: Colors.white60,
-                      child: Icon(Icons.notifications_outlined,color: Colors.blue,size: 36,),
+                      child: Icon(Icons.notifications_outlined,color: Colors.teal.shade800,size: 36,),
                     ),
                     SizedBox(width: 16,),
                     Expanded(

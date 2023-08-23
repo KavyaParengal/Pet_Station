@@ -31,11 +31,7 @@ class _DrawerScreenState extends State<DrawerScreen> {
         width: MediaQuery.of(context).size.width,
         height: MediaQuery.of(context).size.height,
         decoration: BoxDecoration(
-          gradient: LinearGradient(
-              begin: Alignment.topLeft,
-              end: Alignment.bottomRight,
-              colors: [Colors.red, Colors.yellow, Colors.green]
-          )
+          color: Colors.teal.shade800
         ),
         child: Column(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -43,7 +39,7 @@ class _DrawerScreenState extends State<DrawerScreen> {
             Row(
               children: [
                 CircleAvatar(
-                  backgroundColor: Color.fromRGBO(310, 189, 89, 0.4),
+                  backgroundColor: Colors.white,
                   radius: 26,
                   child: Image.asset('images/parrot.png'),
                 ),

@@ -34,17 +34,18 @@ class _HomeScreenState extends State<HomeScreen> {
 
   @override
   Widget build(BuildContext context) {
+
+    var size = MediaQuery.of(context).size;
+    final double itemHeight = (size.height - kToolbarHeight - 200) / 2;
+    final double itemWidth = size.width / 2.18;
+
     return AnimatedContainer(
       transform: Matrix4.translationValues(xOffset, yOffset, 0)..scale(scaleFactor),
       color: Colors.grey.shade200,
       duration: Duration(milliseconds: 250),
 
-      // decoration: BoxDecoration(
-      //     color: Colors.grey.shade200,
-      //   borderRadius: BorderRadius.circular(40),
-      // ),
-
       child: SingleChildScrollView(
+        //physics: ScrollPhysics(),
         child: Column(
           children: [
             SizedBox(height: 50,),
@@ -86,7 +87,7 @@ class _HomeScreenState extends State<HomeScreen> {
                       ),
                       IconButton(
                           onPressed: (){
-                            Navigator.pop(context);
+                           // Navigator.pop(context);
                           },
                           icon: Icon(Icons.shopping_cart_outlined,size: 30,)
                       )
@@ -123,8 +124,9 @@ class _HomeScreenState extends State<HomeScreen> {
               ),
             ),
             Container(
-              height: 120,
+              height: 90,
               child: ListView.builder(
+                //physics: ScrollPhysics(),
                 shrinkWrap: true,
                   scrollDirection: Axis.horizontal,
                   itemCount: categories.length,
@@ -161,92 +163,185 @@ class _HomeScreenState extends State<HomeScreen> {
                   }
               ),
             ),
-            ListView.builder(
-              scrollDirection: Axis.vertical,
-              shrinkWrap: true,
-                itemCount: pets.length,
-                itemBuilder: (context,index){
-                  print(pets[index]['imagePath']);
-                  return GestureDetector(
-                    onTap: (){
-                      Navigator.push(context, MaterialPageRoute(builder: (context)=>SinglePet()));
-                    },
-                    child: Container(
-                      height: 250,
-                      margin: EdgeInsets.symmetric(horizontal: 15,),
-                      child: Row(
-                        children: [
-                          Expanded(child: Stack(
-                            children: [
-                              Container(
-                                decoration: BoxDecoration(
-                                  gradient: LinearGradient(
-                                    begin: Alignment.topLeft,
-                                    end: Alignment.bottomRight,
-                                    colors: [Colors.red, Colors.yellow, Colors.green],
-                                  ),
-                                  borderRadius: BorderRadius.circular(20),
-                                  boxShadow: [
-                                    BoxShadow(
-                                        color: Colors.grey.shade200,
-                                        blurRadius: 30,
-                                        offset: Offset(0, 10)
-                                    )
-                                  ]
-                                ),
-                                margin: EdgeInsets.only(top: 40),
-                              ),
-                              Align(
-                                child: Image.asset(pets[index]['imagePath'],
-                                  //fit: BoxFit.fitWidth,height: 500,width: 600,
-                                ),
-                              )
-                            ],
-                          )),
-                          Expanded(
-                              child: Container(
-                            margin: EdgeInsets.only(top: 55,bottom: 20),
+            // ListView.builder(
+            //   itemCount: 8,
+            //     shrinkWrap: true,
+            //     itemBuilder: (context,index){
+            //       return Column(
+            //         children: [
+            //           Container(
+            //             height: MediaQuery.of(context).size.height/3,
+            //             child: Stack(
+            //               children: [
+            //                 Container(
+            //                   color: Colors.teal.shade800,
+            //                 ),
+            //                 Positioned(
+            //                   bottom: 13,
+            //                   left: 10,
+            //                   child: Container(
+            //                     // width: 100,
+            //                     // height: 40 ,
+            //                     padding: EdgeInsets.symmetric(horizontal: 14,vertical: 10),
+            //                     decoration: BoxDecoration(
+            //                       borderRadius: BorderRadius.circular(22),
+            //                       color: Colors.teal.shade200
+            //                     ),
+            //                     child: Row(
+            //                       children: [
+            //                         Text('4',style: TextStyle(fontSize: 13,fontWeight: FontWeight.w600),),
+            //                         SizedBox(width: 3,),
+            //                         Icon(Icons.star,size: 15,),
+            //                         SizedBox(width: 4,),
+            //                         Text('|'),
+            //                         SizedBox(width: 4,),
+            //                         Text('4.8 k',style: TextStyle(fontSize: 13,fontWeight: FontWeight.w600),)
+            //                       ],
+            //                     ),
+            //                   ),
+            //                 )
+            //               ],
+            //             ),
+            //           ),
+            //           Padding(
+            //               padding: EdgeInsets.symmetric(horizontal: 15,vertical: 10),
+            //             child: Row(
+            //               mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            //               children: [
+            //                 Column(
+            //                   crossAxisAlignment: CrossAxisAlignment.start ,
+            //                   children: [
+            //                     Text(pets[index]['name'],style: TextStyle(
+            //                         fontWeight: FontWeight.w700,
+            //                         fontSize: 18
+            //                     ),),
+            //                     SizedBox(height: 4,),
+            //                     Text(pets[index]['family'],style: TextStyle(
+            //                         fontWeight: FontWeight.w400,
+            //                         color: Colors.grey,
+            //                         fontSize: 15
+            //                     ),),
+            //                     SizedBox(height: 4,),
+            //                     Text("₨. ${pets[index]["price"]}",style: TextStyle(
+            //                         fontWeight: FontWeight.w400,
+            //                         fontSize: 13
+            //                     ),)
+            //                   ],
+            //                 ),
+            //                 IconButton(
+            //                     onPressed: (){},
+            //                     icon: Icon(Icons.favorite_outline)
+            //                 )
+            //               ],
+            //             ),
+            //           )
+            //         ],
+            //       );
+            //     }
+            // ),
+            Padding(
+                padding: const EdgeInsets.all(4.0),
+                child: Container(
+                  //width: MediaQuery.of(context).size.width*12,
+                  child: GridView.builder(
+                    shrinkWrap: true,
+                    itemCount: pets.length,
+                    gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                        childAspectRatio: (itemWidth / itemHeight),
+                        crossAxisCount: 2,
+                        crossAxisSpacing: 4.0,
+                        mainAxisSpacing: 4.0
+                    ),
+                    itemBuilder: (BuildContext context, int index){
+                      return GridTile(
+                          child: Container(
                             decoration: BoxDecoration(
-                              color: Colors.white,
-                                boxShadow: [
-                                  BoxShadow(
-                                      color: Colors.grey.shade200,
-                                      blurRadius: 30,
-                                      offset: Offset(0, 10)
-                                  )
-                              ],
-                              borderRadius: BorderRadius.only(topRight: Radius.circular(20),bottomRight: Radius.circular(20))
+                              border: Border.all(color: Colors.grey.shade300)
                             ),
                             child: Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
+                                GestureDetector(
+                                  onTap: (){
+                                    Navigator.push(context, MaterialPageRoute(builder: (context)=>SinglePet()));
+                                  },
+                                  child: Container(
+                                    height: MediaQuery.of(context).size.height/4,
+                                    child: Stack(
+                                      children: [
+                                        Container(
+                                          decoration: BoxDecoration(
+                                            image: DecorationImage(image: AssetImage(pets[index]['imagePath'])),
+                                            color: Colors.grey.shade100,
+                                          ),
+                                        ),
+                                        Positioned(
+                                          bottom: 13,
+                                          left: 10,
+                                          child: Container(
+                                            // width: 100,
+                                            // height: 40 ,
+                                            padding: EdgeInsets.symmetric(horizontal: 14,vertical: 10),
+                                            decoration: BoxDecoration(
+                                                borderRadius: BorderRadius.circular(22),
+                                                color: Colors.grey.shade400.withOpacity(.5)
+                                            ),
+                                            child: Row(
+                                              children: [
+                                                Text('4',style: TextStyle(fontSize: 13,fontWeight: FontWeight.w600),),
+                                                SizedBox(width: 3,),
+                                                Icon(Icons.star,size: 15,),
+                                                SizedBox(width: 4,),
+                                                Text('|'),
+                                                SizedBox(width: 4,),
+                                                Text('4.8 k',style: TextStyle(fontSize: 13,fontWeight: FontWeight.w600),)
+                                              ],
+                                            ),
+                                          ),
+                                        )
+                                      ],
+                                    ),
+                                  ),
+                                ),
                                 Padding(
-                                  padding: const EdgeInsets.all(8.0),
+                                  padding: EdgeInsets.symmetric(horizontal: 15,vertical: 10),
                                   child: Row(
                                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                                     children: [
-                                      Text(pets[index]['name'],style: TextStyle(fontSize: 25,fontWeight: FontWeight.bold,color: Colors.grey.shade800),),
-                                      pets[index]['imagePath']=="male" ? Icon(Icons.male,color: Colors.grey.shade600,size: 28,) : Icon(Icons.female,color: Colors.grey.shade600,size: 28,)
+                                      Column(
+                                        crossAxisAlignment: CrossAxisAlignment.start ,
+                                        children: [
+                                          Text(pets[index]['name'],style: TextStyle(
+                                              fontWeight: FontWeight.w700,
+                                              fontSize: 18
+                                          ),),
+                                          SizedBox(height: 4,),
+                                          Text(pets[index]['family'],style: TextStyle(
+                                              fontWeight: FontWeight.w400,
+                                              color: Colors.grey,
+                                              fontSize: 15
+                                          ),),
+                                          SizedBox(height: 4,),
+                                          Text("₨. ${pets[index]["price"]}",style: TextStyle(
+                                              fontWeight: FontWeight.w400,
+                                              fontSize: 13
+                                          ),)
+                                        ],
+                                      ),
+                                      IconButton(
+                                          onPressed: (){},
+                                          icon: Icon(Icons.favorite_outline)
+                                      )
                                     ],
                                   ),
-                                ),
-                                Padding(
-                                  padding: const EdgeInsets.only(left: 8,right: 8),
-                                  child: Text(pets[index]['family'],style: TextStyle(fontSize: 20,fontWeight: FontWeight.w500,color: Colors.grey.shade600),),
-                                ),
-                                Padding(
-                                  padding: const EdgeInsets.only(left: 8,right: 8, top: 40),
-                                  child: Text('₨. ${pets[index]['price']}',style: TextStyle(fontSize: 18,fontWeight: FontWeight.w500,color: Colors.grey.shade600),),
                                 )
                               ],
                             ),
-                          ))
-                        ],
-                      ),
-                    ),
-                  );
-                }
-            )
+                          ),
+                      );
+                    },
+                  ),
+                )
+            ),
           ],
         ),
       ),
