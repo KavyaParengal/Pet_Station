@@ -1,6 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:pet_station/config/constants.dart';
 import 'package:pet_station/design/notification.dart';
 import 'package:pet_station/design/single_pet.dart';
+import 'package:pet_station/models/viewCategory.dart';
+import 'package:pet_station/services/allService.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({Key? key}) : super(key: key);
@@ -31,6 +34,8 @@ class _HomeScreenState extends State<HomeScreen> {
     {'name':'Sola','family':'Himalayan Cat','price':'10000','gender':'female','imagePath':'images/cats/himalayan1.png'},
     {'name':'Sola','family':'Billy Cat','price':'2500','gender':'male','imagePath':'images/cats/billy_cat2.png'}
   ];
+
+  ViewCategoryApi viewcategory=ViewCategoryApi();
 
   @override
   Widget build(BuildContext context) {
@@ -125,43 +130,50 @@ class _HomeScreenState extends State<HomeScreen> {
             ),
             Container(
               height: 90,
-              child: ListView.builder(
-                //physics: ScrollPhysics(),
-                shrinkWrap: true,
-                  scrollDirection: Axis.horizontal,
-                  itemCount: categories.length,
-                  itemBuilder: (context,index){
-                    return Container(
-                      child: Column(
-                        children: [
-                          Container(
-                            padding: EdgeInsets.all(10),
-                            margin: EdgeInsets.only(left: 20),
-                            decoration: BoxDecoration(
-                              color: Colors.white,
-                              boxShadow: [ BoxShadow(
-                                color: Colors.grey.shade200,
-                                blurRadius: 30,
-                                offset: Offset(0, 10)
-                              )],
-                              borderRadius: BorderRadius.circular(10)
+              child: FutureBuilder<List<ViewCategoryModel>>(
+                future: viewcategory.getCategories(),
+                builder: (BuildContext content,AsyncSnapshot<List<ViewCategoryModel>> snapshot){
+                  if(snapshot.hasData){
+                    return ListView.builder(
+                        shrinkWrap: true,
+                        scrollDirection: Axis.horizontal,
+                        itemCount: snapshot.data?.length,
+                        itemBuilder: (context,index){
+                          return Container(
+                            child: Column(
+                              children: [
+                                Container(
+                                  padding: EdgeInsets.all(10),
+                                  margin: EdgeInsets.only(left: 20),
+                                  decoration: BoxDecoration(
+                                      color: Colors.white,
+                                      boxShadow: [ BoxShadow(
+                                          color: Colors.grey.shade200,
+                                          blurRadius: 30,
+                                          offset: Offset(0, 10)
+                                      )],
+                                      borderRadius: BorderRadius.circular(10)
+                                  ),
+                                  child: Image.network(APIConstants.url+snapshot.data![index].category_image.toString(),
+                                    height: 50,
+                                    width: 50,
+                                    color: Colors.grey.shade500,
+                                  ),
+                                ),
+                                SizedBox(height: 3,),
+                                Text(snapshot.data![index].category_name.toString(),textAlign: TextAlign.center,style: TextStyle(
+                                    fontWeight: FontWeight.w400,
+                                    color: Colors.grey.shade800
+                                ),)
+                              ],
                             ),
-                            child: Image.asset(categories[index]['iconPath'],
-                              height: 50,
-                              width: 50,
-                              color: Colors.grey.shade500,
-                            ),
-                          ),
-                          SizedBox(height: 3,),
-                          Text(categories[index]['name'],textAlign: TextAlign.center,style: TextStyle(
-                            fontWeight: FontWeight.w400,
-                            color: Colors.grey.shade800
-                          ),)
-                        ],
-                      ),
+                          );
+                        }
                     );
                   }
-              ),
+                  return Center(child: CircularProgressIndicator(),);
+                },
+              )
             ),
             // ListView.builder(
             //   itemCount: 8,
@@ -244,6 +256,7 @@ class _HomeScreenState extends State<HomeScreen> {
                 child: Container(
                   //width: MediaQuery.of(context).size.width*12,
                   child: GridView.builder(
+                    physics: NeverScrollableScrollPhysics(),
                     shrinkWrap: true,
                     itemCount: pets.length,
                     gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(

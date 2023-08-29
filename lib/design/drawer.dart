@@ -1,8 +1,11 @@
 
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:pet_station/design/cartScreen.dart';
+import 'package:pet_station/design/favorite.dart';
 import 'package:pet_station/design/message.dart';
 import 'package:pet_station/design/login_page.dart';
+import 'package:pet_station/design/myOrder.dart';
 import 'package:pet_station/design/profile.dart';
 
 class DrawerScreen extends StatefulWidget {
@@ -58,42 +61,48 @@ class _DrawerScreenState extends State<DrawerScreen> {
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
                 GestureDetector(
-                  onTap: (){},
+                  onTap: (){
+                    Navigator.push(context, MaterialPageRoute(builder: (context)=>MyOrder()));
+                  },
                   child: Padding(
                     padding: const EdgeInsets.only(left: 8,bottom: 16,top: 10),
                     child: Row(
                        children: [
-                         Icon(Icons.check_box,color: Colors.white,size: 32,),
+                         Icon(Icons.check_box,color: Colors.white,size: 30,),
                          SizedBox(width: 12,),
-                         Text('My order',style: TextStyle(fontSize: 22,fontWeight: FontWeight.w600,color: Colors.white),),
+                         Text('My order',style: TextStyle(fontSize: 20,fontWeight: FontWeight.w600,color: Colors.white),),
                        ],
                     ),
                   ),
                 ),
 
                 GestureDetector(
-                  onTap: (){},
+                  onTap: (){
+                    Navigator.push(context, MaterialPageRoute(builder: (context)=>Favorite()));
+                  },
                   child: Padding(
                     padding: const EdgeInsets.only(left: 8,bottom: 16,top: 10),
                     child: Row(
                       children: [
-                        Icon(Icons.favorite,color: Colors.white,size: 32,),
+                        Icon(Icons.favorite,color: Colors.white,size: 30,),
                         SizedBox(width: 12,),
-                        Text('Favorite',style: TextStyle(fontSize: 22,fontWeight: FontWeight.w600,color: Colors.white),),
+                        Text('Favorite',style: TextStyle(fontSize: 20,fontWeight: FontWeight.w600,color: Colors.white),),
                       ],
                     ),
                   ),
                 ),
 
                 GestureDetector(
-                  onTap: (){},
+                  onTap: (){
+                    Navigator.push(context, MaterialPageRoute(builder: (context)=>CartScreen()));
+                  },
                   child: Padding(
                     padding: const EdgeInsets.only(left: 8,bottom: 16,top: 10),
                     child: Row(
                       children: [
-                        Icon(Icons.shopping_cart,color: Colors.white,size: 32,),
+                        Icon(Icons.shopping_cart,color: Colors.white,size: 30,),
                         SizedBox(width: 12,),
-                        Text('My cart',style: TextStyle(fontSize: 22,fontWeight: FontWeight.w600,color: Colors.white),),
+                        Text('My cart',style: TextStyle(fontSize: 20,fontWeight: FontWeight.w600,color: Colors.white),),
                       ],
                     ),
                   ),
@@ -107,9 +116,9 @@ class _DrawerScreenState extends State<DrawerScreen> {
                     padding: const EdgeInsets.only(left: 8,bottom: 16,top: 10),
                     child: Row(
                       children: [
-                        Icon(Icons.person,color: Colors.white,size: 32,),
+                        Icon(Icons.person,color: Colors.white,size: 30,),
                         SizedBox(width: 12,),
-                        Text('Profile',style: TextStyle(fontSize: 22,fontWeight: FontWeight.w600,color: Colors.white),),
+                        Text('Profile',style: TextStyle(fontSize: 20,fontWeight: FontWeight.w600,color: Colors.white),),
                       ],
                     ),
                   ),
@@ -123,9 +132,9 @@ class _DrawerScreenState extends State<DrawerScreen> {
                     padding: const EdgeInsets.only(left: 8,bottom: 16,top: 10),
                     child: Row(
                       children: [
-                        Icon(Icons.message,color: Colors.white,size: 32,),
+                        Icon(Icons.message,color: Colors.white,size: 30,),
                         SizedBox(width: 12,),
-                        Text('Message',style: TextStyle(fontSize: 22,fontWeight: FontWeight.w600,color: Colors.white),),
+                        Text('Message',style: TextStyle(fontSize: 20,fontWeight: FontWeight.w600,color: Colors.white),),
                       ],
                     ),
                   ),

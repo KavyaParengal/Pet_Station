@@ -1,6 +1,7 @@
 
 import 'package:flutter/material.dart';
 import 'package:pet_station/design/login_page.dart';
+import 'package:pet_station/main.dart';
 
 class Start_Page extends StatefulWidget {
   const Start_Page({Key? key}) : super(key: key);
@@ -54,7 +55,7 @@ class _Start_PageState extends State<Start_Page> {
                       color: Colors.white,
                       boxShadow: [
                         BoxShadow(
-                          color: Colors.grey,
+                          color: Colors.grey.shade300,
                           spreadRadius: 1,
                           blurRadius: 0.9,
                           offset: Offset(4, 4),
@@ -65,7 +66,7 @@ class _Start_PageState extends State<Start_Page> {
                       child: TextButton(
                         child: Text("Let's Start",style: TextStyle(color: Colors.teal.shade800,fontWeight: FontWeight.w800,fontSize: 18),),
                         onPressed: (){
-                          Navigator.push(context, MaterialPageRoute(builder: (context)=>Login_Page()));
+                          Navigator.push(context, MaterialPageRoute(builder: (context)=>HomePage()));
                         },
                       ),
                     ),
