@@ -1,16 +1,55 @@
 
+import 'dart:io';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_image_slideshow/flutter_image_slideshow.dart';
 import 'package:flutter_rating_bar/flutter_rating_bar.dart';
+import 'package:pet_station/config/constants.dart';
+import 'package:pet_station/models/viewCategoryItems.dart';
+import 'package:pet_station/services/allService.dart';
 
 class SinglePet extends StatefulWidget {
-  const SinglePet({Key? key}) : super(key: key);
+
+  final int pid;
+
+  SinglePet({ required this.pid});
 
   @override
   State<SinglePet> createState() => _SinglePetState();
 }
 
 class _SinglePetState extends State<SinglePet> {
+
+  ViewCategoryApi viewPetdetails=ViewCategoryApi();
+   ViewCategoryItemsModel? petDetails;
+
+  @override
+  void initState() {
+    super.initState();
+    // Fetch the pet details when the widget initializes
+    fetchPetDetails(widget.pid);
+    print(widget.pid);
+  }
+
+  Future<ViewCategoryItemsModel?> fetchPetDetails(int id) async {
+    try {
+      final details = await ViewCategoryApi.getPetDetails(id);
+
+        petDetails = details;
+        setState(() {
+
+        });// Update petDetails when data is available
+
+
+
+    } catch (e) {
+      // Handle errors here, e.g., show an error message
+      print('Failed to fetch pet details: $e');
+      return null; // Return null in case of an error
+    }
+  }
+
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -33,109 +72,116 @@ class _SinglePetState extends State<SinglePet> {
         ],
       ),
 
-      body: SingleChildScrollView(
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Container(
-              height: MediaQuery.of(context).size.height*.43,
-              width: MediaQuery.of(context).size.width,
-              decoration: BoxDecoration(
-                color: Colors.white,
-                boxShadow: [
-                  BoxShadow(
-                    color: Colors.grey,
-                    blurRadius: 2,
-                    offset: Offset(0, 1)
-                  )
-                ],
-                borderRadius: BorderRadius.only(bottomRight: Radius.circular(30),bottomLeft: Radius.circular(30)),
-              ),
-              child: Center(
-                child: ImageSlideshow(
-                  height: 320,
-                  indicatorColor: Colors.teal.shade800,
-                  indicatorBackgroundColor: Colors.grey,
-                  autoPlayInterval: 4000,
-                  indicatorRadius: 5,
-                  indicatorBottomPadding: 2,
-                  indicatorPadding: 8,
-                  isLoop: true,
+      body:petDetails != null ?  SingleChildScrollView(
+        child:/* FutureBuilder<ViewCategoryItemsModel?>(
+            future: fetchPetDetails(widget.pid),
+            builder: (BuildContext content,AsyncSnapshot<ViewCategoryItemsModel?> snapshot) {
+              if (snapshot.hasData) {
+                 petDetails = snapshot.data!;
+                 print("pet${petDetails}");
+
+                return */Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    Padding(padding: EdgeInsets.all(8),
-                      child: Image.asset('images/cats/billy_cat1.png'),
+                    Container(
+                      height: MediaQuery.of(context).size.height*.43,
+                      width: MediaQuery.of(context).size.width,
+                      decoration: BoxDecoration(
+                        color: Colors.white,
+                        boxShadow: [
+                          BoxShadow(
+                              color: Colors.grey,
+                              blurRadius: 2,
+                              offset: Offset(0, 1)
+                          )
+                        ],
+                        borderRadius: BorderRadius.only(bottomRight: Radius.circular(30),bottomLeft: Radius.circular(30)),
+                      ),
+                      child: Center(
+                        child:  ImageSlideshow(
+                          height: 320,
+                          indicatorColor: Colors.teal.shade800,
+                          indicatorBackgroundColor: Colors.grey,
+                          autoPlayInterval: 4000,
+                          indicatorRadius: 5,
+                          indicatorBottomPadding: 2,
+                          indicatorPadding: 8,
+                          isLoop: true,
+                          children: [
+                            Padding(padding: EdgeInsets.all(8),
+                              child: Image.network(APIConstants.url+petDetails!.image1),
+                            ),
+                            Padding(padding: EdgeInsets.all(8),
+                              child: Image.network(APIConstants.url+petDetails!.image2),
+                            ),
+                            Padding(padding: EdgeInsets.all(8),
+                              child: Image.network(APIConstants.url+petDetails!.image3),
+                            ),
+                            Padding(padding: EdgeInsets.all(8),
+                              child: Image.network(APIConstants.url+petDetails!.image4),
+                            )
+                          ],
+                        ),
+                      ),
                     ),
-                    Padding(padding: EdgeInsets.all(8),
-                      child: Image.asset('images/cats/billy_cat1.png'),
-                    ),
-                    Padding(padding: EdgeInsets.all(8),
-                      child: Image.asset('images/cats/billy_cat1.png'),
-                    ),
-                    Padding(padding: EdgeInsets.all(8),
-                      child: Image.asset('images/cats/billy_cat1.png'),
+                    Padding(padding: EdgeInsets.all(20),
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: [
+                              Text(petDetails!.name,style: TextStyle(
+                                fontWeight: FontWeight.bold,
+                                fontSize: 22,
+                              ),),
+                              petDetails!.gender=='Male'?Icon(Icons.male):Icon(Icons.female)
+                            ],
+                          ),
+                          SizedBox(height: 10,),
+                          Text(petDetails!.breed,style: TextStyle(
+                              fontWeight: FontWeight.bold,
+                              fontSize: 22,
+                              color: Colors.grey
+                          ),),
+                          SizedBox(height: 10,),
+                          Row(
+                            children: [
+                              RatingBar.builder(
+                                  initialRating: 3.5,
+                                  minRating: 1,
+                                  direction: Axis.horizontal,
+                                  allowHalfRating: true,
+                                  itemCount: 5,
+                                  itemSize: 25,
+                                  itemBuilder: (context, _){
+                                    return Icon(Icons.star,color: Colors.amber,);
+                                  },
+                                  onRatingUpdate: (rating){}
+                              ),
+                              SizedBox(width: 5,),
+                              Text('(450)')
+                            ],
+                          ),
+                          SizedBox(height: 15,),
+                          Text('₨. ${petDetails!.price}',style: TextStyle(
+                            fontWeight: FontWeight.bold,
+                            fontSize: 22,
+                          ),),
+                          SizedBox(height: 20,),
+                          Text(petDetails!.description,textAlign: TextAlign.justify,style: TextStyle(
+                            fontSize: 16,
+                          ),),
+                        ],
+                      ),
                     )
                   ],
-                ),
-              ),
-            ),
-            Padding(padding: EdgeInsets.all(20),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      Text('Name',style: TextStyle(
-                        fontWeight: FontWeight.bold,
-                        fontSize: 22,
-                      ),),
-                      Icon(Icons.male)
-                    ],
-                  ),
-                  SizedBox(height: 10,),
-                  Text('Family Name',style: TextStyle(
-                    fontWeight: FontWeight.bold,
-                    fontSize: 22,
-                    color: Colors.grey
-                  ),),
-                  SizedBox(height: 10,),
-                  Row(
-                    children: [
-                      RatingBar.builder(
-                          initialRating: 3.5,
-                          minRating: 1,
-                          direction: Axis.horizontal,
-                          allowHalfRating: true,
-                          itemCount: 5,
-                          itemSize: 25,
-                          itemBuilder: (context, _){
-                            return Icon(Icons.star,color: Colors.amber,);
-                          },
-                          onRatingUpdate: (rating){}
-                      ),
-                      SizedBox(width: 5,),
-                      Text('(450)')
-                    ],
-                  ),
-                  SizedBox(height: 15,),
-                  Text('₨. 2000',style: TextStyle(
-                    fontWeight: FontWeight.bold,
-                    fontSize: 22,
-                  ),),
-                  SizedBox(height: 20,),
-                  Text("These are the most well-known breed of cats in India. "
-                      "They are very affectionate, playful, beautiful, and well-suited "
-                      "for the Indian climate. They live long without much attention and "
-                      "clean themselves with their tongue. Their short coat means you don’t "
-                      "have to worry about shedding.",textAlign: TextAlign.justify,style: TextStyle(
-                    fontSize: 16,
-                  ),),
-                ],
-              ),
-            )
-          ],
-        ),
-      ),
+                )
+              /*} else {
+                return Text('No pet details available');
+              }
+          }
+      ),*/) : Center(child: CircularProgressIndicator(),),
       bottomNavigationBar: Container(
         height: 70,
         margin: EdgeInsets.symmetric(vertical: 10,horizontal: 20),

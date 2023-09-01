@@ -2,6 +2,7 @@
 import 'package:flutter/material.dart';
 import 'package:pet_station/design/login_page.dart';
 import 'package:pet_station/main.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class Start_Page extends StatefulWidget {
   const Start_Page({Key? key}) : super(key: key);
@@ -11,6 +12,25 @@ class Start_Page extends StatefulWidget {
 }
 
 class _Start_PageState extends State<Start_Page> {
+
+  late SharedPreferences localStorage;
+  String user="user";
+  String role="";
+  late SharedPreferences preferences;
+
+  Future<void> checkRoleAndNavigate() async {
+    preferences = await SharedPreferences.getInstance();
+    role = (preferences.getString("role") ?? '');
+
+    if (role == user) {
+      Navigator.push(
+          context, MaterialPageRoute(builder: (context) => HomePage()));
+    } else {
+      Navigator.pushReplacement(
+          context, MaterialPageRoute(builder: (_) => Login_Page()));
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -66,7 +86,8 @@ class _Start_PageState extends State<Start_Page> {
                       child: TextButton(
                         child: Text("Let's Start",style: TextStyle(color: Colors.teal.shade800,fontWeight: FontWeight.w800,fontSize: 18),),
                         onPressed: (){
-                          Navigator.push(context, MaterialPageRoute(builder: (context)=>HomePage()));
+                          checkRoleAndNavigate();
+                          //Navigator.push(context, MaterialPageRoute(builder: (context)=>HomePage()));
                         },
                       ),
                     ),
