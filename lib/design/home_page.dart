@@ -8,6 +8,7 @@ import 'package:pet_station/models/viewCategory.dart';
 import 'package:pet_station/models/viewCategoryItems.dart';
 import 'package:pet_station/services/allService.dart';
 import 'package:http/http.dart' as http;
+import 'package:shared_preferences/shared_preferences.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({Key? key}) : super(key: key);
@@ -24,6 +25,21 @@ class _HomeScreenState extends State<HomeScreen> {
   List<ViewCategoryItemsModel> _data=[];
   bool isDrawerOpen=false;
 
+  // late SharedPreferences prefs;
+  // late int outid;
+  //
+  // void getoutId()async {
+  //   prefs = await SharedPreferences.getInstance();
+  //   outid = (prefs.getInt('login_id') ?? 0 ) ;
+  //   print('Outsider id ${outid}');
+  // }
+  //
+  // @override
+  // void initState() {
+  //   // TODO: implement initState
+  //   super.initState();
+  //   getoutId();
+  // }
 
   ViewCategoryApi viewcategory=ViewCategoryApi();
 
@@ -57,13 +73,13 @@ class _HomeScreenState extends State<HomeScreen> {
     return AnimatedContainer(
       transform: Matrix4.translationValues(xOffset, yOffset, 0)..scale(scaleFactor),
       color: Colors.grey.shade200,
-      duration: Duration(milliseconds: 250),
+      duration: const Duration(milliseconds: 250),
 
       child: SingleChildScrollView(
         //physics: ScrollPhysics(),
         child: Column(
           children: [
-            SizedBox(height: 50,),
+            const SizedBox(height: 30,),
             Container(
               margin: EdgeInsets.symmetric(horizontal: 20),
               child: Row(
@@ -79,7 +95,7 @@ class _HomeScreenState extends State<HomeScreen> {
                           isDrawerOpen=false;
                         });
                       },
-                      icon: Icon(Icons.arrow_back_ios,size: 33,)
+                      icon: const Icon(Icons.arrow_back_ios,size: 33,)
                   ) :
                   IconButton(
                       onPressed: (){
@@ -90,7 +106,7 @@ class _HomeScreenState extends State<HomeScreen> {
                           isDrawerOpen=true;
                         });
                       },
-                      icon: Icon(Icons.menu,size: 30,)
+                      icon: const Icon(Icons.menu,size: 30,)
                   ),
                   Row(
                     children: [
@@ -98,13 +114,13 @@ class _HomeScreenState extends State<HomeScreen> {
                           onPressed: (){
                             Navigator.push(context, MaterialPageRoute(builder: (context)=>const NotificationPage()));
                           },
-                          icon: Icon(Icons.notifications_outlined,size: 30,)
+                          icon: const Icon(Icons.notifications_outlined,size: 30,)
                       ),
                       IconButton(
                           onPressed: (){
                            // Navigator.pop(context);
                           },
-                          icon: Icon(Icons.shopping_cart_outlined,size: 30,)
+                          icon: const Icon(Icons.shopping_cart_outlined,size: 30,)
                       )
                     ],
                   )
@@ -124,7 +140,7 @@ class _HomeScreenState extends State<HomeScreen> {
                   const Icon(Icons.search),
                   SizedBox(
                     width: MediaQuery.of(context).size.width*.6,
-                    child: TextField(
+                    child: const TextField(
                       decoration: InputDecoration(
                         hintText: 'Search pets and foods',
                         border: InputBorder.none
@@ -164,8 +180,8 @@ class _HomeScreenState extends State<HomeScreen> {
                               child: Column(
                                 children: [
                                   Container(
-                                    padding: EdgeInsets.all(10),
-                                    margin: EdgeInsets.only(left: 20),
+                                    padding: const EdgeInsets.all(10),
+                                    margin: const EdgeInsets.only(left: 20),
                                     decoration: BoxDecoration(
                                         color: checkindex == index ? Colors.teal.shade800 : Colors.white,
                                         boxShadow: [ BoxShadow(
@@ -181,7 +197,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                       color: checkindex == index ? Colors.white : Colors.grey.shade500,
                                     ),
                                   ),
-                                  SizedBox(height: 3,),
+                                  const SizedBox(height: 3,),
                                   Text(snapshot.data![index].category_name.toString(),textAlign: TextAlign.center,style: TextStyle(
                                       fontWeight: FontWeight.w400,
                                       color: Colors.grey.shade800
@@ -193,92 +209,16 @@ class _HomeScreenState extends State<HomeScreen> {
                         }
                     );
                   }
-                  return Center(child: CircularProgressIndicator(),);
+                  return const Center(child: CircularProgressIndicator(),);
                 },
               )
             ),
-            // ListView.builder(
-            //   itemCount: 8,
-            //     shrinkWrap: true,
-            //     itemBuilder: (context,index){
-            //       return Column(
-            //         children: [
-            //           Container(
-            //             height: MediaQuery.of(context).size.height/3,
-            //             child: Stack(
-            //               children: [
-            //                 Container(
-            //                   color: Colors.teal.shade800,
-            //                 ),
-            //                 Positioned(
-            //                   bottom: 13,
-            //                   left: 10,
-            //                   child: Container(
-            //                     // width: 100,
-            //                     // height: 40 ,
-            //                     padding: EdgeInsets.symmetric(horizontal: 14,vertical: 10),
-            //                     decoration: BoxDecoration(
-            //                       borderRadius: BorderRadius.circular(22),
-            //                       color: Colors.teal.shade200
-            //                     ),
-            //                     child: Row(
-            //                       children: [
-            //                         Text('4',style: TextStyle(fontSize: 13,fontWeight: FontWeight.w600),),
-            //                         SizedBox(width: 3,),
-            //                         Icon(Icons.star,size: 15,),
-            //                         SizedBox(width: 4,),
-            //                         Text('|'),
-            //                         SizedBox(width: 4,),
-            //                         Text('4.8 k',style: TextStyle(fontSize: 13,fontWeight: FontWeight.w600),)
-            //                       ],
-            //                     ),
-            //                   ),
-            //                 )
-            //               ],
-            //             ),
-            //           ),
-            //           Padding(
-            //               padding: EdgeInsets.symmetric(horizontal: 15,vertical: 10),
-            //             child: Row(
-            //               mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            //               children: [
-            //                 Column(
-            //                   crossAxisAlignment: CrossAxisAlignment.start ,
-            //                   children: [
-            //                     Text(pets[index]['name'],style: TextStyle(
-            //                         fontWeight: FontWeight.w700,
-            //                         fontSize: 18
-            //                     ),),
-            //                     SizedBox(height: 4,),
-            //                     Text(pets[index]['family'],style: TextStyle(
-            //                         fontWeight: FontWeight.w400,
-            //                         color: Colors.grey,
-            //                         fontSize: 15
-            //                     ),),
-            //                     SizedBox(height: 4,),
-            //                     Text("₨. ${pets[index]["price"]}",style: TextStyle(
-            //                         fontWeight: FontWeight.w400,
-            //                         fontSize: 13
-            //                     ),)
-            //                   ],
-            //                 ),
-            //                 IconButton(
-            //                     onPressed: (){},
-            //                     icon: Icon(Icons.favorite_outline)
-            //                 )
-            //               ],
-            //             ),
-            //           )
-            //         ],
-            //       );
-            //     }
-            // ),
             Padding(
                 padding: const EdgeInsets.all(4.0),
-                child: Container(
+                child:  Container(
                   //width: MediaQuery.of(context).size.width*12,
                   child: GridView.builder(
-                          physics: NeverScrollableScrollPhysics(),
+                          physics: const NeverScrollableScrollPhysics(),
                           shrinkWrap: true,
                           itemCount:_data.length,
                           gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
@@ -316,7 +256,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                               right: 1,
                                                 child: IconButton(
                                                     onPressed: (){},
-                                                    icon: Icon(Icons.favorite_outline)
+                                                    icon: const Icon(Icons.favorite_outline)
                                                 )
                                             ),
                                             Positioned(
@@ -325,12 +265,12 @@ class _HomeScreenState extends State<HomeScreen> {
                                               child: Container(
                                                 // width: 100,
                                                 // height: 40 ,
-                                                padding: EdgeInsets.symmetric(horizontal: 14,vertical: 10),
+                                                padding: const EdgeInsets.symmetric(horizontal: 14,vertical: 10),
                                                 decoration: BoxDecoration(
                                                     borderRadius: BorderRadius.circular(22),
                                                     color: Colors.grey.shade400.withOpacity(.5)
                                                 ),
-                                                child: Row(
+                                                child:const Row(
                                                   children: [
                                                     Text('4',style: TextStyle(fontSize: 13,fontWeight: FontWeight.w600),),
                                                     SizedBox(width: 3,),
@@ -348,7 +288,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                       ),
                                     ),
                                     Padding(
-                                      padding: EdgeInsets.symmetric(horizontal: 15,vertical: 10),
+                                      padding:const EdgeInsets.symmetric(horizontal: 15,vertical: 10),
                                       child: Row(
                                         //mainAxisAlignment: MainAxisAlignment.spaceBetween,
                                         children: [
@@ -356,18 +296,18 @@ class _HomeScreenState extends State<HomeScreen> {
                                             crossAxisAlignment: CrossAxisAlignment.start ,
                                             mainAxisAlignment: MainAxisAlignment.spaceBetween,
                                             children: [
-                                              Text(_data[index].name.toString(),style: TextStyle(
+                                              Text(_data[index].name.toString(),style: const TextStyle(
                                                   fontWeight: FontWeight.w700,
                                                   fontSize: 18
                                               ),),
-                                              SizedBox(height: 4,),
-                                              Text(_data[index].breed.toString(),style: TextStyle(
+                                              const SizedBox(height: 4,),
+                                              Text(_data[index].breed.toString(),style: const TextStyle(
                                                   fontWeight: FontWeight.w400,
                                                   color: Colors.grey,
                                                   fontSize: 15
                                               ),),
-                                              SizedBox(height: 4,),
-                                              Text("₨. ${_data[index].price.toString()}",style: TextStyle(
+                                              const SizedBox(height: 4,),
+                                              Text("₨. ${_data[index].price.toString()}",style: const TextStyle(
                                                   fontWeight: FontWeight.w400,
                                                   fontSize: 13
                                               ),)
@@ -382,8 +322,6 @@ class _HomeScreenState extends State<HomeScreen> {
                               ),
                             );
                           },
-
-
                   )
                 )
             ),
