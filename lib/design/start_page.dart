@@ -87,7 +87,7 @@ class _Start_PageState extends State<Start_Page> {
                         child: Text("Let's Start",style: TextStyle(color: Colors.teal.shade800,fontWeight: FontWeight.w800,fontSize: 18),),
                         onPressed: (){
                           checkRoleAndNavigate();
-                          //Navigator.push(context, MaterialPageRoute(builder: (context)=>Login_Page()));
+                          //Navigator.push(context, MaterialPageRoute(builder: (context)=>HomePage()));
                         },
                       ),
                     ),

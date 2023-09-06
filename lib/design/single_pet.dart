@@ -5,8 +5,11 @@ import 'package:flutter/material.dart';
 import 'package:flutter_image_slideshow/flutter_image_slideshow.dart';
 import 'package:flutter_rating_bar/flutter_rating_bar.dart';
 import 'package:pet_station/config/constants.dart';
+import 'package:pet_station/design/cartScreen.dart';
+import 'package:pet_station/design/login_page.dart';
 import 'package:pet_station/models/viewCategoryItems.dart';
 import 'package:pet_station/services/allService.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class SinglePet extends StatefulWidget {
 
@@ -21,7 +24,7 @@ class SinglePet extends StatefulWidget {
 class _SinglePetState extends State<SinglePet> {
 
   ViewCategoryApi viewPetdetails=ViewCategoryApi();
-   ViewCategoryItemsModel? petDetails;
+  ViewCategoryItemsModel? petDetails;
 
   @override
   void initState() {
@@ -29,6 +32,7 @@ class _SinglePetState extends State<SinglePet> {
     // Fetch the pet details when the widget initializes
     fetchPetDetails(widget.pid);
     print(widget.pid);
+    getoutId();
   }
 
   Future<ViewCategoryItemsModel?> fetchPetDetails(int id) async {
@@ -40,13 +44,20 @@ class _SinglePetState extends State<SinglePet> {
 
         });// Update petDetails when data is available
 
-
-
     } catch (e) {
       // Handle errors here, e.g., show an error message
       print('Failed to fetch pet details: $e');
       return null; // Return null in case of an error
     }
+  }
+
+  late SharedPreferences prefs;
+  late int outid;
+
+  void getoutId()async {
+    prefs = await SharedPreferences.getInstance();
+    outid = (prefs.getInt('login_id') ?? 0 ) ;
+    print('Outsider id ${outid}');
   }
 
 
@@ -68,19 +79,18 @@ class _SinglePetState extends State<SinglePet> {
                 //Navigator.pop(context);
               },
               icon: Icon(Icons.ios_share_outlined)
+          ),
+          IconButton(
+              onPressed: (){
+                Navigator.push(context, MaterialPageRoute(builder: (context)=>CartScreen()));
+              },
+              icon: Icon(Icons.shopping_cart_outlined)
           )
         ],
       ),
 
       body:petDetails != null ?  SingleChildScrollView(
-        child:/* FutureBuilder<ViewCategoryItemsModel?>(
-            future: fetchPetDetails(widget.pid),
-            builder: (BuildContext content,AsyncSnapshot<ViewCategoryItemsModel?> snapshot) {
-              if (snapshot.hasData) {
-                 petDetails = snapshot.data!;
-                 print("pet${petDetails}");
-
-                return */Column(
+        child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Container(
@@ -177,11 +187,7 @@ class _SinglePetState extends State<SinglePet> {
                     )
                   ],
                 )
-              /*} else {
-                return Text('No pet details available');
-              }
-          }
-      ),*/) : Center(child: CircularProgressIndicator(),),
+      ) : Center(child: CircularProgressIndicator(),),
       bottomNavigationBar: Container(
         height: 70,
         margin: EdgeInsets.symmetric(vertical: 10,horizontal: 20),
@@ -200,6 +206,10 @@ class _SinglePetState extends State<SinglePet> {
               ),
             ),
             InkWell(
+              onTap: (){
+                //Navigator.push(context, MaterialPageRoute(builder: (context)=>Login_Page()));
+                viewPetdetails.addtoCart(context: context, userId: outid, productId: widget.pid);
+              },
               child: Container(
                 height: 60,
                 width: MediaQuery.of(context).size.width/1.5,

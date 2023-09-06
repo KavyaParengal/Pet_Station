@@ -2,6 +2,7 @@ import 'dart:convert';
 
 import 'package:flutter/material.dart';
 import 'package:pet_station/config/constants.dart';
+import 'package:pet_station/design/cartScreen.dart';
 import 'package:pet_station/design/notification.dart';
 import 'package:pet_station/design/single_pet.dart';
 import 'package:pet_station/models/viewCategory.dart';
@@ -61,8 +62,6 @@ class _HomeScreenState extends State<HomeScreen> {
   }
 
   int ? checkindex;
-
-
   @override
   Widget build(BuildContext context) {
 
@@ -118,7 +117,7 @@ class _HomeScreenState extends State<HomeScreen> {
                       ),
                       IconButton(
                           onPressed: (){
-                           // Navigator.pop(context);
+                            Navigator.push(context, MaterialPageRoute(builder: (context)=>CartScreen()));
                           },
                           icon: const Icon(Icons.shopping_cart_outlined,size: 30,)
                       )
@@ -158,6 +157,7 @@ class _HomeScreenState extends State<HomeScreen> {
               height: 90,
               child: FutureBuilder<List<ViewCategoryModel>>(
                 future: viewcategory.getCategories(),
+                initialData: [],
                 builder: (BuildContext content,AsyncSnapshot<List<ViewCategoryModel>> snapshot){
                   if(snapshot.hasData){
                     return ListView.builder(
@@ -167,11 +167,12 @@ class _HomeScreenState extends State<HomeScreen> {
                         itemCount: snapshot.data?.length,
                         itemBuilder: (context,index){
 
-                          return GestureDetector(
+                          return InkWell(
                             onTap: () {
 
-                              checkindex = index;
                               setState(() {
+
+                                checkindex = index;
                                 getCategoryItems(snapshot.data![index].id);
                               //  c_id = snapshot.data![index].id; // Update the selected category ID
                               });
@@ -199,8 +200,9 @@ class _HomeScreenState extends State<HomeScreen> {
                                   ),
                                   const SizedBox(height: 3,),
                                   Text(snapshot.data![index].category_name.toString(),textAlign: TextAlign.center,style: TextStyle(
-                                      fontWeight: FontWeight.w400,
-                                      color: Colors.grey.shade800
+                                      fontWeight: FontWeight.w500,
+                                      fontSize: 13,
+                                      color: Colors.grey.shade700
                                   ),)
                                 ],
                               ),

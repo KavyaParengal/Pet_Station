@@ -1,31 +1,31 @@
 import 'dart:convert';
 import 'package:http/http.dart' as http;
+import 'package:pet_station/config/constants.dart';
 
 class Api {
-  final String url = "https://7c91-117-252-220-77.ngrok-free.app";
 
   authData(data, apiUrl) async {
-    var fullUrl = url + apiUrl;
+    var fullUrl = APIConstants.url + apiUrl;
     return await http.post(
       Uri.parse(fullUrl),
       body: data,
     );
   }
   postData( apiUrl) async {
-    var fullUrl = url + apiUrl;
+    var fullUrl = APIConstants.url + apiUrl;
     return await http.post(
       Uri.parse(fullUrl),
     );
   }
   putData(data, apiUrl) async {
-    var fullUrl = url + apiUrl;
+    var fullUrl = APIConstants.url + apiUrl;
     return await http.put(
       Uri.parse(fullUrl),
       body: data,
     );
   }
   getData(apiUrl) async {
-    var fullUrl = url + apiUrl;
+    var fullUrl = APIConstants.url + apiUrl;
     // await _getToken();
     return await http.get(
       Uri.parse(fullUrl),
@@ -33,7 +33,7 @@ class Api {
     );
   }
   deleteData(apiUrl)async{
-    var fullUrl = url + apiUrl;
+    var fullUrl = APIConstants.url + apiUrl;
     return await http.get(
       Uri.parse(fullUrl),
     );
