@@ -1,31 +1,31 @@
 
 
-class PetAppModel{
-  String? id;
-  String? fullnameController;
-  String? phoneController;
-  String? emailController;
-  String? usernmController;
-  String? pwdController;
-  String? role;
-  String? userstatus;
-  String? userimage;
-  String? log_id;
+class UserRegisterModel{
+  int id;
+  String fullnameController;
+  String phoneController;
+  String emailController;
+  String usernmController;
+  String pwdController;
+  String role;
+  String userstatus;
+  String userimage;
+  int log_id;
 
-  PetAppModel(
-      {this.id,
-      this.fullnameController,
-      this.phoneController,
-      this.emailController,
-      this.usernmController,
-      this.pwdController,
-      this.role,
-      this.userstatus,
-      this.userimage,
-      this.log_id});
+  UserRegisterModel(
+      {required this.id,
+      required this.fullnameController,
+      required this.phoneController,
+      required this.emailController,
+        required this.usernmController,
+        required this.pwdController,
+        required this.role,
+        required this.userstatus,
+        required this.userimage,
+        required this.log_id});
 
-  factory PetAppModel.fromJson(Map<String, dynamic> json){
-    return PetAppModel(
+  factory UserRegisterModel.fromJson(Map<String, dynamic> json){
+    return UserRegisterModel(
       id: json['id'],
       fullnameController: json['fullnameController'],
       phoneController: json['phoneController'],

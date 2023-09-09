@@ -7,8 +7,11 @@ import 'package:pet_station/design/notification.dart';
 import 'package:pet_station/design/single_pet.dart';
 import 'package:pet_station/models/viewCategory.dart';
 import 'package:pet_station/models/viewCategoryItems.dart';
+import 'package:pet_station/provider/fav_provider.dart';
 import 'package:pet_station/services/allService.dart';
 import 'package:http/http.dart' as http;
+import 'package:pet_station/services/searchitem.dart';
+import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class HomeScreen extends StatefulWidget {
@@ -25,24 +28,11 @@ class _HomeScreenState extends State<HomeScreen> {
   double scaleFactor=1;
   List<ViewCategoryItemsModel> _data=[];
   bool isDrawerOpen=false;
-
-  // late SharedPreferences prefs;
-  // late int outid;
-  //
-  // void getoutId()async {
-  //   prefs = await SharedPreferences.getInstance();
-  //   outid = (prefs.getInt('login_id') ?? 0 ) ;
-  //   print('Outsider id ${outid}');
-  // }
-  //
-  // @override
-  // void initState() {
-  //   // TODO: implement initState
-  //   super.initState();
-  //   getoutId();
-  // }
+  bool isLoaded=false;
+  String breed='';
 
   ViewCategoryApi viewcategory=ViewCategoryApi();
+  SearchItem search_Item= SearchItem();
 
   Future<List<ViewCategoryItemsModel>> getCategoryItems(int id) async{
     final urls=APIConstants.url + APIConstants.viewItemInSingleCategory + id.toString();
@@ -64,6 +54,8 @@ class _HomeScreenState extends State<HomeScreen> {
   int ? checkindex;
   @override
   Widget build(BuildContext context) {
+
+    final object = Provider.of<FavProvider_class>(context);
 
     var size = MediaQuery.of(context).size;
     final double itemHeight = (size.height - kToolbarHeight - 200) / 2;
@@ -139,7 +131,16 @@ class _HomeScreenState extends State<HomeScreen> {
                   const Icon(Icons.search),
                   SizedBox(
                     width: MediaQuery.of(context).size.width*.6,
-                    child: const TextField(
+                    child: TextFormField(
+                      onFieldSubmitted: (String text){
+                        setState(() {
+                          breed=text;
+                          search_Item.searchItems(context, text);
+                          setState(() {
+                            isLoaded=false;
+                          });
+                        });
+                      },
                       decoration: InputDecoration(
                         hintText: 'Search pets and foods',
                         border: InputBorder.none
@@ -257,9 +258,13 @@ class _HomeScreenState extends State<HomeScreen> {
                                             Positioned(
                                               right: 1,
                                                 child: IconButton(
-                                                    onPressed: (){},
-                                                    icon: const Icon(Icons.favorite_outline)
-                                                )
+                                                  onPressed: (){
+                                                    object.favorites(APIConstants.url+_data[index].image1.toString(), _data[index].name.toString(), _data[index].breed.toString(), _data[index].price.toString());
+                                                  },
+                                                  icon: object.icn_change(APIConstants.url+_data[index].image1.toString()) ?
+                                                  Icon(Icons.favorite,color: Colors.red,) :
+                                                  Icon(Icons.favorite_outline,color: Colors.grey.shade800,),
+                                                ),
                                             ),
                                             Positioned(
                                               bottom: 13,

@@ -4,13 +4,19 @@ import 'package:pet_station/design/drawer.dart';
 import 'package:pet_station/design/home_page.dart';
 import 'package:pet_station/design/login_page.dart';
 import 'package:pet_station/design/start_page.dart';
+import 'package:provider/provider.dart';
+
+import 'provider/fav_provider.dart';
 
 void main(){
   runApp(
-      MaterialApp(
-        home: Start_Page(),
-        debugShowCheckedModeBanner: false,
-        theme: ThemeData(primarySwatch: Colors.blue),
+      ChangeNotifierProvider(
+        create: (context) => FavProvider_class(),
+        child: MaterialApp(
+          home: Start_Page(),
+          debugShowCheckedModeBanner: false,
+          theme: ThemeData(primarySwatch: Colors.blue),
+        ),
       )
   );
 }

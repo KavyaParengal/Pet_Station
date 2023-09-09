@@ -1,7 +1,12 @@
 
 import 'package:flutter/material.dart';
+import 'package:pet_station/config/constants.dart';
 import 'package:pet_station/design/home_page.dart';
 import 'package:pet_station/main.dart';
+import 'package:pet_station/models/userregister.dart';
+import 'package:pet_station/services/updateProfile.dart';
+import 'package:pet_station/services/viewProfile.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class ProfilePage extends StatefulWidget {
   const ProfilePage({Key? key}) : super(key: key);
@@ -11,6 +16,58 @@ class ProfilePage extends StatefulWidget {
 }
 
 class _ProfilePageState extends State<ProfilePage> {
+
+  late SharedPreferences prefs;
+  late int outid;
+  UserRegisterModel? userDetails;
+  TextEditingController fullnameController=TextEditingController();
+  TextEditingController emailController=TextEditingController();
+  TextEditingController contactController=TextEditingController();
+  String name='';
+  String email='';
+  String contact='';
+
+  UpdateProfile updateUserProfile = UpdateProfile();
+
+  void getoutId()async {
+    prefs = await SharedPreferences.getInstance();
+    outid = (prefs.getInt('login_id') ?? 0 ) ;
+    print('Outsider id ${outid}');
+
+    fetchUserDetails(outid);
+  }
+
+  Future<UserRegisterModel?> fetchUserDetails(int uId) async {
+    try {
+      final details = await ViewProfileAPI().getViewProfile(uId);
+      userDetails=details;
+      setState(() {
+        name =  userDetails!.fullnameController;
+        email = userDetails!.emailController;
+        contact = userDetails!.phoneController;
+        print(name);
+        fullnameController.text = name!;
+        emailController.text= email!;
+        contactController.text= contact!;
+
+      });
+    }
+    catch(e){
+      // Handle errors here, e.g., show an error message
+      print('Failed to fetch user details: $e');
+      return null; // Return null in case of an error
+    }
+  }
+
+
+
+  @override
+  void initState() {
+    super.initState();
+    // Fetch the user details when the widget initializes
+    getoutId();
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -49,12 +106,21 @@ class _ProfilePageState extends State<ProfilePage> {
             Padding(
               padding: const EdgeInsets.all(20.0),
               child: CircleAvatar(
-                radius: 40,
+                radius: 43,
                 backgroundColor: Colors.white,
+                child: CircleAvatar(
+                  radius: 40,
+                  backgroundColor: Colors.teal.shade800,
+                  child: Text(userDetails!.fullnameController[0],style: TextStyle(
+                      fontWeight: FontWeight.bold,
+                      fontSize: 41,
+                      color: Colors.white
+                  ),),
+                ),
               )
             ),
             SizedBox(height: 16,),
-            Expanded(
+            userDetails != null ? Expanded(
               child: Container(
                 decoration: BoxDecoration(
                     color: Colors.white,
@@ -94,8 +160,9 @@ class _ProfilePageState extends State<ProfilePage> {
                                         color: Colors.grey.shade700
                                     ),),
                                     TextField(
+                                      controller: fullnameController,
                                       decoration: InputDecoration(
-                                          hintText: "kavya",
+                                          hintText: "${name}",
                                           hintStyle: TextStyle(color: Colors.grey),
                                           border: InputBorder.none,
 
@@ -118,8 +185,9 @@ class _ProfilePageState extends State<ProfilePage> {
                                         color: Colors.grey.shade700
                                     ),),
                                     TextField(
+                                      controller: contactController,
                                       decoration: InputDecoration(
-                                          hintText: "9645713419",
+                                          hintText: "${contact}",
                                           hintStyle: TextStyle(color: Colors.grey),
                                           border: InputBorder.none
                                       ),
@@ -141,8 +209,9 @@ class _ProfilePageState extends State<ProfilePage> {
                                       color: Colors.grey.shade700
                                     ),),
                                     TextField(
+                                      controller: emailController,
                                       decoration: InputDecoration(
-                                          hintText: "kavya@gmail.com",
+                                          hintText: "${email}",
                                           hintStyle: TextStyle(color: Colors.grey),
                                           border: InputBorder.none
                                       ),
@@ -172,7 +241,8 @@ class _ProfilePageState extends State<ProfilePage> {
                             child: TextButton(
                               child: Text('Edit Profile',style: TextStyle(color: Colors.white,fontWeight: FontWeight.bold,fontSize: 18),),
                               onPressed: (){
-                                Navigator.push(context, MaterialPageRoute(builder: (context)=>HomePage()));
+                                //Navigator.push(context, MaterialPageRoute(builder: (context)=>HomePage()));
+                                updateUserProfile.updateProfile(context, fullnameController.text, contactController.text, emailController.text);
                               },
                             ),
                           ),
@@ -182,7 +252,7 @@ class _ProfilePageState extends State<ProfilePage> {
                   ),
                 ),
               ),
-            ),
+            ) : Center(child: CircularProgressIndicator(),),
           ],
         ),
       ),

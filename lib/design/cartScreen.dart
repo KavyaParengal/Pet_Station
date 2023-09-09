@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:pet_station/config/constants.dart';
-import 'package:pet_station/deliveryAddress/deliveryAddress.dart';
+import 'package:pet_station/design/single_pet.dart';
 import 'package:pet_station/models/addtoCart.dart';
 import 'package:pet_station/services/allService.dart';
 import 'package:pet_station/services/decrementQnty.dart';
@@ -9,6 +9,7 @@ import 'package:pet_station/services/incrementQnty.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 import '../services/deleteCartItem.dart';
+import 'deliveryAddress/deliveryAddress.dart';
 
 class CartScreen extends StatefulWidget {
   const CartScreen({Key? key}) : super(key: key);
@@ -89,7 +90,7 @@ class _CartScreenState extends State<CartScreen> {
                             final item = snapshot.data![index].id;
                             print(item);
 
-                              count = snapshot.data!.length;
+                            count = snapshot.data!.length;
 
                             return Dismissible(
                               onDismissed: (DismissDirection direction) {
@@ -118,25 +119,31 @@ class _CartScreenState extends State<CartScreen> {
                                   children: [
                                     Row(
                                       children: [
-                                        SizedBox(
-                                          width: 120,
-                                          child: AspectRatio(
-                                            aspectRatio: 0.88,
-                                            child: Container(
-                                              padding: EdgeInsets.all(10),
-                                              decoration: BoxDecoration(
-                                                  color: Colors.grey.shade300,
-                                                  borderRadius:
-                                                      BorderRadius.circular(15)),
-                                              child: Image.network(
-                                                  APIConstants.url +
-                                                      snapshot.data![index].image
-                                                          .toString()),
+                                        InkWell(
+                                          onTap: (){
+                                            int? pid=snapshot.data![index].item?.toInt();
+                                            print("product id   $pid");
+                                            Navigator.push(context, MaterialPageRoute(builder: (context)=>SinglePet(pid: snapshot.data![index].item!.toInt())));
+                                          },
+                                          child: SizedBox(
+                                            width: 120,
+                                            child: AspectRatio(
+                                              aspectRatio: 0.88,
+                                              child: Container(
+                                                padding: EdgeInsets.all(10),
+                                                decoration: BoxDecoration(
+                                                    color: Colors.grey.shade300,
+                                                    borderRadius:
+                                                        BorderRadius.circular(15)),
+                                                child: Image.network(
+                                                    APIConstants.url + snapshot.data![index].image.toString()
+                                                ),
+                                              ),
                                             ),
                                           ),
                                         ),
                                         const SizedBox(
-                                          width: 20,
+                                          width: 18,
                                         ),
                                         Column(
                                           crossAxisAlignment:
