@@ -9,7 +9,7 @@ import 'package:pet_station/services/incrementQnty.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 import '../services/deleteCartItem.dart';
-import 'deliveryAddress/deliveryAddress.dart';
+import 'deliveryAddress.dart';
 
 class CartScreen extends StatefulWidget {
   const CartScreen({Key? key}) : super(key: key);
@@ -26,13 +26,17 @@ class _CartScreenState extends State<CartScreen> {
   DeleteCartItemAPI deleteCartItem=DeleteCartItemAPI();
 
   late SharedPreferences prefs;
-  int? outid;
+  late int outid;
+  late int loginId;
 
   void getoutId() async {
     prefs = await SharedPreferences.getInstance();
-    outid = (prefs.getInt('login_id') ?? 0);
+    loginId = (prefs.getInt('login_id') ?? 0);
+    outid = (prefs.getInt('user_id') ?? 0 ) ;
     print('Outsider id ${outid}');
-    setState(() {});
+    setState(() {
+
+    });
   }
 
   @override
@@ -79,7 +83,7 @@ class _CartScreenState extends State<CartScreen> {
           children: [
             Container(
                 child: FutureBuilder<List<Data>>(
-                  future: ViewCategoryApi.getSinglecartItems(3), builder: (BuildContext content, snapshot) {
+                  future: ViewCategoryApi.getSinglecartItems(outid), builder: (BuildContext content, snapshot) {
                     if (snapshot.hasData) {
                       return ListView.builder(
                           physics: NeverScrollableScrollPhysics(),

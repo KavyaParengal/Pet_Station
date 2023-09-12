@@ -31,7 +31,8 @@ class _ProfilePageState extends State<ProfilePage> {
 
   void getoutId()async {
     prefs = await SharedPreferences.getInstance();
-    outid = (prefs.getInt('login_id') ?? 0 ) ;
+    outid = (prefs.getInt('user_id') ?? 0 ) ;
+
     print('Outsider id ${outid}');
 
     fetchUserDetails(outid);
@@ -103,7 +104,7 @@ class _ProfilePageState extends State<ProfilePage> {
                 ],
               ),
             ),
-            Padding(
+            userDetails != null ?  Padding(
               padding: const EdgeInsets.all(20.0),
               child: CircleAvatar(
                 radius: 43,
@@ -118,7 +119,7 @@ class _ProfilePageState extends State<ProfilePage> {
                   ),),
                 ),
               )
-            ),
+            ) : Center(child: CircularProgressIndicator(),),
             SizedBox(height: 16,),
             userDetails != null ? Expanded(
               child: Container(

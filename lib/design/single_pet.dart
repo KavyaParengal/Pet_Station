@@ -32,7 +32,7 @@ class _SinglePetState extends State<SinglePet> {
   @override
   void initState() {
     super.initState();
-    // Fetch the pet details when the widget initializes
+
     fetchPetDetails(widget.pid);
     print(widget.pid);
     getoutId();
@@ -43,6 +43,7 @@ class _SinglePetState extends State<SinglePet> {
       final details = await ViewCategoryApi.getPetDetails(id);
 
         petDetails = details;
+        print('------------$petDetails');
         setState(() {
 
         });// Update petDetails when data is available
@@ -59,15 +60,16 @@ class _SinglePetState extends State<SinglePet> {
 
   void getoutId()async {
     prefs = await SharedPreferences.getInstance();
-    outid = (prefs.getInt('login_id') ?? 0 ) ;
+    outid = (prefs.getInt('user_id') ?? 0 ) ;
     print('Outsider id ${outid}');
   }
 
 
   @override
   Widget build(BuildContext context) {
+    print('rebuild');
 
-    final object = Provider.of<FavProvider_class>(context);
+    final object = Provider.of<FavProvider_class>(context,listen: false);
 
     return Scaffold(
       appBar: AppBar(

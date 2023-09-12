@@ -19,10 +19,10 @@ class SaveOrderAddress{
       String landmark,
       String addressType
   ) async {
-    var urls = Uri.parse('${APIConstants.url + APIConstants.saveOrderAddress}');
-    print(urls);
+    //var urls = Uri.parse(APIConstants.url + APIConstants.saveOrderAddress + uid.toString());
+    //print('url== $urls');
     var orderaddress= {
-      "user": uid,
+      "user": uid.toString(),
       "pincode": pincode,
       "city":city,
       "state": state,
@@ -31,8 +31,9 @@ class SaveOrderAddress{
       "landmark": landmark,
       "addressType":addressType,
     };
+    print('-----------------$orderaddress');
     try {
-      var response = await Api().authData(orderaddress,APIConstants.saveOrderAddress);
+      var response = await Api().authData(orderaddress,APIConstants.saveOrderAddress+uid.toString());
       var body = json.decode(response.body);
       print("body$body");
       if (body['success'] == true) {
@@ -49,6 +50,7 @@ class SaveOrderAddress{
       }
     }
     catch (e) {
+      print('===========$e');
       throw e.toString();
     }
     throw 'Unexpected error occurred';

@@ -7,6 +7,10 @@ import 'package:pet_station/design/message.dart';
 import 'package:pet_station/design/login_page.dart';
 import 'package:pet_station/design/myOrder.dart';
 import 'package:pet_station/design/profile.dart';
+import 'package:pet_station/models/userregister.dart';
+import 'package:pet_station/services/updateProfile.dart';
+import 'package:pet_station/services/viewProfile.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class DrawerScreen extends StatefulWidget {
   const DrawerScreen({Key? key}) : super(key: key);
@@ -25,6 +29,47 @@ class _DrawerScreenState extends State<DrawerScreen> {
     {'icon':Icons.message,'title':'Message'},
     {'icon':FontAwesomeIcons.language,'title':'Select language'}
   ];
+
+  late SharedPreferences prefs;
+  late int outid;
+  UserRegisterModel? userDetails;
+  String name='';
+
+  UpdateProfile updateUserProfile = UpdateProfile();
+
+  void getoutId()async {
+    prefs = await SharedPreferences.getInstance();
+    outid = (prefs.getInt('login_id') ?? 0 ) ;
+    print('Outsider id ${outid}');
+
+    fetchUserDetails(outid);
+  }
+
+  Future<UserRegisterModel?> fetchUserDetails(int uId) async {
+    try {
+      final details = await ViewProfileAPI().getViewProfile(uId);
+      userDetails=details;
+      setState(() {
+        name =  userDetails!.fullnameController;
+        print(name);
+
+      });
+    }
+    catch(e){
+      // Handle errors here, e.g., show an error message
+      print('Failed to fetch user details: $e');
+      return null; // Return null in case of an error
+    }
+  }
+
+
+
+  @override
+  void initState() {
+    super.initState();
+    // Fetch the user details when the widget initializes
+    getoutId();
+  }
 
   @override
   Widget build(BuildContext context) {

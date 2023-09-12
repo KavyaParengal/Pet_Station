@@ -1,5 +1,6 @@
 
 import 'package:flutter/material.dart';
+import 'package:pet_station/design/changeAddress.dart';
 import 'package:pet_station/design/orderSuccessMessage.dart';
 
 class OrderConfirmation extends StatefulWidget {
@@ -11,7 +12,6 @@ class OrderConfirmation extends StatefulWidget {
 
 class _OrderConfirmationState extends State<OrderConfirmation> {
 
-  bool value = false;
   String paymentType='';
   bool isRadioButtonSelected = false;
 
@@ -61,11 +61,16 @@ class _OrderConfirmationState extends State<OrderConfirmation> {
                               fontSize: 19,
                               color: Colors.black,
                             ),),
-                            Text('Change address',style: TextStyle(
-                              fontWeight: FontWeight.w500,
-                              fontSize: 13,
-                              color: Colors.teal.shade800,
-                            ),),
+                            InkWell(
+                              onTap: (){
+                                Navigator.push(context, MaterialPageRoute(builder: (context)=>ChangeAddress()));
+                              },
+                              child: Text('Change address',style: TextStyle(
+                                fontWeight: FontWeight.w500,
+                                fontSize: 13,
+                                color: Colors.teal.shade800,
+                              ),),
+                            ),
                           ],
                         ),
                         SizedBox(height: 15,),
