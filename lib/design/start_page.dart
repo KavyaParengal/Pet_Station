@@ -13,23 +13,6 @@ class Start_Page extends StatefulWidget {
 
 class _Start_PageState extends State<Start_Page> {
 
-  late SharedPreferences localStorage;
-  String user="user";
-  String role="";
-  late SharedPreferences preferences;
-
-  Future<void> checkRoleAndNavigate() async {
-    preferences = await SharedPreferences.getInstance();
-    role = (preferences.getString("role") ?? '');
-
-    if (role == user) {
-      Navigator.push(
-          context, MaterialPageRoute(builder: (context) => HomePage()));
-    } else {
-      Navigator.pushReplacement(
-          context, MaterialPageRoute(builder: (_) => Login_Page()));
-    }
-  }
 
   @override
   Widget build(BuildContext context) {
@@ -86,8 +69,7 @@ class _Start_PageState extends State<Start_Page> {
                       child: TextButton(
                         child: Text("Let's Start",style: TextStyle(color: Colors.teal.shade800,fontWeight: FontWeight.w800,fontSize: 18),),
                         onPressed: (){
-                          checkRoleAndNavigate();
-                          //Navigator.push(context, MaterialPageRoute(builder: (context)=>HomePage()));
+                          Navigator.push(context, MaterialPageRoute(builder: (context)=>Login_Page()));
                         },
                       ),
                     ),

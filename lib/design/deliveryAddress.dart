@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:pet_station/models/orderAddress.dart';
 import 'package:pet_station/models/userregister.dart';
 import 'package:pet_station/services/saveOrderAddress.dart';
 import 'package:pet_station/services/viewProfile.dart';
@@ -40,7 +41,7 @@ class _DeliveryAddressState extends State<DeliveryAddress> {
    fetchUserDetails(outid);
   }
 
-  Future<UserRegisterModel?> fetchUserDetails(int uId) async {
+  Future<OrderAddress?> fetchUserDetails(int uId) async {
     try {
       final details = await ViewProfileAPI().getViewProfile(uId);
       userDetails=details;

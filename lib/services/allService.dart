@@ -11,22 +11,22 @@ import 'package:pet_station/services/apiService.dart';
 
 class ViewCategoryApi {
 
-  Future<List<ViewCategoryModel>> getCategories() async {
-    final urls = APIConstants.url + APIConstants.viewCategoty;
-    print(urls);
-    var response = await http.get(Uri.parse(urls));
-    if (response.statusCode == 200) {
-      var body = json.decode(response.body);
-      print(body);
-      List<ViewCategoryModel> _data = List<ViewCategoryModel>.from(
-          body['data'].map((e) => ViewCategoryModel.fromJson(e)).toList());
-      return _data;
-    }
-    else {
-      List<ViewCategoryModel> _data = [];
-      return _data;
-    }
-  }
+  // Future<List<ViewCategoryModel>> getCategories() async {
+  //   final urls = APIConstants.url + APIConstants.viewCategoty;
+  //   print(urls);
+  //   var response = await http.get(Uri.parse(urls));
+  //   if (response.statusCode == 200) {
+  //     var body = json.decode(response.body);
+  //     print(body);
+  //     List<ViewCategoryModel> _data = List<ViewCategoryModel>.from(
+  //         body['data'].map((e) => ViewCategoryModel.fromJson(e)).toList());
+  //     return _data;
+  //   }
+  //   else {
+  //     List<ViewCategoryModel> _data = [];
+  //     return _data;
+  //   }
+  // }
 
   // Future<List<ViewCategoryItemsModel>> getCategoryItems(int id) async{
   //   final urls=APIConstants.url + APIConstants.viewItemInSingleCategory + id.toString();
@@ -110,7 +110,7 @@ class ViewCategoryApi {
     if (response.statusCode == 200) {
       var body = json.decode(response.body);
 
-    List<Data> data =  body['data'].map<Data>((e) => Data.fromJson(e)).toList();
+      List<Data> data =  body['data'].map<Data>((e) => Data.fromJson(e)).toList();
       print('################# $data');
       return data;
 

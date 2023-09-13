@@ -67,8 +67,6 @@ class _SinglePetState extends State<SinglePet> {
 
   @override
   Widget build(BuildContext context) {
-    print('rebuild');
-
     final object = Provider.of<FavProvider_class>(context,listen: false);
 
     return Scaffold(
@@ -210,16 +208,16 @@ class _SinglePetState extends State<SinglePet> {
                   borderRadius: BorderRadius.circular(20),
                   color: Colors.teal.shade800
               ),
-              child: Center(
-                  child: IconButton(
-                    onPressed: (){
-                      object.favorites(APIConstants.url+petDetails!.image1, petDetails!.name, petDetails!.breed, petDetails!.price);
-                    },
-                    icon: object.icn_change(APIConstants.url+petDetails!.image1) ?
-                    Icon(Icons.favorite,color: Colors.white,size: 32,) :
-                    Icon(Icons.favorite_outline,color: Colors.white,size: 32,),
-                  ),
-              ),
+              // child: Center(
+              //     child: //IconButton(
+              //       // onPressed: (){
+              //       //   object.favorites(APIConstants.url+petDetails!.image1, petDetails!.name, petDetails!.breed, petDetails!.price);
+              //       // },
+              //       // icon: object.icn_change(APIConstants.url+petDetails!.image1) ?
+              //       // Icon(Icons.favorite,color: Colors.white,size: 32,) :
+              //       // Icon(Icons.favorite_outline,color: Colors.white,size: 32,),
+              //     //),
+              // ),
             ),
             InkWell(
               onTap: (){

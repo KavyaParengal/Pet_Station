@@ -31,18 +31,18 @@ class ViewCategoryItemsModel{
   factory ViewCategoryItemsModel.fromJson(Map<String, dynamic> json) {
 
     return ViewCategoryItemsModel(
-      id: json['id'],
-      categoryName: json['categoryName'],
-      name: json['name'],
-      breed: json['breed'],
-      age: json['age'],
-      gender: json['gender'],
-      price: json['price'],
-      description: json['description'],
-      image1: json['image1'],
-      image2: json['image2'],
-      image3: json['image3'],
-      image4: json['image4']
+      id: json['id']==null?0:json['id'],
+      categoryName: json['categoryName']==null?'':json['categoryName'],
+      name: json['name']==null?'':json['name'],
+      breed: json['breed']==null?'':json['breed'],
+      age: json['age']==null?'':json['age'],
+      gender: json['gender']==null?'':json['gender'],
+      price: json['price']==null?'':json['price'],
+      description: json['description']==null?'':json['description'],
+      image1: json['image1']==null?'':json['image1'],
+      image2: json['image2']==null?'':json['image2'],
+      image3: json['image3']==null?'':json['image3'],
+      image4: json['image4']==null?'':json['image4']
     );
   }
 }

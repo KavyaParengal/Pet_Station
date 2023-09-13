@@ -1,7 +1,13 @@
 
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
+import 'package:fluttertoast/fluttertoast.dart';
+import 'package:pet_station/config/constants.dart';
 import 'package:pet_station/design/changeAddress.dart';
 import 'package:pet_station/design/orderSuccessMessage.dart';
+import 'package:pet_station/services/apiService.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class OrderConfirmation extends StatefulWidget {
   const OrderConfirmation({Key? key}) : super(key: key);
@@ -14,6 +20,56 @@ class _OrderConfirmationState extends State<OrderConfirmation> {
 
   String paymentType='';
   bool isRadioButtonSelected = false;
+
+  late SharedPreferences prefs;
+  late int outid;
+  late int loginId;
+  var _loaddata;
+
+  void getoutId() async {
+    prefs = await SharedPreferences.getInstance();
+    loginId = (prefs.getInt('login_id') ?? 0);
+    outid = (prefs.getInt('user_id') ?? 0 ) ;
+    print('Outsider id ${outid}');
+    setState(() {
+
+    });
+
+    fetchTotalPrice();
+  }
+
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    getoutId();
+  }
+
+  Future<void> fetchTotalPrice() async {
+    print(APIConstants.totalOrderPrice + outid.toString());
+    try {
+      var response = await Api().getData(APIConstants.totalOrderPrice + outid.toString());
+      if (response.statusCode == 201) {
+        var items = json.decode(response.body);
+        var body=items['data']['total_price'];
+        print(body);
+        setState(() {
+          _loaddata = body;
+          print(_loaddata);
+        });
+      } else {
+        setState(() {
+          _loaddata = [];
+          Fluttertoast.showToast(
+            msg:"Currently there is no data available",
+            backgroundColor: Colors.grey,
+          );
+        });
+      }
+    } catch (e) {
+      print("Error: $e");
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -145,7 +201,7 @@ class _OrderConfirmationState extends State<OrderConfirmation> {
                         fontSize: 18,
                         color: Colors.black,
                       ),),
-                      Text('₹999.00',style: TextStyle(
+                      Text('₹${_loaddata}',style: TextStyle(
                         fontSize: 15,
                         color: Colors.black,
                       ),),

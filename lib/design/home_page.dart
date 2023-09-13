@@ -12,7 +12,6 @@ import 'package:pet_station/services/allService.dart';
 import 'package:http/http.dart' as http;
 import 'package:pet_station/services/searchitem.dart';
 import 'package:provider/provider.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({Key? key}) : super(key: key);
@@ -27,14 +26,19 @@ class _HomeScreenState extends State<HomeScreen> {
   double yOffset=0;
   double scaleFactor=1;
   List<ViewCategoryItemsModel> _data=[];
+  List<ViewCategoryModel> _categortData=[];
   bool isDrawerOpen=false;
   bool isLoaded=false;
+  bool itemload=false;
   String breed='';
 
   ViewCategoryApi viewcategory=ViewCategoryApi();
   SearchItem search_Item= SearchItem();
 
   Future<List<ViewCategoryItemsModel>> getCategoryItems(int id) async{
+    setState(() {
+      itemload=true;
+    });
     final urls=APIConstants.url + APIConstants.viewItemInSingleCategory + id.toString();
     print(urls);
     var response=await http.get(Uri.parse(urls));
@@ -43,15 +47,48 @@ class _HomeScreenState extends State<HomeScreen> {
       print("items ${body}");
       _data=List<ViewCategoryItemsModel>.from(
           body['data'].map((e)=>ViewCategoryItemsModel.fromJson(e)).toList());
+      setState(() {
+        itemload=false;
+      });
       return _data;
     }
     else{
+      itemload=false;
       _data=[];
       return _data;
     }
   }
 
-  int ? checkindex;
+  Future<List<ViewCategoryModel>> getCategories() async {
+    final urls = APIConstants.url + APIConstants.viewCategoty;
+    print(urls);
+    var response = await http.get(Uri.parse(urls));
+    if (response.statusCode == 200) {
+      var body = json.decode(response.body);
+      print(body);
+      _categortData = List<ViewCategoryModel>.from(
+          body['data'].map((e) => ViewCategoryModel.fromJson(e)).toList());
+      setState(() {
+
+      });
+      getCategoryItems(_categortData[0].id);
+      return _categortData;
+    }
+    else {
+      _categortData = [];
+      return _categortData;
+    }
+  }
+
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    getCategories();
+  }
+
+
+  int checkindex=0;
   @override
   Widget build(BuildContext context) {
 
@@ -135,7 +172,8 @@ class _HomeScreenState extends State<HomeScreen> {
                       onFieldSubmitted: (String text){
                         setState(() {
                           breed=text;
-                          search_Item.searchItems(context, text);
+
+                          SearchItem.searchItems(context, breed);
                           setState(() {
                             isLoaded=false;
                           });
@@ -154,69 +192,64 @@ class _HomeScreenState extends State<HomeScreen> {
                 ],
               ),
             ),
+
+
             Container(
               height: 90,
-              child: FutureBuilder<List<ViewCategoryModel>>(
-                future: viewcategory.getCategories(),
-                initialData: [],
-                builder: (BuildContext content,AsyncSnapshot<List<ViewCategoryModel>> snapshot){
-                  if(snapshot.hasData){
-                    return ListView.builder(
+              child: ListView.builder(
+                  shrinkWrap: true,
+                  scrollDirection: Axis.horizontal,
+                  itemCount: _categortData.length,
+                  itemBuilder: (context,index){
 
-                        shrinkWrap: true,
-                        scrollDirection: Axis.horizontal,
-                        itemCount: snapshot.data?.length,
-                        itemBuilder: (context,index){
+                    return InkWell(
+                      onTap: () {
 
-                          return InkWell(
-                            onTap: () {
-
-                              setState(() {
-
-                                checkindex = index;
-                                getCategoryItems(snapshot.data![index].id);
-                              //  c_id = snapshot.data![index].id; // Update the selected category ID
-                              });
-                            },
-                            child: Container(
-                              child: Column(
-                                children: [
-                                  Container(
-                                    padding: const EdgeInsets.all(10),
-                                    margin: const EdgeInsets.only(left: 20),
-                                    decoration: BoxDecoration(
-                                        color: checkindex == index ? Colors.teal.shade800 : Colors.white,
-                                        boxShadow: [ BoxShadow(
-                                            color: Colors.grey.shade200,
-                                            blurRadius: 30,
-                                            offset: Offset(0, 10)
-                                        )],
-                                        borderRadius: BorderRadius.circular(10)
-                                    ),
-                                    child: Image.network(APIConstants.url+snapshot.data![index].category_image.toString(),
-                                      height: 50,
-                                      width: 50,
-                                      color: checkindex == index ? Colors.white : Colors.grey.shade500,
-                                    ),
-                                  ),
-                                  const SizedBox(height: 3,),
-                                  Text(snapshot.data![index].category_name.toString(),textAlign: TextAlign.center,style: TextStyle(
-                                      fontWeight: FontWeight.w500,
-                                      fontSize: 13,
-                                      color: Colors.grey.shade700
-                                  ),)
-                                ],
+                        setState(() {
+                          checkindex = index;
+                          print('checkindex=$checkindex');
+                          print('index=$index');
+                          getCategoryItems(_categortData[index].id);
+                          //  c_id = snapshot.data![index].id; // Update the selected category ID
+                        });
+                      },
+                      child: Container(
+                        child: Column(
+                          children: [
+                            Container(
+                              padding: const EdgeInsets.all(10),
+                              margin: const EdgeInsets.only(left: 20),
+                              decoration: BoxDecoration(
+                                  color: checkindex == index ? Colors.teal.shade800 : Colors.white,
+                                  boxShadow: [ BoxShadow(
+                                      color: Colors.grey.shade200,
+                                      blurRadius: 30,
+                                      offset: Offset(0, 10)
+                                  )],
+                                  borderRadius: BorderRadius.circular(10)
+                              ),
+                              child: Image.network(APIConstants.url+_categortData[index].category_image,
+                                height: 50,
+                                width: 50,
+                                color: checkindex == index ? Colors.white : Colors.grey.shade500,
                               ),
                             ),
-                          );
-                        }
+                            const SizedBox(height: 3,),
+                            Text(_categortData[index].category_name,textAlign: TextAlign.center,style: TextStyle(
+                                fontWeight: FontWeight.w500,
+                                fontSize: 13,
+                                color: Colors.grey.shade700
+                            ),)
+                          ],
+                        ),
+                      ),
                     );
                   }
-                  return const Center(child: CircularProgressIndicator(),);
-                },
-              )
+              ),
             ),
-            Padding(
+
+
+            itemload?Center(child: CircularProgressIndicator(),):Padding(
                 padding: const EdgeInsets.all(4.0),
                 child:  Container(
                   //width: MediaQuery.of(context).size.width*12,

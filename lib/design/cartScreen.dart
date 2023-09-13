@@ -1,9 +1,14 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:pet_station/config/constants.dart';
 import 'package:pet_station/design/single_pet.dart';
 import 'package:pet_station/models/addtoCart.dart';
+import 'package:pet_station/models/allOrderPrice.dart';
 import 'package:pet_station/services/allService.dart';
+import 'package:pet_station/services/apiService.dart';
 import 'package:pet_station/services/decrementQnty.dart';
 import 'package:pet_station/services/incrementQnty.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -28,6 +33,7 @@ class _CartScreenState extends State<CartScreen> {
   late SharedPreferences prefs;
   late int outid;
   late int loginId;
+  var _loaddata;
 
   void getoutId() async {
     prefs = await SharedPreferences.getInstance();
@@ -37,6 +43,8 @@ class _CartScreenState extends State<CartScreen> {
     setState(() {
 
     });
+
+    fetchTotalPrice();
   }
 
   @override
@@ -46,10 +54,35 @@ class _CartScreenState extends State<CartScreen> {
     getoutId();
   }
 
-  List items = ['naame', 'naame', 'naame'];
+  Future<void> fetchTotalPrice() async {
+    print(APIConstants.totalOrderPrice + outid.toString());
+    try {
+      var response = await Api().getData(APIConstants.totalOrderPrice + outid.toString());
+      if (response.statusCode == 201) {
+        var items = json.decode(response.body);
+        var body=items['data']['total_price'];
+        print(body);
+        setState(() {
+          _loaddata = body;
+          print(_loaddata);
+        });
+      } else {
+        setState(() {
+          _loaddata = [];
+          Fluttertoast.showToast(
+            msg:"Currently there is no data available",
+            backgroundColor: Colors.grey,
+          );
+        });
+      }
+    } catch (e) {
+      print("Error: $e");
+    }
+  }
+
   double counter = 0;
 
-   int? count;
+   int count=0;
 
   @override
   Widget build(BuildContext context) {
@@ -95,6 +128,7 @@ class _CartScreenState extends State<CartScreen> {
                             print(item);
 
                             count = snapshot.data!.length;
+
 
                             return Dismissible(
                               onDismissed: (DismissDirection direction) {
@@ -303,8 +337,8 @@ class _CartScreenState extends State<CartScreen> {
           child: Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              const Text(
-                '₹ 2000',
+               Text(
+                '₹ ${_loaddata}',
                 style: TextStyle(
                     fontSize: 20,
                     color: Colors.black,
