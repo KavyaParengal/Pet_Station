@@ -23,9 +23,9 @@ class SearchItem{
         List _data=body['data'];
         var items=_data.map((e) => ViewCategoryItemsModel.fromJson(e)).toList();
         print(items);
-        ScaffoldMessenger.of(context).showSnackBar(
-            SnackBar(content: Text(body['message']),
-            ));
+        // ScaffoldMessenger.of(context).showSnackBar(
+        //     SnackBar(content: Text(body['message']),
+        //     ));
         Navigator.push(context, MaterialPageRoute(builder: (context)=>SearchResult(items:items)));
 
       }

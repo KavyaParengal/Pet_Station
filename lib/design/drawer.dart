@@ -75,7 +75,7 @@ class _DrawerScreenState extends State<DrawerScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       body: Container(
-        padding: EdgeInsets.only(top: 60,bottom: 40,left: 10),
+        padding: const EdgeInsets.only(top: 60,bottom: 40,left: 10),
         width: MediaQuery.of(context).size.width,
         height: MediaQuery.of(context).size.height,
         decoration: BoxDecoration(
@@ -91,8 +91,8 @@ class _DrawerScreenState extends State<DrawerScreen> {
                   radius: 26,
                   child: Image.asset('images/parrot.png'),
                 ),
-                SizedBox(width: 12,),
-                Column(
+                const SizedBox(width: 12,),
+                const Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Text('Kavya',style: TextStyle(fontSize: 23,fontWeight: FontWeight.w600,color: Colors.white),),
@@ -107,10 +107,10 @@ class _DrawerScreenState extends State<DrawerScreen> {
               children: [
                 GestureDetector(
                   onTap: (){
-                    Navigator.push(context, MaterialPageRoute(builder: (context)=>MyOrder()));
+                    Navigator.push(context, MaterialPageRoute(builder: (context)=>const MyOrder()));
                   },
-                  child: Padding(
-                    padding: const EdgeInsets.only(left: 8,bottom: 16,top: 10),
+                  child: const Padding(
+                    padding: EdgeInsets.only(left: 8,bottom: 16,top: 10),
                     child: Row(
                        children: [
                          Icon(Icons.check_box,color: Colors.white,size: 30,),
@@ -123,10 +123,10 @@ class _DrawerScreenState extends State<DrawerScreen> {
 
                 GestureDetector(
                   onTap: (){
-                    Navigator.push(context, MaterialPageRoute(builder: (context)=>Favorite()));
+                    Navigator.push(context, MaterialPageRoute(builder: (context)=>const Favorite()));
                   },
-                  child: Padding(
-                    padding: const EdgeInsets.only(left: 8,bottom: 16,top: 10),
+                  child: const Padding(
+                    padding: EdgeInsets.only(left: 8,bottom: 16,top: 10),
                     child: Row(
                       children: [
                         Icon(Icons.favorite,color: Colors.white,size: 30,),
@@ -139,10 +139,10 @@ class _DrawerScreenState extends State<DrawerScreen> {
 
                 GestureDetector(
                   onTap: (){
-                    Navigator.push(context, MaterialPageRoute(builder: (context)=>CartScreen()));
+                    Navigator.push(context, MaterialPageRoute(builder: (context)=>const CartScreen()));
                   },
-                  child: Padding(
-                    padding: const EdgeInsets.only(left: 8,bottom: 16,top: 10),
+                  child: const Padding(
+                    padding: EdgeInsets.only(left: 8,bottom: 16,top: 10),
                     child: Row(
                       children: [
                         Icon(Icons.shopping_cart,color: Colors.white,size: 30,),
@@ -155,10 +155,10 @@ class _DrawerScreenState extends State<DrawerScreen> {
 
                 GestureDetector(
                   onTap: (){
-                    Navigator.push(context, MaterialPageRoute(builder: (context)=>ProfilePage()));
+                    Navigator.push(context, MaterialPageRoute(builder: (context)=>const ProfilePage()));
                   },
-                  child: Padding(
-                    padding: const EdgeInsets.only(left: 8,bottom: 16,top: 10),
+                  child: const Padding(
+                    padding: EdgeInsets.only(left: 8,bottom: 16,top: 10),
                     child: Row(
                       children: [
                         Icon(Icons.person,color: Colors.white,size: 30,),
@@ -171,10 +171,10 @@ class _DrawerScreenState extends State<DrawerScreen> {
 
                 GestureDetector(
                   onTap: (){
-                    Navigator.push(context, MaterialPageRoute(builder: (context)=>MessageScreen()));
+                    Navigator.push(context, MaterialPageRoute(builder: (context)=>const MessageScreen()));
                   },
-                  child: Padding(
-                    padding: const EdgeInsets.only(left: 8,bottom: 16,top: 10),
+                  child: const Padding(
+                    padding: EdgeInsets.only(left: 8,bottom: 16,top: 10),
                     child: Row(
                       children: [
                         Icon(Icons.message,color: Colors.white,size: 30,),
@@ -189,23 +189,25 @@ class _DrawerScreenState extends State<DrawerScreen> {
 
             Row(
               children: [
-                Icon(Icons.settings,color: Colors.white,size: 32,),
-                SizedBox(width: 12,),
+                const Icon(Icons.settings,color: Colors.white,size: 32,),
+                const SizedBox(width: 12,),
                 TextButton(
-                    child: Text('Settings',style: TextStyle(fontSize: 20,fontWeight: FontWeight.w400,color: Colors.white),),
+                    child: const Text('Settings',style: TextStyle(fontSize: 20,fontWeight: FontWeight.w400,color: Colors.white),),
                   onPressed: (){},
                 ),
-                SizedBox(width: 12,),
+                const SizedBox(width: 12,),
                 Container(
                   height: 20,
                   width: 2,
                   color: Colors.white,
                 ),
-                SizedBox(width: 12,),
+                const SizedBox(width: 12,),
                 TextButton(
-                  child: Text('Logout',style: TextStyle(fontSize: 20,fontWeight: FontWeight.w400,color: Colors.white),),
-                  onPressed: (){
-                    Navigator.push(context, MaterialPageRoute(builder: (context)=>Login_Page()));
+                  child: const Text('Logout',style: TextStyle(fontSize: 20,fontWeight: FontWeight.w400,color: Colors.white),),
+                  onPressed: () async {
+                    SharedPreferences localStorage = await  SharedPreferences.getInstance();
+                    localStorage.setString('role', 'null');
+                    Navigator.push(context, MaterialPageRoute(builder: (context)=>const Login_Page()));
                   },
                 ),
               ],
