@@ -6,8 +6,6 @@ class Api {
 
   authData(data, apiUrl) async {
     var fullUrl = APIConstants.url + apiUrl;
-    print('data === $data');
-    print('fullurl== $fullUrl');
     return await http.post(
       Uri.parse(fullUrl),
       body: data,

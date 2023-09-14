@@ -1,6 +1,7 @@
 
 import 'package:custom_clippers/custom_clippers.dart';
 import 'package:flutter/material.dart';
+import 'package:pet_station/services/chat.dart';
 
 class MessageScreen extends StatefulWidget {
   const MessageScreen({Key? key}) : super(key: key);
@@ -10,6 +11,9 @@ class MessageScreen extends StatefulWidget {
 }
 
 class _MessageScreenState extends State<MessageScreen> {
+
+  TextEditingController messageController = TextEditingController();
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -119,6 +123,7 @@ class _MessageScreenState extends State<MessageScreen> {
                 alignment: Alignment.centerRight,
                 width: MediaQuery.of(context).size.width*.6,
                 child: TextFormField(
+                  controller: messageController,
                   decoration: InputDecoration(
                     hintText: 'Type your message',
                     border: InputBorder.none
@@ -127,7 +132,9 @@ class _MessageScreenState extends State<MessageScreen> {
               ),
               IconButton(
                 icon: Icon(Icons.send,color: Colors.grey,size: 30,),
-                onPressed: (){},
+                onPressed: (){
+                  ChatApi.chat(context, messageController.text);
+                },
               ),
             ],
           ),

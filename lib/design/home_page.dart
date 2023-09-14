@@ -33,7 +33,6 @@ class _HomeScreenState extends State<HomeScreen> {
   String breed='';
 
   ViewCategoryApi viewcategory=ViewCategoryApi();
-  SearchItem search_Item= SearchItem();
 
   Future<List<ViewCategoryItemsModel>> getCategoryItems(int id) async{
     setState(() {
@@ -107,9 +106,9 @@ class _HomeScreenState extends State<HomeScreen> {
         //physics: ScrollPhysics(),
         child: Column(
           children: [
-            const SizedBox(height: 30,),
+            const SizedBox(height: 31,),
             Container(
-              margin: EdgeInsets.symmetric(horizontal: 20),
+              margin: const EdgeInsets.symmetric(horizontal: 20),
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
@@ -138,17 +137,43 @@ class _HomeScreenState extends State<HomeScreen> {
                   ),
                   Row(
                     children: [
-                      IconButton(
-                          onPressed: (){
-                            Navigator.push(context, MaterialPageRoute(builder: (context)=>const NotificationPage()));
-                          },
-                          icon: const Icon(Icons.notifications_outlined,size: 30,)
+                      Stack(
+                        children: [
+                          IconButton(
+                            onPressed: (){
+                              Navigator.push(context, MaterialPageRoute(builder: (context)=>const NotificationPage()));
+                            },
+                            icon: const Icon(Icons.notifications_outlined,size: 35,)
+                          ),
+                          Positioned(
+                            right: 0,
+                            bottom: 23,
+                            child: CircleAvatar(
+                              backgroundColor: Colors.teal.shade800,
+                              radius: 12,
+                              child: Text('2',style: TextStyle(color: Colors.white),),
+                            ),
+                          )
+                        ]
                       ),
-                      IconButton(
-                          onPressed: (){
-                            Navigator.push(context, MaterialPageRoute(builder: (context)=>CartScreen()));
-                          },
-                          icon: const Icon(Icons.shopping_cart_outlined,size: 30,)
+                      Stack(
+                        children: [
+                          IconButton(
+                            onPressed: (){
+                              Navigator.push(context, MaterialPageRoute(builder: (context)=>const CartScreen()));
+                            },
+                            icon: const Icon(Icons.shopping_cart_outlined,size: 35,)
+                          ),
+                          Positioned(
+                            right: 0,
+                            bottom: 23,
+                            child: CircleAvatar(
+                              backgroundColor: Colors.teal.shade800,
+                              radius: 12,
+                              child: Text('2',style: TextStyle(color: Colors.white),),
+                            ),
+                          )
+                        ]
                       )
                     ],
                   )
@@ -179,7 +204,7 @@ class _HomeScreenState extends State<HomeScreen> {
                           });
                         });
                       },
-                      decoration: InputDecoration(
+                      decoration: const InputDecoration(
                         hintText: 'Search pets and foods',
                         border: InputBorder.none
                       ),
@@ -187,7 +212,7 @@ class _HomeScreenState extends State<HomeScreen> {
                   ),
                   IconButton(
                       onPressed: (){},
-                      icon: Icon(Icons.sort)
+                      icon: const Icon(Icons.sort)
                   )
                 ],
               ),
@@ -224,7 +249,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                   boxShadow: [ BoxShadow(
                                       color: Colors.grey.shade200,
                                       blurRadius: 30,
-                                      offset: Offset(0, 10)
+                                      offset: const Offset(0, 10)
                                   )],
                                   borderRadius: BorderRadius.circular(10)
                               ),
@@ -249,7 +274,7 @@ class _HomeScreenState extends State<HomeScreen> {
             ),
 
 
-            itemload?Center(child: CircularProgressIndicator(),):Padding(
+            itemload?const Center(child: CircularProgressIndicator(),):Padding(
                 padding: const EdgeInsets.all(4.0),
                 child:  Container(
                   //width: MediaQuery.of(context).size.width*12,
@@ -295,7 +320,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                                     object.favorites(APIConstants.url+_data[index].image1.toString(), _data[index].name.toString(), _data[index].breed.toString(), _data[index].price.toString());
                                                   },
                                                   icon: object.icn_change(APIConstants.url+_data[index].image1.toString()) ?
-                                                  Icon(Icons.favorite,color: Colors.red,) :
+                                                  const Icon(Icons.favorite,color: Colors.red,) :
                                                   Icon(Icons.favorite_outline,color: Colors.grey.shade800,),
                                                 ),
                                             ),
