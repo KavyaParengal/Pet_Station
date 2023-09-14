@@ -33,8 +33,6 @@ class _ProfilePageState extends State<ProfilePage> {
     prefs = await SharedPreferences.getInstance();
     outid = (prefs.getInt('user_id') ?? 0 ) ;
 
-    print('Outsider id ${outid}');
-
     fetchUserDetails(outid);
   }
 
@@ -46,7 +44,6 @@ class _ProfilePageState extends State<ProfilePage> {
         name =  userDetails!.fullnameController;
         email = userDetails!.emailController;
         contact = userDetails!.phoneController;
-        print(name);
         fullnameController.text = name!;
         emailController.text= email!;
         contactController.text= contact!;
@@ -90,7 +87,7 @@ class _ProfilePageState extends State<ProfilePage> {
                       onPressed: (){
                         Navigator.pop(context);
                       },
-                      icon: Icon(Icons.arrow_back_ios,size: 28,color: Colors.white,),
+                      icon: Icon(Icons.arrow_back,size: 28,color: Colors.white,),
                   ),
                   SizedBox(width: 10,),
                   Align(

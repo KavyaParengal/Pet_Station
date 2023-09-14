@@ -37,16 +37,13 @@ class _Login_PageState extends State<Login_Page> {
     print("data${data}");
     var res = await Api().authData(data,'/api/login_users');
     var body = json.decode(res.body);
-    print(body);
     if (body['success'] == true) {
-      print(body);
 
       localStorage = await SharedPreferences.getInstance();
       localStorage.setInt('login_id', body['data']['login_id']);
       localStorage.setInt('user_id', body['data']['user_id']);
       localStorage.setString('role', body['data']['role']);
 
-      print('login_id ${body['data']['login_id']}');
       Navigator.push(context, MaterialPageRoute(builder: (context)=>HomePage()));
 
     }else {

@@ -15,7 +15,6 @@ class UpdateProfile{
 
     SharedPreferences prefs = await SharedPreferences.getInstance();
     int userId = (prefs.getInt('login_id') ?? 0 ) ;
-    print('Outsider id ${userId}');
 
     var userData= {
       "fullnameController": name,
@@ -26,7 +25,6 @@ class UpdateProfile{
     try{
       var response = await Api().putData(userData, APIConstants.updateProfile+userId.toString());
       var body = json.decode(response.body);
-      print(body);
       if(body['success'] == true){
         ScaffoldMessenger.of(context).showSnackBar(
             SnackBar(content: Text(body['message'],),

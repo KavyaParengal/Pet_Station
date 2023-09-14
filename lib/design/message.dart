@@ -26,7 +26,7 @@ class _MessageScreenState extends State<MessageScreen> {
             onPressed: (){
               Navigator.pop(context);
             },
-            icon: Icon(Icons.arrow_back_ios),
+            icon: Icon(Icons.arrow_back),
           ),
           actions: [
             Padding(

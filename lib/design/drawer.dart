@@ -40,7 +40,6 @@ class _DrawerScreenState extends State<DrawerScreen> {
   void getoutId()async {
     prefs = await SharedPreferences.getInstance();
     outid = (prefs.getInt('login_id') ?? 0 ) ;
-    print('Outsider id ${outid}');
 
     fetchUserDetails(outid);
   }
@@ -51,7 +50,6 @@ class _DrawerScreenState extends State<DrawerScreen> {
       userDetails=details;
       setState(() {
         name =  userDetails!.fullnameController;
-        print(name);
 
       });
     }

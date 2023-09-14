@@ -17,7 +17,7 @@ class _MyOrderState extends State<MyOrder> {
         backgroundColor: Colors.teal.shade800,
         leading: IconButton(
             onPressed: (){Navigator.pop(context);},
-            icon: Icon(Icons.arrow_back_ios)
+            icon: Icon(Icons.arrow_back)
         ),
         title: Text('My Orders',style: TextStyle(
           fontWeight: FontWeight.w500,
@@ -89,12 +89,14 @@ class _MyOrderState extends State<MyOrder> {
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: [
                             Image.asset('images/cats/billy_cat1.png',width: 85,height: 85,),
-                            const Column(
+                             Column(
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
-                                Text('Delivered on jun 09, 2023',style: TextStyle(fontSize: 16,color: Colors.black,fontWeight: FontWeight.w500),maxLines: 2,),
+                                Text('Delivered on jun 09, 2023',style: TextStyle(fontSize: 17,color: Colors.black,fontWeight: FontWeight.w500),maxLines: 2,),
                                 SizedBox(height: 8,),
-                                Text('Name',style: TextStyle(fontSize: 15,color: Colors.grey)),
+                                Text('Name',style: TextStyle(fontSize: 16,color: Colors.grey.shade600)),
+                                SizedBox(height: 8,),
+                                Text('Name',style: TextStyle(fontSize: 14,color: Colors.grey)),
                               ],
                             ),
                             Icon(Icons.arrow_forward_ios,size: 15,)

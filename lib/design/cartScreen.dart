@@ -4,13 +4,16 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:pet_station/config/constants.dart';
+import 'package:pet_station/design/orderConfirmation.dart';
 import 'package:pet_station/design/single_pet.dart';
 import 'package:pet_station/models/addtoCart.dart';
 import 'package:pet_station/models/allOrderPrice.dart';
+import 'package:pet_station/models/userregister.dart';
 import 'package:pet_station/services/allService.dart';
 import 'package:pet_station/services/apiService.dart';
 import 'package:pet_station/services/decrementQnty.dart';
 import 'package:pet_station/services/incrementQnty.dart';
+import 'package:pet_station/services/viewProfile.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 import '../services/deleteCartItem.dart';
@@ -34,17 +37,37 @@ class _CartScreenState extends State<CartScreen> {
   late int outid;
   late int loginId;
   var _loaddata;
+  UserRegisterModel? userDetails;
 
   void getoutId() async {
     prefs = await SharedPreferences.getInstance();
     loginId = (prefs.getInt('login_id') ?? 0);
     outid = (prefs.getInt('user_id') ?? 0 ) ;
-    print('Outsider id ${outid}');
     setState(() {
 
     });
 
     fetchTotalPrice();
+  }
+
+  Future<void> CheckAndNavigate() async {
+    try {
+      final details = await ViewProfileAPI().getViewProfile(outid);
+      userDetails=details;
+      setState(() {
+        if(userDetails!.userstatus=="1"){
+          Navigator.push(context, MaterialPageRoute(builder: (context)=>OrderConfirmation()));
+        }
+        else{
+          Navigator.push(context, MaterialPageRoute(builder: (context)=>DeliveryAddress()));
+        }
+      });
+    }
+    catch(e){
+      // Handle errors here, e.g., show an error message
+      print('Failed to fetch user details: $e');
+      return null; // Return null in case of an error
+    }
   }
 
   @override
@@ -55,16 +78,13 @@ class _CartScreenState extends State<CartScreen> {
   }
 
   Future<void> fetchTotalPrice() async {
-    print(APIConstants.totalOrderPrice + outid.toString());
     try {
       var response = await Api().getData(APIConstants.totalOrderPrice + outid.toString());
       if (response.statusCode == 201) {
         var items = json.decode(response.body);
         var body=items['data']['total_price'];
-        print(body);
         setState(() {
           _loaddata = body;
-          print(_loaddata);
         });
       } else {
         setState(() {
@@ -91,7 +111,7 @@ class _CartScreenState extends State<CartScreen> {
         toolbarHeight: 60,
         leading: IconButton(
           icon: const Icon(
-            Icons.arrow_back_ios,
+            Icons.arrow_back,
             color: Colors.black,
           ),
           onPressed: () {
@@ -123,9 +143,7 @@ class _CartScreenState extends State<CartScreen> {
                           shrinkWrap: true,
                           itemCount: snapshot.data?.length,
                           itemBuilder: (context, index) {
-                            print('ddddddd   ${snapshot.data![index].image}');
                             final item = snapshot.data![index].id;
-                            print(item);
 
                             count = snapshot.data!.length;
 
@@ -160,7 +178,6 @@ class _CartScreenState extends State<CartScreen> {
                                         InkWell(
                                           onTap: (){
                                             int? pid=snapshot.data![index].item?.toInt();
-                                            print("product id   $pid");
                                             Navigator.push(context, MaterialPageRoute(builder: (context)=>SinglePet(pid: snapshot.data![index].item!.toInt())));
                                           },
                                           child: SizedBox(
@@ -346,10 +363,7 @@ class _CartScreenState extends State<CartScreen> {
               ),
               InkWell(
                 onTap: () {
-                  Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                          builder: (context) => const DeliveryAddress()));
+                  CheckAndNavigate();
                 },
                 child: Container(
                   height: 50,

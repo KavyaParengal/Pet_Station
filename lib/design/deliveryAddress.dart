@@ -48,7 +48,6 @@ class _DeliveryAddressState extends State<DeliveryAddress> {
       setState(() {
         name =  userDetails!.fullnameController;
         contact = userDetails!.phoneController;
-        print(name);
 
       });
     }

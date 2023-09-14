@@ -32,7 +32,6 @@ class SaveOrderAddress{
     try {
       var response = await Api().authData(orderaddress,APIConstants.saveOrderAddress+uid.toString());
       var body = json.decode(response.body);
-      print("body$body");
       if (body['success'] == true) {
         ScaffoldMessenger.of(context).showSnackBar(
             SnackBar(content: Text(body['message']),

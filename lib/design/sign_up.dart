@@ -36,10 +36,8 @@ class _Sign_UpState extends State<Sign_Up> {
       "usernmController": unameController.text.trim(),
       "pwdController": pwdController.text.trim(),
     };
-    print("data${data}");
     var res = await Api().authData(data,'/api/user_register');
     var body = json.decode(res.body);
-    print('res${res}');
 
     if(body['success']==true)
     {

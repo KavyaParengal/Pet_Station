@@ -1,6 +1,8 @@
 
 import 'package:flutter/material.dart';
 import 'package:pet_station/design/deliveryAddress.dart';
+import 'package:pet_station/models/orderAddress.dart';
+import 'package:pet_station/services/viewAddress.dart';
 
 class ChangeAddress extends StatefulWidget {
   const ChangeAddress({Key? key}) : super(key: key);
@@ -13,6 +15,24 @@ class _ChangeAddressState extends State<ChangeAddress> {
   String address = '';
   bool isRadioButtonSelected = false;
   int selectedAddressIndex = -1;
+
+  List<Data> _orderAddress=[];
+
+  Future<void> fetchOrderAddress() async {
+    ViewOrderAddress viewOrderAddress = ViewOrderAddress();
+    List<Data> data = await viewOrderAddress.getOrderAddress();
+
+    setState(() {
+      _orderAddress = data;
+    });
+  }
+
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    fetchOrderAddress();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -57,9 +77,8 @@ class _ChangeAddressState extends State<ChangeAddress> {
           ),
         ],
       ),
-      body: ListView.builder(
-        // Remove shrinkWrap: true if not needed
-        itemCount: 3,
+      body: _orderAddress.isNotEmpty ? ListView.builder(
+        itemCount: _orderAddress.length,
         itemBuilder: (context, index) {
           return Padding(
             padding: const EdgeInsets.all(20.0),
@@ -80,7 +99,7 @@ class _ChangeAddressState extends State<ChangeAddress> {
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
                               Text(
-                                'Kavya',
+                                '${_orderAddress[index].name}',
                                 style: TextStyle(
                                   fontWeight: FontWeight.w500,
                                   fontSize: 17,
@@ -91,7 +110,7 @@ class _ChangeAddressState extends State<ChangeAddress> {
                               Container(
                                 constraints: BoxConstraints(maxWidth: MediaQuery.of(context).size.width - 120),
                                 child: Text(
-                                  'Parengal House, Thennala, MALAPPURAM, KERALA-676508',
+                                  '${_orderAddress[index].buildingName}, ${_orderAddress[index].area}, ${_orderAddress[index].city}, ${_orderAddress[index].state}-${_orderAddress[index].pincode}',
                                   softWrap: true,
                                   maxLines: 2,
                                   overflow: TextOverflow.ellipsis,
@@ -112,7 +131,7 @@ class _ChangeAddressState extends State<ChangeAddress> {
                                     ),
                                   ),
                                   Text(
-                                    '9645713419',
+                                    '${_orderAddress[index].contact}',
                                     style: TextStyle(
                                       fontWeight: FontWeight.w500,
                                       fontSize: 14,
@@ -158,7 +177,8 @@ class _ChangeAddressState extends State<ChangeAddress> {
             ),
           );
         },
-      ),
+      ) :
+          Center(child: CircularProgressIndicator(),)
     );
   }
 }

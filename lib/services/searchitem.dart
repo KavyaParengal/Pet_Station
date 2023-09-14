@@ -16,13 +16,10 @@ class SearchItem{
 
     try {
       var response = await Api().authData(data,APIConstants.searchItem);
-      print("response$response");
       var body = json.decode(response.body);
-      print("body---$body");
       if (body['success'] == true) {
         List _data=body['data'];
         var items=_data.map((e) => ViewCategoryItemsModel.fromJson(e)).toList();
-        print(items);
         Navigator.push(context, MaterialPageRoute(builder: (context)=>SearchResult(items:items)));
 
       }

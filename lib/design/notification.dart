@@ -28,7 +28,7 @@ class _NotificationPageState extends State<NotificationPage> {
           onPressed: (){
             Navigator.pop(context);
           },
-          icon: Icon(Icons.arrow_back_ios),
+          icon: Icon(Icons.arrow_back),
         ),
       ),
       body: ListView.builder(

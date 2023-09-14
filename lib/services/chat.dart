@@ -10,15 +10,12 @@ class ChatApi{
   static Future<void> chat(BuildContext context,String message) async {
     SharedPreferences localstorage = await SharedPreferences.getInstance();
     int userId = (localstorage.getInt('user_id') ?? 0 ) ;
-    print('Outsider id ${userId}');
     try{
       var data={
         "user": userId.toString(),
         "message":message
       };
-      print(data);
       final urls = APIConstants.url + APIConstants.chat;
-      print(urls);
       var response = await http.post(Uri.parse(urls),body: data);
       var body = json.decode(response.body);
       if (body['success'] == true) {

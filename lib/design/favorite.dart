@@ -35,7 +35,7 @@ class _FavoriteState extends State<Favorite> {
                   children: [
                     IconButton(
                         onPressed: (){Navigator.pop(context);},
-                        icon: Icon(Icons.arrow_back_ios)
+                        icon: Icon(Icons.arrow_back)
                     ),
                     Text('Favorite List',style: TextStyle(
                       fontWeight: FontWeight.w800,

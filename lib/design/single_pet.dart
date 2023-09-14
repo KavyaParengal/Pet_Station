@@ -34,7 +34,6 @@ class _SinglePetState extends State<SinglePet> {
     super.initState();
 
     fetchPetDetails(widget.pid);
-    print(widget.pid);
     getoutId();
   }
 
@@ -43,7 +42,6 @@ class _SinglePetState extends State<SinglePet> {
       final details = await ViewCategoryApi.getPetDetails(id);
 
         petDetails = details;
-        print('------------$petDetails');
         setState(() {
 
         });// Update petDetails when data is available
@@ -61,7 +59,6 @@ class _SinglePetState extends State<SinglePet> {
   void getoutId()async {
     prefs = await SharedPreferences.getInstance();
     outid = (prefs.getInt('user_id') ?? 0 ) ;
-    print('Outsider id ${outid}');
   }
 
 
@@ -77,7 +74,7 @@ class _SinglePetState extends State<SinglePet> {
             onPressed: (){
               Navigator.pop(context);
             },
-            icon: Icon(Icons.arrow_back_ios)
+            icon: Icon(Icons.arrow_back)
         ),
         actions: [
           IconButton(

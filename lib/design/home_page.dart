@@ -34,37 +34,11 @@ class _HomeScreenState extends State<HomeScreen> {
 
   ViewCategoryApi viewcategory=ViewCategoryApi();
 
-  Future<List<ViewCategoryItemsModel>> getCategoryItems(int id) async{
-    setState(() {
-      itemload=true;
-    });
-    final urls=APIConstants.url + APIConstants.viewItemInSingleCategory + id.toString();
-    print(urls);
-    var response=await http.get(Uri.parse(urls));
-    if(response.statusCode==200){
-      var body=json.decode(response.body);
-      print("items ${body}");
-      _data=List<ViewCategoryItemsModel>.from(
-          body['data'].map((e)=>ViewCategoryItemsModel.fromJson(e)).toList());
-      setState(() {
-        itemload=false;
-      });
-      return _data;
-    }
-    else{
-      itemload=false;
-      _data=[];
-      return _data;
-    }
-  }
-
   Future<List<ViewCategoryModel>> getCategories() async {
     final urls = APIConstants.url + APIConstants.viewCategoty;
-    print(urls);
     var response = await http.get(Uri.parse(urls));
     if (response.statusCode == 200) {
       var body = json.decode(response.body);
-      print(body);
       _categortData = List<ViewCategoryModel>.from(
           body['data'].map((e) => ViewCategoryModel.fromJson(e)).toList());
       setState(() {
@@ -76,6 +50,28 @@ class _HomeScreenState extends State<HomeScreen> {
     else {
       _categortData = [];
       return _categortData;
+    }
+  }
+
+  Future<List<ViewCategoryItemsModel>> getCategoryItems(int id) async{
+    setState(() {
+      itemload=true;
+    });
+    final urls=APIConstants.url + APIConstants.viewItemInSingleCategory + id.toString();
+    var response=await http.get(Uri.parse(urls));
+    if(response.statusCode==200){
+      var body=json.decode(response.body);
+      _data=List<ViewCategoryItemsModel>.from(
+          body['data'].map((e)=>ViewCategoryItemsModel.fromJson(e)).toList());
+      setState(() {
+        itemload=false;
+      });
+      return _data;
+    }
+    else{
+      itemload=false;
+      _data=[];
+      return _data;
     }
   }
 
@@ -232,8 +228,6 @@ class _HomeScreenState extends State<HomeScreen> {
 
                         setState(() {
                           checkindex = index;
-                          print('checkindex=$checkindex');
-                          print('index=$index');
                           getCategoryItems(_categortData[index].id);
                           //  c_id = snapshot.data![index].id; // Update the selected category ID
                         });
@@ -300,7 +294,6 @@ class _HomeScreenState extends State<HomeScreen> {
                                     GestureDetector(
                                       onTap: (){
                                         int pid=_data[index].id;
-                                        print("selected id$pid");
                                         Navigator.push(context, MaterialPageRoute(builder: (context)=>SinglePet(pid: _data[index].id)));
                                       },
                                       child: Container(

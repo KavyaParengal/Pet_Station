@@ -48,11 +48,9 @@ class ViewCategoryApi {
   static Future<ViewCategoryItemsModel> getPetDetails(int id) async {
     final urls = APIConstants.url + APIConstants.viewSinglePetDetails +
         id.toString();
-    print(urls);
     var response = await http.get(Uri.parse(urls));
     if (response.statusCode == 200) {
       var body = json.decode(response.body);
-      print("items ${body}");
       return ViewCategoryItemsModel.fromJson(body['data']);
     } else {
       throw Exception('Failed to load pet details');
@@ -61,11 +59,9 @@ class ViewCategoryApi {
 
   static Future<ViewCategoryItemsModel> getAllPetDetails() async {
     final urls = APIConstants.url + APIConstants.viewAllPetDetails;
-    print(urls);
     var response = await http.get(Uri.parse(urls));
     if (response.statusCode == 200) {
       var body = json.decode(response.body);
-      print("items ${body}");
       return ViewCategoryItemsModel.fromJson(body['data']);
     } else {
       throw Exception('Failed to load pet details');
@@ -74,18 +70,15 @@ class ViewCategoryApi {
 
   Future<AddtoCartModel> addtoCart({required BuildContext context, required int userId, required int productId}) async {
     var urls = Uri.parse('${APIConstants.url + APIConstants.addtoCartItem}');
-    print(urls);
     var datas = {
 
       "user": userId.toString(),
       "item": productId.toString(),
       "quantity": "1",
     };
-    print(datas);
     try {
       var response = await Api().authData(datas,APIConstants.addtoCartItem);
       var body = json.decode(response.body);
-      print("body$body");
       if (body['success'] == true) {
         ScaffoldMessenger.of(context).showSnackBar(
             SnackBar(content: Text(body['message']),
@@ -109,9 +102,7 @@ class ViewCategoryApi {
     var response = await http.get(Uri.parse(urls));
     if (response.statusCode == 200) {
       var body = json.decode(response.body);
-
       List<Data> data =  body['data'].map<Data>((e) => Data.fromJson(e)).toList();
-      print('################# $data');
       return data;
 
     } else {

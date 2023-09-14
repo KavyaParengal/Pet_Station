@@ -6,7 +6,9 @@ import 'package:fluttertoast/fluttertoast.dart';
 import 'package:pet_station/config/constants.dart';
 import 'package:pet_station/design/changeAddress.dart';
 import 'package:pet_station/design/orderSuccessMessage.dart';
+import 'package:pet_station/models/orderAddress.dart';
 import 'package:pet_station/services/apiService.dart';
+import 'package:pet_station/services/viewAddress.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class OrderConfirmation extends StatefulWidget {
@@ -26,16 +28,27 @@ class _OrderConfirmationState extends State<OrderConfirmation> {
   late int loginId;
   var _loaddata;
 
+  List<Data> _orderAddress=[];
+
   void getoutId() async {
     prefs = await SharedPreferences.getInstance();
     loginId = (prefs.getInt('login_id') ?? 0);
     outid = (prefs.getInt('user_id') ?? 0 ) ;
-    print('Outsider id ${outid}');
     setState(() {
 
     });
 
     fetchTotalPrice();
+    fetchOrderAddress();
+  }
+
+  Future<void> fetchOrderAddress() async {
+    ViewOrderAddress viewOrderAddress = ViewOrderAddress();
+    List<Data> data = await viewOrderAddress.getOrderAddress();
+
+    setState(() {
+      _orderAddress = data;
+    });
   }
 
   @override
@@ -46,16 +59,13 @@ class _OrderConfirmationState extends State<OrderConfirmation> {
   }
 
   Future<void> fetchTotalPrice() async {
-    print(APIConstants.totalOrderPrice + outid.toString());
     try {
       var response = await Api().getData(APIConstants.totalOrderPrice + outid.toString());
       if (response.statusCode == 201) {
         var items = json.decode(response.body);
         var body=items['data']['total_price'];
-        print(body);
         setState(() {
           _loaddata = body;
-          print(_loaddata);
         });
       } else {
         setState(() {
@@ -89,15 +99,15 @@ class _OrderConfirmationState extends State<OrderConfirmation> {
           onPressed: () {
             Navigator.pop(context);
           },
-          icon: const Icon(Icons.arrow_back_ios, color: Colors.black),
+          icon: const Icon(Icons.arrow_back, color: Colors.black),
         ),
       ),
 
       body: SingleChildScrollView(
-        child: Column(
+        child: _orderAddress.isNotEmpty ? Column(
           children: [
             Padding(
-              padding: EdgeInsets.all(22),
+              padding: const EdgeInsets.all(22),
               child: Expanded(
                 child: Container(
                   decoration: BoxDecoration(
@@ -112,14 +122,14 @@ class _OrderConfirmationState extends State<OrderConfirmation> {
                         Row(
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: [
-                            Text('Home Delivery',style: TextStyle(
+                            Text('${_orderAddress[0].addressType} Delivery',style: TextStyle(
                               fontWeight: FontWeight.w500,
                               fontSize: 19,
                               color: Colors.black,
                             ),),
                             InkWell(
                               onTap: (){
-                                Navigator.push(context, MaterialPageRoute(builder: (context)=>ChangeAddress()));
+                                Navigator.push(context, MaterialPageRoute(builder: (context)=>const ChangeAddress()));
                               },
                               child: Text('Change address',style: TextStyle(
                                 fontWeight: FontWeight.w500,
@@ -129,25 +139,25 @@ class _OrderConfirmationState extends State<OrderConfirmation> {
                             ),
                           ],
                         ),
-                        SizedBox(height: 15,),
-                        Text('Kavya',style: TextStyle(
+                        const SizedBox(height: 15,),
+                        Text(_orderAddress[0].name!,style: TextStyle(
                           fontWeight: FontWeight.w500,
                           fontSize: 15,
                           color: Colors.black,
                         ),),
-                        SizedBox(height: 10,),
-                        Text('Parengal House, Thennala, MALAPPURAM, KERALA-676508',style: TextStyle(
+                        const SizedBox(height: 10,),
+                        Text('${_orderAddress[0].buildingName}, ${_orderAddress[0].area}, ${_orderAddress[0].city}, ${_orderAddress[0].state}-${_orderAddress[0].pincode}',style: TextStyle(
                           fontSize: 15,
                           color: Colors.grey.shade600,
                         ),),
-                        SizedBox(height: 10,),
+                        const SizedBox(height: 10,),
                         Row(
                           children: [
                             Text('Phone : ',style: TextStyle(
                               fontSize: 15,
                               color: Colors.grey.shade600,
                             ),),
-                            Text('9645713419',style: TextStyle(
+                            Text('${_orderAddress[0].contact}',style: TextStyle(
                               fontWeight: FontWeight.w500,
                               fontSize: 14,
                               color: Colors.grey.shade800,
@@ -163,7 +173,7 @@ class _OrderConfirmationState extends State<OrderConfirmation> {
             Container(
               width: MediaQuery.of(context).size.width,
               height: MediaQuery.of(context).size.height*.07,
-              decoration: BoxDecoration(
+              decoration: const BoxDecoration(
                 color: Colors.white
               ),
               child: Padding(
@@ -171,7 +181,7 @@ class _OrderConfirmationState extends State<OrderConfirmation> {
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
-                    Text('Expected Delivery',style: TextStyle(
+                    const Text('Expected Delivery',style: TextStyle(
                     fontWeight: FontWeight.w500,
                     fontSize: 18,
                     color: Colors.black,
@@ -184,11 +194,11 @@ class _OrderConfirmationState extends State<OrderConfirmation> {
                 ),
               ),
             ),
-            SizedBox(height: 8,),
+            const SizedBox(height: 8,),
             Container(
               width: MediaQuery.of(context).size.width,
               height: MediaQuery.of(context).size.height*.07,
-              decoration: BoxDecoration(
+              decoration: const BoxDecoration(
                   color: Colors.white
               ),
               child: Padding(
@@ -196,12 +206,12 @@ class _OrderConfirmationState extends State<OrderConfirmation> {
                 child: Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
-                      Text('Amount Payable',style: TextStyle(
+                      const Text('Amount Payable',style: TextStyle(
                         fontWeight: FontWeight.w500,
                         fontSize: 18,
                         color: Colors.black,
                       ),),
-                      Text('₹${_loaddata}',style: TextStyle(
+                      Text('₹${_loaddata}',style: const TextStyle(
                         fontSize: 15,
                         color: Colors.black,
                       ),),
@@ -209,11 +219,11 @@ class _OrderConfirmationState extends State<OrderConfirmation> {
                 ),
               ),
             ),
-            SizedBox(height: 8,),
+            const SizedBox(height: 8,),
             Container(
               width: MediaQuery.of(context).size.width,
               height: MediaQuery.of(context).size.height*.36,
-              decoration: BoxDecoration(
+              decoration: const BoxDecoration(
                   color: Colors.white
               ),
               child: Padding(
@@ -221,18 +231,18 @@ class _OrderConfirmationState extends State<OrderConfirmation> {
                 child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      Text('Payment Methods',style: TextStyle(
+                      const Text('Payment Methods',style: TextStyle(
                         fontWeight: FontWeight.w500,
                         fontSize: 18,
                         color: Colors.black,
                       ),),
-                      SizedBox(height: 15,),
+                      const SizedBox(height: 15,),
 
                       Expanded(
                         child: RadioListTile(
-                          title: Text("UPI"),
+                          title: const Text("UPI"),
                           value: "upi",
-                          contentPadding: EdgeInsets.only(left: 5),
+                          contentPadding: const EdgeInsets.only(left: 5),
                           groupValue: paymentType,
                           activeColor: Colors.teal.shade800,
                           onChanged: (value){
@@ -246,8 +256,8 @@ class _OrderConfirmationState extends State<OrderConfirmation> {
 
                       Expanded(
                         child: RadioListTile(
-                          title: Text("Cradit / Debit Card"),
-                          contentPadding: EdgeInsets.only(left: 5),
+                          title: const Text("Cradit / Debit Card"),
+                          contentPadding: const EdgeInsets.only(left: 5),
                           value: "cards",
                           groupValue: paymentType,
                           activeColor: Colors.teal.shade800,
@@ -262,10 +272,10 @@ class _OrderConfirmationState extends State<OrderConfirmation> {
 
                       Expanded(
                         child: RadioListTile(
-                          title: Text("Net Banking"),
+                          title: const Text("Net Banking"),
                           value: "netBanking",
                           groupValue: paymentType,
-                          contentPadding: EdgeInsets.only(left: 5),
+                          contentPadding: const EdgeInsets.only(left: 5),
                           activeColor: Colors.teal.shade800,
                           onChanged: (value){
                             setState(() {
@@ -278,10 +288,10 @@ class _OrderConfirmationState extends State<OrderConfirmation> {
 
                       Expanded(
                         child: RadioListTile(
-                          title: Text("Wallet"),
+                          title: const Text("Wallet"),
                           value: "wallet",
                           groupValue: paymentType,
-                          contentPadding: EdgeInsets.only(left: 5),
+                          contentPadding: const EdgeInsets.only(left: 5),
                           activeColor: Colors.teal.shade800,
                           onChanged: (value){
                             setState(() {
@@ -294,10 +304,10 @@ class _OrderConfirmationState extends State<OrderConfirmation> {
 
                       Expanded(
                         child: RadioListTile(
-                          title: Text("Cash on Delivery"),
+                          title: const Text("Cash on Delivery"),
                           value: "cashOnDelivery",
                           groupValue: paymentType,
-                          contentPadding: EdgeInsets.only(left: 5),
+                          contentPadding: const EdgeInsets.only(left: 5),
                           activeColor: Colors.teal.shade800,
                           onChanged: (value){
                             setState(() {
@@ -313,13 +323,14 @@ class _OrderConfirmationState extends State<OrderConfirmation> {
               ),
             ),
           ],
-        ),
+        ) :
+          Center(child: CircularProgressIndicator(),)
       ),
 
       bottomNavigationBar: InkWell(
         onTap: () {
           // Handle the save address action
-          Navigator.push(context, MaterialPageRoute(builder: (context)=>OrderSuccessMessage()));
+          Navigator.push(context, MaterialPageRoute(builder: (context)=>const OrderSuccessMessage()));
         },
         child: Container(
           decoration: BoxDecoration(
