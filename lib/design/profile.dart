@@ -32,7 +32,7 @@ class _ProfilePageState extends State<ProfilePage> {
   void getoutId()async {
     prefs = await SharedPreferences.getInstance();
     outid = (prefs.getInt('user_id') ?? 0 ) ;
-
+    print('User id : ${outid}');
     fetchUserDetails(outid);
   }
 

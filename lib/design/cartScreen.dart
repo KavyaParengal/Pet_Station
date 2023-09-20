@@ -354,6 +354,13 @@ class _CartScreenState extends State<CartScreen> {
           child: Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
+               _loaddata=='None'?Text(
+                 '₹ 0',
+                 style: TextStyle(
+                     fontSize: 20,
+                     color: Colors.black,
+                     fontWeight: FontWeight.w500),
+               ):
                Text(
                 '₹ ${_loaddata}',
                 style: TextStyle(

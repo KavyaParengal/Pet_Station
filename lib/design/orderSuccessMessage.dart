@@ -1,5 +1,6 @@
 
 import 'package:flutter/material.dart';
+import 'package:pet_station/design/myOrder.dart';
 import 'package:pet_station/main.dart';
 
 class OrderSuccessMessage extends StatefulWidget {
@@ -33,7 +34,9 @@ class _OrderSuccessMessageState extends State<OrderSuccessMessage> {
               crossAxisAlignment: CrossAxisAlignment.end,
               children: [
                 TextButton(
-                    onPressed: (){},
+                    onPressed: (){
+                      Navigator.push(context, MaterialPageRoute(builder: (context)=>MyOrder()));
+                    },
                     child: Text('VIEW ORDER',style: TextStyle(
                       fontSize: 14,
                       color: Colors.black,

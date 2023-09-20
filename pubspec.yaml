@@ -44,6 +44,9 @@ dependencies:
   flutter_rating_bar: ^4.0.1
   flutter_svg: ^2.0.7
   provider: ^6.0.5
+  intl: ^0.18.1
+  expandable_text: any
+  readmore: ^2.1.0
 
 dev_dependencies:
   flutter_test:
@@ -74,6 +77,7 @@ flutter:
     - images/icons/
     - images/ordersuccess.png
     - images/dog/pomeranianpuppy1.1.webp
+    - images/food/
 
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/assets-and-images/#resolution-aware

@@ -8,6 +8,7 @@ import 'package:pet_station/design/changeAddress.dart';
 import 'package:pet_station/design/orderSuccessMessage.dart';
 import 'package:pet_station/models/orderAddress.dart';
 import 'package:pet_station/services/apiService.dart';
+import 'package:pet_station/services/placeOrder.dart';
 import 'package:pet_station/services/viewAddress.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -314,7 +315,9 @@ class _OrderConfirmationState extends State<OrderConfirmation> {
                               paymentType = value.toString();
                               isRadioButtonSelected = true;
                             });
+
                           },
+
                         ),
                       ),
 
@@ -329,8 +332,8 @@ class _OrderConfirmationState extends State<OrderConfirmation> {
 
       bottomNavigationBar: InkWell(
         onTap: () {
-          // Handle the save address action
-          Navigator.push(context, MaterialPageRoute(builder: (context)=>const OrderSuccessMessage()));
+          PlaceOrderAPI.placeOrder(context);
+          //Navigator.push(context, MaterialPageRoute(builder: (context)=>const OrderSuccessMessage()));
         },
         child: Container(
           decoration: BoxDecoration(

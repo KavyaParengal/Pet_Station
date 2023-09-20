@@ -2,14 +2,19 @@ import 'dart:convert';
 
 import 'package:flutter/material.dart';
 import 'package:pet_station/config/constants.dart';
+import 'package:pet_station/design/SingleFoodScreen.dart';
 import 'package:pet_station/design/cartScreen.dart';
+import 'package:pet_station/design/foodScreen.dart';
 import 'package:pet_station/design/notification.dart';
 import 'package:pet_station/design/single_pet.dart';
+import 'package:pet_station/models/foodModel.dart';
 import 'package:pet_station/models/viewCategory.dart';
 import 'package:pet_station/models/viewCategoryItems.dart';
 import 'package:pet_station/provider/fav_provider.dart';
 import 'package:pet_station/services/allService.dart';
 import 'package:http/http.dart' as http;
+import 'package:pet_station/services/favoriteItemService.dart';
+import 'package:pet_station/services/foodViewService.dart';
 import 'package:pet_station/services/searchitem.dart';
 import 'package:provider/provider.dart';
 
@@ -27,6 +32,7 @@ class _HomeScreenState extends State<HomeScreen> {
   double scaleFactor=1;
   List<ViewCategoryItemsModel> _data=[];
   List<ViewCategoryModel> _categortData=[];
+  List<ViewFoodModel> _fooddata=[];
   bool isDrawerOpen=false;
   bool isLoaded=false;
   bool itemload=false;
@@ -75,6 +81,30 @@ class _HomeScreenState extends State<HomeScreen> {
     }
   }
 
+  Future<List<ViewFoodModel>> getFoodItems(int id) async{
+    setState(() {
+      itemload=true;
+    });
+    final urls=APIConstants.url + APIConstants.viewfoods + id.toString();
+    print(urls);
+    var response=await http.get(Uri.parse(urls));
+    if(response.statusCode==200){
+      var body=json.decode(response.body);
+      _fooddata =List<ViewFoodModel>.from(
+          body['data'].map((e)=>ViewFoodModel.fromJson(e)).toList());
+      setState(() {
+        itemload=false;
+      });
+      print('========${_fooddata}');
+      return _fooddata;
+    }
+    else{
+      itemload=false;
+      _fooddata=[];
+      return _fooddata;
+    }
+  }
+
   @override
   void initState() {
     // TODO: implement initState
@@ -84,14 +114,19 @@ class _HomeScreenState extends State<HomeScreen> {
 
 
   int checkindex=0;
+  late int categorId;
+
   @override
   Widget build(BuildContext context) {
 
     final object = Provider.of<FavProvider_class>(context);
 
     var size = MediaQuery.of(context).size;
-    final double itemHeight = (size.height - kToolbarHeight - 200) / 2;
+    final double itemHeight = (size.height - kToolbarHeight - 200) / 1.9;
     final double itemWidth = size.width / 2.18;
+
+    bool foodVisible=false;
+    String categoryType='';
 
     return AnimatedContainer(
       transform: Matrix4.translationValues(xOffset, yOffset, 0)..scale(scaleFactor),
@@ -134,42 +169,42 @@ class _HomeScreenState extends State<HomeScreen> {
                   Row(
                     children: [
                       Stack(
-                        children: [
-                          IconButton(
-                            onPressed: (){
-                              Navigator.push(context, MaterialPageRoute(builder: (context)=>const NotificationPage()));
-                            },
-                            icon: const Icon(Icons.notifications_outlined,size: 35,)
-                          ),
-                          Positioned(
-                            right: 0,
-                            bottom: 23,
-                            child: CircleAvatar(
-                              backgroundColor: Colors.teal.shade800,
-                              radius: 12,
-                              child: Text('2',style: TextStyle(color: Colors.white),),
+                          children: [
+                            IconButton(
+                                onPressed: (){
+                                  Navigator.push(context, MaterialPageRoute(builder: (context)=>const NotificationPage()));
+                                },
+                                icon: const Icon(Icons.notifications_outlined,size: 35,)
                             ),
-                          )
-                        ]
+                            Positioned(
+                              right: 0,
+                              bottom: 23,
+                              child: CircleAvatar(
+                                backgroundColor: Colors.teal.shade800,
+                                radius: 12,
+                                child: Text('2',style: TextStyle(color: Colors.white),),
+                              ),
+                            )
+                          ]
                       ),
                       Stack(
-                        children: [
-                          IconButton(
-                            onPressed: (){
-                              Navigator.push(context, MaterialPageRoute(builder: (context)=>const CartScreen()));
-                            },
-                            icon: const Icon(Icons.shopping_cart_outlined,size: 35,)
-                          ),
-                          Positioned(
-                            right: 0,
-                            bottom: 23,
-                            child: CircleAvatar(
-                              backgroundColor: Colors.teal.shade800,
-                              radius: 12,
-                              child: Text('2',style: TextStyle(color: Colors.white),),
+                          children: [
+                            IconButton(
+                                onPressed: (){
+                                  Navigator.push(context, MaterialPageRoute(builder: (context)=>const CartScreen()));
+                                },
+                                icon: const Icon(Icons.shopping_cart_outlined,size: 35,)
                             ),
-                          )
-                        ]
+                            Positioned(
+                              right: 0,
+                              bottom: 23,
+                              child: CircleAvatar(
+                                backgroundColor: Colors.teal.shade800,
+                                radius: 12,
+                                child: Text('2',style: TextStyle(color: Colors.white),),
+                              ),
+                            )
+                          ]
                       )
                     ],
                   )
@@ -180,8 +215,8 @@ class _HomeScreenState extends State<HomeScreen> {
               padding: const EdgeInsets.symmetric(horizontal: 16,vertical: 10),
               margin: const EdgeInsets.symmetric(vertical: 27,horizontal: 20),
               decoration: BoxDecoration(
-                color: Colors.white,
-                borderRadius: BorderRadius.circular(20)
+                  color: Colors.white,
+                  borderRadius: BorderRadius.circular(20)
               ),
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -201,8 +236,8 @@ class _HomeScreenState extends State<HomeScreen> {
                         });
                       },
                       decoration: const InputDecoration(
-                        hintText: 'Search pets and foods',
-                        border: InputBorder.none
+                          hintText: 'Search pets and foods',
+                          border: InputBorder.none
                       ),
                     ),
                   ),
@@ -213,7 +248,6 @@ class _HomeScreenState extends State<HomeScreen> {
                 ],
               ),
             ),
-
 
             Container(
               height: 90,
@@ -228,6 +262,10 @@ class _HomeScreenState extends State<HomeScreen> {
 
                         setState(() {
                           checkindex = index;
+                          categorId=_categortData[index].id;
+                          categoryType=_categortData[index].category_name;
+                          print(categoryType);
+                          _categortData[index].category_name=='Food'? getFoodItems(_categortData[index].id) :
                           getCategoryItems(_categortData[index].id);
                           //  c_id = snapshot.data![index].id; // Update the selected category ID
                         });
@@ -269,119 +307,243 @@ class _HomeScreenState extends State<HomeScreen> {
 
 
             itemload?const Center(child: CircularProgressIndicator(),):Padding(
-                padding: const EdgeInsets.all(4.0),
-                child:  Container(
-                  //width: MediaQuery.of(context).size.width*12,
-                  child: GridView.builder(
-                          physics: const NeverScrollableScrollPhysics(),
-                          shrinkWrap: true,
-                          itemCount:_data.length,
-                          gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-                              childAspectRatio: (itemWidth / itemHeight),
-                              crossAxisCount: 2,
-                              crossAxisSpacing: 3.0,
-                              mainAxisSpacing: 4.0
-                          ),
-                          itemBuilder: (BuildContext context, int index){
+              padding: const EdgeInsets.all(4.0),
+              child:  Column(
+                children: [
+                  Container(
+                    //width: MediaQuery.of(context).size.width*12,
+                      child: categoryType== 'Food' ?  GridView.builder(
+                        physics: const NeverScrollableScrollPhysics(),
+                        shrinkWrap: true,
+                        itemCount:_fooddata.length,
+                        gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                            childAspectRatio: (itemWidth / itemHeight),
+                            crossAxisCount: 2,
+                            crossAxisSpacing: 3.0,
+                            mainAxisSpacing: 4.0
+                        ),
+                        itemBuilder: (BuildContext context, int index){
 
-                            return GridTile(
-                              child: Container(
-                                decoration: BoxDecoration(
-                                    border: Border.all(color: Colors.grey.shade300)
-                                ),
-                                child: Column(
-                                  children: [
-                                    GestureDetector(
-                                      onTap: (){
-                                        int pid=_data[index].id;
-                                        Navigator.push(context, MaterialPageRoute(builder: (context)=>SinglePet(pid: _data[index].id)));
-                                      },
-                                      child: Container(
-                                        height: MediaQuery.of(context).size.height/4,
-                                        child: Stack(
-                                          children: [
-                                            Container(
-                                              decoration: BoxDecoration(
-                                                image: DecorationImage(image: NetworkImage(APIConstants.url+_data[index].image1.toString())),
-                                                color: Colors.grey.shade100,
-                                              ),
-                                            ),
-                                            Positioned(
-                                              right: 1,
-                                                child: IconButton(
-                                                  onPressed: (){
-                                                    object.favorites(APIConstants.url+_data[index].image1.toString(), _data[index].name.toString(), _data[index].breed.toString(), _data[index].price.toString());
-                                                  },
-                                                  icon: object.icn_change(APIConstants.url+_data[index].image1.toString()) ?
-                                                  const Icon(Icons.favorite,color: Colors.red,) :
-                                                  Icon(Icons.favorite_outline,color: Colors.grey.shade800,),
-                                                ),
-                                            ),
-                                            Positioned(
-                                              bottom: 13,
-                                              left: 10,
-                                              child: Container(
-                                                // width: 100,
-                                                // height: 40 ,
-                                                padding: const EdgeInsets.symmetric(horizontal: 14,vertical: 10),
-                                                decoration: BoxDecoration(
-                                                    borderRadius: BorderRadius.circular(22),
-                                                    color: Colors.grey.shade400.withOpacity(.5)
-                                                ),
-                                                child:const Row(
-                                                  children: [
-                                                    Text('4',style: TextStyle(fontSize: 13,fontWeight: FontWeight.w600),),
-                                                    SizedBox(width: 3,),
-                                                    Icon(Icons.star,size: 15,),
-                                                    SizedBox(width: 4,),
-                                                    Text('|'),
-                                                    SizedBox(width: 4,),
-                                                    Text('4.8 k',style: TextStyle(fontSize: 13,fontWeight: FontWeight.w600),)
-                                                  ],
-                                                ),
-                                              ),
-                                            )
-                                          ],
-                                        ),
-                                      ),
-                                    ),
-                                    Padding(
-                                      padding:const EdgeInsets.symmetric(horizontal: 15,vertical: 10),
-                                      child: Row(
-                                        //mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          return GridTile(
+                            child: Container(
+                              decoration: BoxDecoration(
+                                  border: Border.all(color: Colors.grey.shade300)
+                              ),
+                              child: Column(
+                                children: [
+                                  GestureDetector(
+                                    onTap: (){
+                                      Navigator.push(context, MaterialPageRoute(builder: (context)=>SingleFoodScreen()));
+                                    },
+                                    child: Container(
+                                      height: MediaQuery.of(context).size.height/4,
+                                      child: Stack(
                                         children: [
-                                          Column(
-                                            crossAxisAlignment: CrossAxisAlignment.start ,
-                                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                                            children: [
-                                              Text(_data[index].name.toString(),style: const TextStyle(
-                                                  fontWeight: FontWeight.w700,
-                                                  fontSize: 18
-                                              ),),
-                                              const SizedBox(height: 4,),
-                                              Text(_data[index].breed.toString(),style: const TextStyle(
-                                                  fontWeight: FontWeight.w400,
-                                                  color: Colors.grey,
-                                                  fontSize: 15
-                                              ),),
-                                              const SizedBox(height: 4,),
-                                              Text("₨. ${_data[index].price.toString()}",style: const TextStyle(
-                                                  fontWeight: FontWeight.w400,
-                                                  fontSize: 13
-                                              ),)
-                                            ],
+                                          Container(
+                                            decoration: BoxDecoration(
+                                              image: DecorationImage(image: NetworkImage(APIConstants.url+_fooddata[index].image1.toString())),
+                                              color: Colors.grey.shade100,
+                                            ),
                                           ),
-
+                                          const Positioned(
+                                            right: 1,
+                                            // child: IconButton(
+                                            //   onPressed: (){
+                                            //     object.favorites(APIConstants.url+_data[index].image1.toString(), _data[index].name.toString(), _data[index].breed.toString(), _data[index].price.toString());
+                                            //   },
+                                            //   icon: object.icn_change(APIConstants.url+_data[index].image1.toString()) ?
+                                            //   const Icon(Icons.favorite,color: Colors.red,) :
+                                            //   Icon(Icons.favorite_outline,color: Colors.grey.shade800,),
+                                            // ),
+                                            // child: IconButton(
+                                            //     onPressed: (){
+                                            //       FavoriteItemAPI.FavoriteItem(context: context,productId: _data[index].id);
+                                            //     },
+                                            //     icon: Icon(Icons.favorite_outline,color: Colors.grey.shade800,)
+                                            // ),
+                                            child: Icon(Icons.favorite),
+                                          ),
+                                          Positioned(
+                                            bottom: 13,
+                                            left: 10,
+                                            child: Container(
+                                              // width: 100,
+                                              // height: 40 ,
+                                              padding: const EdgeInsets.symmetric(horizontal: 14,vertical: 10),
+                                              decoration: BoxDecoration(
+                                                  borderRadius: BorderRadius.circular(22),
+                                                  color: Colors.grey.shade400.withOpacity(.5)
+                                              ),
+                                              child:const Row(
+                                                children: [
+                                                  Text('4',style: TextStyle(fontSize: 13,fontWeight: FontWeight.w600),),
+                                                  SizedBox(width: 3,),
+                                                  Icon(Icons.star,size: 15,),
+                                                  SizedBox(width: 4,),
+                                                  Text('|'),
+                                                  SizedBox(width: 4,),
+                                                  Text('4.8 k',style: TextStyle(fontSize: 13,fontWeight: FontWeight.w600),)
+                                                ],
+                                              ),
+                                            ),
+                                          )
                                         ],
                                       ),
-                                    )
-                                  ],
-                                ),
+                                    ),
+                                  ),
+                                  Padding(
+                                    padding:const EdgeInsets.symmetric(horizontal: 15,vertical: 10),
+                                    child: Column(
+                                      crossAxisAlignment: CrossAxisAlignment.start ,
+                                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                      children: [
+                                        Text(_fooddata[index].companyName.toString(),style: const TextStyle(
+                                          fontWeight: FontWeight.w500,
+                                          fontSize: 15,
+                                        ),),
+                                        Container(
+                                          constraints: BoxConstraints(maxWidth: itemWidth-20),
+                                          child: Text(_fooddata[index].productName.toString(),style: TextStyle(
+                                              fontWeight: FontWeight.w400,
+                                              fontSize: 15,
+                                              color: Colors.grey.shade600
+                                          ),),
+                                        ),
+                                        const SizedBox(height: 4,),
+                                        Text("₨. ${_fooddata[index].price}",style: const TextStyle(
+                                          fontWeight: FontWeight.w500,
+                                          fontSize: 15,
+                                        ),)
+                                      ],
+                                    ),
+                                  )
+                                ],
                               ),
-                            );
-                          },
-                  )
-                )
+                            ),
+                          );
+                        },
+                      ) :
+                      GridView.builder(
+                        physics: const NeverScrollableScrollPhysics(),
+                        shrinkWrap: true,
+                        itemCount:_data.length,
+                        gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                            childAspectRatio: (itemWidth / itemHeight),
+                            crossAxisCount: 2,
+                            crossAxisSpacing: 3.0,
+                            mainAxisSpacing: 4.0
+                        ),
+                        itemBuilder: (BuildContext context, int index){
+                          return GridTile(
+                            child: Container(
+                              decoration: BoxDecoration(
+                                  border: Border.all(color: Colors.grey.shade300)
+                              ),
+                              child: Column(
+                                children: [
+                                  GestureDetector(
+                                    onTap: (){
+                                      int pid=_data[index].id;
+                                      Navigator.push(context, MaterialPageRoute(builder: (context)=>SinglePet(pid: _data[index].id)));
+                                    },
+                                    child: Container(
+                                      height: MediaQuery.of(context).size.height/4,
+                                      child: Stack(
+                                        children: [
+                                          // Container(
+                                          //   decoration: BoxDecoration(
+                                          //     image: DecorationImage(image: NetworkImage(APIConstants.url+_data[index].image1.toString())),
+                                          //     color: Colors.grey.shade100,
+                                          //   ),
+                                          // ),
+                                          Positioned(
+                                            right: 1,
+                                              child: IconButton(
+                                                onPressed: (){
+                                                  object.favorites(APIConstants.url+_data[index].image1.toString(), _data[index].name.toString(), _data[index].breed.toString(), _data[index].price.toString());
+                                                },
+                                                icon: object.icn_change(APIConstants.url+_data[index].image1.toString()) ?
+                                                const Icon(Icons.favorite,color: Colors.red,) :
+                                                Icon(Icons.favorite_outline,color: Colors.grey.shade800,),
+                                              ),
+                                            // child: IconButton(
+                                            //     onPressed: (){
+                                            //       FavoriteItemAPI.FavoriteItem(context: context,productId: _data[index].id);
+                                            //     },
+                                            //     icon: Icon(Icons.favorite_outline,color: Colors.grey.shade800,)
+                                            // ),
+                                          ),
+                                          Positioned(
+                                            bottom: 13,
+                                            left: 10,
+                                            child: Container(
+                                              // width: 100,
+                                              // height: 40 ,
+                                              padding: const EdgeInsets.symmetric(horizontal: 14,vertical: 10),
+                                              decoration: BoxDecoration(
+                                                  borderRadius: BorderRadius.circular(22),
+                                                  color: Colors.grey.shade400.withOpacity(.5)
+                                              ),
+                                              child:const Row(
+                                                children: [
+                                                  Text('4',style: TextStyle(fontSize: 13,fontWeight: FontWeight.w600),),
+                                                  SizedBox(width: 3,),
+                                                  Icon(Icons.star,size: 15,),
+                                                  SizedBox(width: 4,),
+                                                  Text('|'),
+                                                  SizedBox(width: 4,),
+                                                  Text('4.8 k',style: TextStyle(fontSize: 13,fontWeight: FontWeight.w600),)
+                                                ],
+                                              ),
+                                            ),
+                                          )
+                                        ],
+                                      ),
+                                    ),
+                                  ),
+                                  Padding(
+                                    padding:const EdgeInsets.symmetric(horizontal: 15,vertical: 10),
+                                    child: Row(
+                                      //mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                      children: [
+                                        Column(
+                                          crossAxisAlignment: CrossAxisAlignment.start ,
+                                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                          children: [
+                                            Text(_data[index].name.toString(),style: const TextStyle(
+                                                fontWeight: FontWeight.w700,
+                                                fontSize: 18
+                                            ),),
+                                            const SizedBox(height: 4,),
+                                            Container(
+                                              constraints: BoxConstraints(maxWidth: itemWidth-50),
+                                              child: Text(_data[index].breed.toString(),style: const TextStyle(
+                                                  fontWeight: FontWeight.w400,
+                                                  color: Colors.grey,
+                                                  fontSize: 14
+                                              ),maxLines: 2,),
+                                            ),
+                                            const SizedBox(height: 4,),
+                                            Text("₨. ${_data[index].price.toString()}",style: const TextStyle(
+                                                fontWeight: FontWeight.w400,
+                                                fontSize: 14
+                                            ),)
+                                          ],
+                                        ),
+
+                                      ],
+                                    ),
+                                  )
+                                ],
+                              ),
+                            ),
+                          );
+                        },
+                      )
+                  ),
+                ],
+              ),
+
             ),
           ],
         ),

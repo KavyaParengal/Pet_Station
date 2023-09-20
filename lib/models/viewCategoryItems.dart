@@ -8,6 +8,7 @@ class ViewCategoryItemsModel{
   String age;
   String gender;
   String price;
+  String expdate;
   String description;
   String image1;
   String image2;
@@ -22,6 +23,7 @@ class ViewCategoryItemsModel{
         required this.age,
         required this.gender,
         required this.price,
+        required this.expdate,
         required this.description,
         required this.image1,
         required this.image2,
@@ -38,6 +40,7 @@ class ViewCategoryItemsModel{
       age: json['age']==null?'':json['age'],
       gender: json['gender']==null?'':json['gender'],
       price: json['price']==null?'':json['price'],
+      expdate: json['expdate']==null?'':json['expdate'],
       description: json['description']==null?'':json['description'],
       image1: json['image1']==null?'':json['image1'],
       image2: json['image2']==null?'':json['image2'],

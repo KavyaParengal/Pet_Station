@@ -171,7 +171,9 @@ class _SinglePetState extends State<SinglePet> {
                                     itemBuilder: (context, _){
                                       return Icon(Icons.star,color: Colors.amber,);
                                     },
-                                    onRatingUpdate: (rating){}
+                                    onRatingUpdate: (rating){
+                                      print(rating);
+                                    }
                                 ),
                                 SizedBox(width: 5,),
                                 Text('(450)')
@@ -181,6 +183,12 @@ class _SinglePetState extends State<SinglePet> {
                             Text('₨. ${petDetails!.price}',style: TextStyle(
                               fontWeight: FontWeight.bold,
                               fontSize: 22,
+                            ),),
+                            SizedBox(height: 15,),
+                            Text('Delivery within ${petDetails!.expdate} days',style: TextStyle(
+                              fontWeight: FontWeight.bold,
+                              color: Colors.grey.shade600,
+                              fontSize: 16,
                             ),),
                             SizedBox(height: 20,),
                             Text(petDetails!.description,textAlign: TextAlign.justify,style: TextStyle(
