@@ -95,7 +95,7 @@ class _HomeScreenState extends State<HomeScreen> {
       setState(() {
         itemload=false;
       });
-      print('========${_fooddata}');
+      print('========${_fooddata[0].productName}');
       return _fooddata;
     }
     else{
@@ -312,7 +312,7 @@ class _HomeScreenState extends State<HomeScreen> {
                 children: [
                   Container(
                     //width: MediaQuery.of(context).size.width*12,
-                      child: categoryType== 'Food' ?  GridView.builder(
+                      child: categoryType=="Food" ?  GridView.builder(
                         physics: const NeverScrollableScrollPhysics(),
                         shrinkWrap: true,
                         itemCount:_fooddata.length,
@@ -323,7 +323,7 @@ class _HomeScreenState extends State<HomeScreen> {
                             mainAxisSpacing: 4.0
                         ),
                         itemBuilder: (BuildContext context, int index){
-
+                          print(_fooddata[index].productName);
                           return GridTile(
                             child: Container(
                               decoration: BoxDecoration(
@@ -450,12 +450,12 @@ class _HomeScreenState extends State<HomeScreen> {
                                       height: MediaQuery.of(context).size.height/4,
                                       child: Stack(
                                         children: [
-                                          // Container(
-                                          //   decoration: BoxDecoration(
-                                          //     image: DecorationImage(image: NetworkImage(APIConstants.url+_data[index].image1.toString())),
-                                          //     color: Colors.grey.shade100,
-                                          //   ),
-                                          // ),
+                                          Container(
+                                            decoration: BoxDecoration(
+                                              image: DecorationImage(image: NetworkImage(APIConstants.url+_data[index].image1.toString())),
+                                              color: Colors.grey.shade100,
+                                            ),
+                                          ),
                                           Positioned(
                                             right: 1,
                                               child: IconButton(
