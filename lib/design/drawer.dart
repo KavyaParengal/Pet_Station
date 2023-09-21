@@ -37,37 +37,37 @@ class _DrawerScreenState extends State<DrawerScreen> {
 
   UpdateProfile updateUserProfile = UpdateProfile();
 
-  // void getoutId()async {
-  //   prefs = await SharedPreferences.getInstance();
-  //   outid = (prefs.getInt('login_id') ?? 0 ) ;
-  //
-  //   fetchUserDetails(outid);
-  // }
-  //
-  // Future<UserRegisterModel?> fetchUserDetails(int uId) async {
-  //   try {
-  //     final details = await ViewProfileAPI().getViewProfile(uId);
-  //     userDetails=details;
-  //     setState(() {
-  //       name =  userDetails!.fullnameController;
-  //
-  //     });
-  //   }
-  //   catch(e){
-  //     // Handle errors here, e.g., show an error message
-  //     print('Failed to fetch user details: $e');
-  //     return null; // Return null in case of an error
-  //   }
-  // }
-  //
-  //
-  //
-  // @override
-  // void initState() {
-  //   super.initState();
-  //   // Fetch the user details when the widget initializes
-  //   getoutId();
-  // }
+  void getoutId()async {
+    prefs = await SharedPreferences.getInstance();
+    outid = (prefs.getInt('user_id') ?? 0 ) ;
+
+    fetchUserDetails(outid);
+  }
+
+  Future<UserRegisterModel?> fetchUserDetails(int uId) async {
+    try {
+      final details = await ViewProfileAPI().getViewProfile(uId);
+      userDetails=details;
+      setState(() {
+        name =  userDetails!.fullnameController;
+        print(name);
+      });
+    }
+    catch(e){
+      // Handle errors here, e.g., show an error message
+      print('Failed to fetch user details: $e');
+      return null; // Return null in case of an error
+    }
+  }
+
+
+
+  @override
+  void initState() {
+    super.initState();
+    // Fetch the user details when the widget initializes
+    getoutId();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -82,18 +82,19 @@ class _DrawerScreenState extends State<DrawerScreen> {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
+            userDetails==null ? CircularProgressIndicator() :
             Row(
               children: [
                 CircleAvatar(
                   backgroundColor: Colors.white,
                   radius: 26,
-                  child: Image.asset('images/parrot.png'),
+                  child: Text('${name[0]}',style: TextStyle(fontSize: 32,fontWeight: FontWeight.w600,color: Colors.teal.shade800),),
                 ),
                 const SizedBox(width: 12,),
-                const Column(
+                Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    Text('Kavya',style: TextStyle(fontSize: 23,fontWeight: FontWeight.w600,color: Colors.white),),
+                    Text('$name',style: TextStyle(fontSize: 23,fontWeight: FontWeight.w600,color: Colors.white),),
                     Text('Active status',style: TextStyle(fontSize: 18,fontWeight: FontWeight.w400,color: Colors.white),),
                   ],
                 )

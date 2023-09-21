@@ -168,43 +168,17 @@ class _HomeScreenState extends State<HomeScreen> {
                   ),
                   Row(
                     children: [
-                      Stack(
-                          children: [
-                            IconButton(
-                                onPressed: (){
-                                  Navigator.push(context, MaterialPageRoute(builder: (context)=>const NotificationPage()));
-                                },
-                                icon: const Icon(Icons.notifications_outlined,size: 35,)
-                            ),
-                            Positioned(
-                              right: 0,
-                              bottom: 23,
-                              child: CircleAvatar(
-                                backgroundColor: Colors.teal.shade800,
-                                radius: 12,
-                                child: Text('2',style: TextStyle(color: Colors.white),),
-                              ),
-                            )
-                          ]
+                      IconButton(
+                          onPressed: (){
+                            Navigator.push(context, MaterialPageRoute(builder: (context)=>const NotificationPage()));
+                          },
+                          icon: const Icon(Icons.notifications_outlined,size: 31,)
                       ),
-                      Stack(
-                          children: [
-                            IconButton(
-                                onPressed: (){
-                                  Navigator.push(context, MaterialPageRoute(builder: (context)=>const CartScreen()));
-                                },
-                                icon: const Icon(Icons.shopping_cart_outlined,size: 35,)
-                            ),
-                            Positioned(
-                              right: 0,
-                              bottom: 23,
-                              child: CircleAvatar(
-                                backgroundColor: Colors.teal.shade800,
-                                radius: 12,
-                                child: Text('2',style: TextStyle(color: Colors.white),),
-                              ),
-                            )
-                          ]
+                      IconButton(
+                          onPressed: (){
+                            Navigator.push(context, MaterialPageRoute(builder: (context)=>const CartScreen()));
+                          },
+                          icon: const Icon(Icons.shopping_cart_outlined,size: 31,)
                       )
                     ],
                   )
@@ -484,15 +458,15 @@ class _HomeScreenState extends State<HomeScreen> {
                                                   borderRadius: BorderRadius.circular(22),
                                                   color: Colors.grey.shade400.withOpacity(.5)
                                               ),
-                                              child:const Row(
+                                              child: Row(
                                                 children: [
-                                                  Text('4',style: TextStyle(fontSize: 13,fontWeight: FontWeight.w600),),
+                                                  Text('${_data[index].rating.toStringAsFixed(1)}',style: TextStyle(fontSize: 13,fontWeight: FontWeight.w600),),
                                                   SizedBox(width: 3,),
                                                   Icon(Icons.star,size: 15,),
                                                   SizedBox(width: 4,),
                                                   Text('|'),
                                                   SizedBox(width: 4,),
-                                                  Text('4.8 k',style: TextStyle(fontSize: 13,fontWeight: FontWeight.w600),)
+                                                  Text('${_data[index].rating_count}',style: TextStyle(fontSize: 13,fontWeight: FontWeight.w600),)
                                                 ],
                                               ),
                                             ),

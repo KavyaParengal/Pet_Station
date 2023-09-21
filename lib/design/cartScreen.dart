@@ -147,7 +147,6 @@ class _CartScreenState extends State<CartScreen> {
 
                             count = snapshot.data!.length;
 
-
                             return Dismissible(
                               onDismissed: (DismissDirection direction) {
                                 setState(() {

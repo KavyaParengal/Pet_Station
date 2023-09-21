@@ -14,6 +14,8 @@ class ViewCategoryItemsModel{
   String image2;
   String image3;
   String image4;
+  double rating;
+  int rating_count;
 
   ViewCategoryItemsModel(
       {required this.id,
@@ -28,7 +30,10 @@ class ViewCategoryItemsModel{
         required this.image1,
         required this.image2,
         required this.image3,
-        required this.image4});
+        required this.image4,
+        required this.rating,
+        required this.rating_count
+      });
 
   factory ViewCategoryItemsModel.fromJson(Map<String, dynamic> json) {
 
@@ -45,7 +50,9 @@ class ViewCategoryItemsModel{
       image1: json['image1']==null?'':json['image1'],
       image2: json['image2']==null?'':json['image2'],
       image3: json['image3']==null?'':json['image3'],
-      image4: json['image4']==null?'':json['image4']
+      image4: json['image4']==null?'':json['image4'],
+      rating: json['rating']==null?0:json['rating'],
+      rating_count: json['rating_count']==null?0:json['rating_count']
     );
   }
 }

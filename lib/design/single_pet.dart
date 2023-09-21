@@ -9,6 +9,7 @@ import 'package:pet_station/design/cartScreen.dart';
 import 'package:pet_station/design/login_page.dart';
 import 'package:pet_station/models/viewCategoryItems.dart';
 import 'package:pet_station/services/allService.dart';
+import 'package:pet_station/services/ratePets.dart';
 import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -43,8 +44,8 @@ class _SinglePetState extends State<SinglePet> {
 
         petDetails = details;
         setState(() {
-
-        });// Update petDetails when data is available
+           print(petDetails!.rating);
+        });
 
     } catch (e) {
       // Handle errors here, e.g., show an error message
@@ -162,7 +163,7 @@ class _SinglePetState extends State<SinglePet> {
                             Row(
                               children: [
                                 RatingBar.builder(
-                                    initialRating: 3.5,
+                                    initialRating: petDetails!.rating,
                                     minRating: 1,
                                     direction: Axis.horizontal,
                                     allowHalfRating: true,
@@ -171,12 +172,13 @@ class _SinglePetState extends State<SinglePet> {
                                     itemBuilder: (context, _){
                                       return Icon(Icons.star,color: Colors.amber,);
                                     },
-                                    onRatingUpdate: (rating){
+                                    onRatingUpdate: (rating) {
+                                      RatePetsAPI.ratePets(context, widget.pid, rating);
                                       print(rating);
                                     }
                                 ),
                                 SizedBox(width: 5,),
-                                Text('(450)')
+                                Text('(${petDetails!.rating_count})')
                               ],
                             ),
                             SizedBox(height: 15,),
