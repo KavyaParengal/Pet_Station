@@ -88,14 +88,14 @@ class _DrawerScreenState extends State<DrawerScreen> {
                 CircleAvatar(
                   backgroundColor: Colors.white,
                   radius: 26,
-                  child: Text('${name[0]}',style: TextStyle(fontSize: 32,fontWeight: FontWeight.w600,color: Colors.teal.shade800),),
+                  child: Text('${name[0]}',style: TextStyle(fontSize: 27,fontWeight: FontWeight.w600,color: Colors.teal.shade800),),
                 ),
                 const SizedBox(width: 12,),
                 Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    Text('$name',style: TextStyle(fontSize: 23,fontWeight: FontWeight.w600,color: Colors.white),),
-                    Text('Active status',style: TextStyle(fontSize: 18,fontWeight: FontWeight.w400,color: Colors.white),),
+                    Text('$name',style: TextStyle(fontSize: 21,fontWeight: FontWeight.w600,color: Colors.white),),
+                    Text('Active status',style: TextStyle(fontSize: 15,fontWeight: FontWeight.w400,color: Colors.white),),
                   ],
                 )
               ],
