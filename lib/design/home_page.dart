@@ -197,7 +197,7 @@ class _HomeScreenState extends State<HomeScreen> {
                 children: [
                   const Icon(Icons.search),
                   SizedBox(
-                    width: MediaQuery.of(context).size.width*.6,
+                    width: MediaQuery.of(context).size.width*.72,
                     child: TextFormField(
                       onFieldSubmitted: (String text){
                         setState(() {
@@ -211,18 +211,13 @@ class _HomeScreenState extends State<HomeScreen> {
                       },
                       decoration: const InputDecoration(
                           hintText: 'Search pets and foods',
-                          border: InputBorder.none
+                          border: InputBorder.none,
                       ),
                     ),
                   ),
-                  IconButton(
-                      onPressed: (){},
-                      icon: const Icon(Icons.sort)
-                  )
                 ],
               ),
             ),
-
             Container(
               height: 90,
               child: ListView.builder(
@@ -307,7 +302,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                 children: [
                                   GestureDetector(
                                     onTap: (){
-                                      Navigator.push(context, MaterialPageRoute(builder: (context)=>SingleFoodScreen()));
+                                      //Navigator.push(context, MaterialPageRoute(builder: (context)=>SingleFoodScreen()));
                                     },
                                     child: Container(
                                       height: MediaQuery.of(context).size.height/4,

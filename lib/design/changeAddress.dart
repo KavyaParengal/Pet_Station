@@ -1,6 +1,8 @@
 
 import 'package:flutter/material.dart';
 import 'package:pet_station/design/deliveryAddress.dart';
+import 'package:pet_station/design/editAddress.dart';
+import 'package:pet_station/design/orderConfirmation.dart';
 import 'package:pet_station/models/orderAddress.dart';
 import 'package:pet_station/services/viewAddress.dart';
 
@@ -80,98 +82,106 @@ class _ChangeAddressState extends State<ChangeAddress> {
       body: _orderAddress.isNotEmpty ? ListView.builder(
         itemCount: _orderAddress.length,
         itemBuilder: (context, index) {
-          return Padding(
-            padding: const EdgeInsets.all(20.0),
-            child: Container(
-              decoration: BoxDecoration(
-                color: Colors.white,
-                borderRadius: BorderRadius.circular(10),
-              ),
-              child: Padding(
-                padding: const EdgeInsets.all(12.0),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Row(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              Text(
-                                '${_orderAddress[index].name}',
-                                style: TextStyle(
-                                  fontWeight: FontWeight.w500,
-                                  fontSize: 17,
-                                  color: Colors.black,
-                                ),
-                              ),
-                              SizedBox(height: 13,),
-                              Container(
-                                constraints: BoxConstraints(maxWidth: MediaQuery.of(context).size.width - 120),
-                                child: Text(
-                                  '${_orderAddress[index].buildingName}, ${_orderAddress[index].area}, ${_orderAddress[index].city}, ${_orderAddress[index].state}-${_orderAddress[index].pincode}',
-                                  softWrap: true,
-                                  maxLines: 2,
-                                  overflow: TextOverflow.ellipsis,
+          return InkWell(
+            onTap: (){
+              Navigator.push(context, MaterialPageRoute(builder: (context)=>OrderConfirmation()));
+            },
+            child: Padding(
+              padding: const EdgeInsets.all(20.0),
+              child: Container(
+                decoration: BoxDecoration(
+                  color: Colors.white,
+                  borderRadius: BorderRadius.circular(10),
+                ),
+                child: Padding(
+                  padding: const EdgeInsets.all(12.0),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Row(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                Text(
+                                  '${_orderAddress[index].name}',
                                   style: TextStyle(
-                                    fontSize: 15,
-                                    color: Colors.grey.shade600,
+                                    fontWeight: FontWeight.w500,
+                                    fontSize: 17,
+                                    color: Colors.black,
                                   ),
                                 ),
-                              ),
-                              SizedBox(height: 8,),
-                              Row(
-                                children: [
-                                  Text(
-                                    'Phone : ',
+                                SizedBox(height: 13,),
+                                Container(
+                                  constraints: BoxConstraints(maxWidth: MediaQuery.of(context).size.width - 120),
+                                  child: Text(
+                                    '${_orderAddress[index].buildingName}, ${_orderAddress[index].area}, ${_orderAddress[index].city}, ${_orderAddress[index].state}-${_orderAddress[index].pincode}',
+                                    softWrap: true,
+                                    maxLines: 2,
+                                    overflow: TextOverflow.ellipsis,
                                     style: TextStyle(
                                       fontSize: 15,
                                       color: Colors.grey.shade600,
                                     ),
                                   ),
-                                  Text(
-                                    '${_orderAddress[index].contact}',
-                                    style: TextStyle(
-                                      fontWeight: FontWeight.w500,
-                                      fontSize: 14,
-                                      color: Colors.grey.shade800,
+                                ),
+                                SizedBox(height: 8,),
+                                Row(
+                                  children: [
+                                    Text(
+                                      'Phone : ',
+                                      style: TextStyle(
+                                        fontSize: 15,
+                                        color: Colors.grey.shade600,
+                                      ),
                                     ),
-                                  ),
-                                ],
-                              ),
-                            ]
-                        ),
-                        Radio(
-                          value: index,
-                          groupValue: selectedAddressIndex,
-                          activeColor: Colors.teal.shade800,
-                          onChanged: (value) {
-                            setState(() {
-                              selectedAddressIndex = value as int;
-                              print(selectedAddressIndex);
-                            });
-                          },
-                        ),
-                      ],
-                    ),
-                    SizedBox(height: 20,),
-                    Container(
-                      color: Colors.grey.shade300,
-                      height: 1,
-                      width: MediaQuery.of(context).size.width*0.83,
-                    ),
-                    TextButton(
-                        onPressed: () {},
-                        child: Text(
-                          'Edit',
-                          style: TextStyle(
-                            color: Colors.teal.shade700,
-                            fontWeight: FontWeight.w500,
+                                    Text(
+                                      '${_orderAddress[index].contact}',
+                                      style: TextStyle(
+                                        fontWeight: FontWeight.w500,
+                                        fontSize: 14,
+                                        color: Colors.grey.shade800,
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                              ]
                           ),
-                        )
-                    ),
-                  ],
+                          Radio(
+                            value: index,
+                            groupValue: selectedAddressIndex,
+                            activeColor: Colors.teal.shade800,
+                            onChanged: (value) {
+                              setState(() {
+                                selectedAddressIndex = value as int;
+                                print(selectedAddressIndex);
+                              });
+                            },
+                          ),
+                        ],
+                      ),
+                      SizedBox(height: 20,),
+                      Container(
+                        color: Colors.grey.shade300,
+                        height: 1,
+                        width: MediaQuery.of(context).size.width*0.83,
+                      ),
+                      TextButton(
+                          onPressed: () {
+                            print(_orderAddress[index].id!);
+                            Navigator.push(context, MaterialPageRoute(builder: (context)=>EditAddress(orderAddressId:_orderAddress[index].id!)));
+                          },
+                          child: Text(
+                            'Edit',
+                            style: TextStyle(
+                              color: Colors.teal.shade700,
+                              fontWeight: FontWeight.w500,
+                            ),
+                          )
+                      ),
+                    ],
+                  ),
                 ),
               ),
             ),

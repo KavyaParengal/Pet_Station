@@ -2,8 +2,10 @@
 import 'package:flutter/material.dart';
 import 'package:pet_station/design/changeAddress.dart';
 import 'package:pet_station/design/drawer.dart';
+import 'package:pet_station/design/foodScreen.dart';
 import 'package:pet_station/design/home_page.dart';
 import 'package:pet_station/design/login_page.dart';
+import 'package:pet_station/design/orderConfirmation.dart';
 import 'package:pet_station/design/searchResult.dart';
 import 'package:pet_station/design/splash.dart';
 import 'package:pet_station/design/start_page.dart';
@@ -16,8 +18,8 @@ void main(){
       ChangeNotifierProvider(
         create: (context) => FavProvider_class(),
         child: MaterialApp(
-          home: SplashScreen(),
-          //home: Search_Result(),
+          //home: SplashScreen(),
+          home: FoodScreen(),
           debugShowCheckedModeBanner: false,
           theme: ThemeData(primarySwatch: Colors.blue),
         ),

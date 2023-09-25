@@ -97,16 +97,16 @@ class ViewCategoryApi {
     throw 'Unexpected error occurred';
   }
 
-  static Future<List<Data>> getSinglecartItems(int userId) async{
+  static Future<List<CartData>> getSinglecartItems(int userId) async{
     final urls = APIConstants.url + APIConstants.cartItemsview + userId.toString();
     var response = await http.get(Uri.parse(urls));
     if (response.statusCode == 200) {
       var body = json.decode(response.body);
-      List<Data> data =  body['data'].map<Data>((e) => Data.fromJson(e)).toList();
+      List<CartData> data =  body['data'].map<CartData>((e) => CartData.fromJson(e)).toList();
       return data;
 
     } else {
-      List<Data> data = [];
+      List<CartData> data = [];
       return data;
     }
   }

@@ -127,7 +127,7 @@ class _CartScreenState extends State<CartScreen> {
               "Your Cart",
               style: TextStyle(color: Colors.black),
             ),
-            Text("${count} items", style: Theme.of(context).textTheme.caption),
+            count!=null?Text("${count} items", style: Theme.of(context).textTheme.caption):CircularProgressIndicator(),
           ],
         ),
       ),
@@ -135,7 +135,7 @@ class _CartScreenState extends State<CartScreen> {
         child: Column(
           children: [
             Container(
-                child: FutureBuilder<List<Data>>(
+                child: FutureBuilder<List<CartData>>(
                   future: ViewCategoryApi.getSinglecartItems(outid), builder: (BuildContext content, snapshot) {
                     if (snapshot.hasData) {
                       return ListView.builder(
@@ -360,13 +360,13 @@ class _CartScreenState extends State<CartScreen> {
                      color: Colors.black,
                      fontWeight: FontWeight.w500),
                ):
-               Text(
+               _loaddata==null?Text(
                 '₹ ${_loaddata}',
                 style: TextStyle(
                     fontSize: 20,
                     color: Colors.black,
                     fontWeight: FontWeight.w500),
-              ),
+              ):CircularProgressIndicator(),
               InkWell(
                 onTap: () {
                   CheckAndNavigate();

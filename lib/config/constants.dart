@@ -1,5 +1,5 @@
 class APIConstants{
-  static const url = "https://e2e5-2401-4900-332e-6781-213d-72f6-d653-70b5.ngrok-free.app";
+  static const url = "https://bc82-2409-4073-2e91-e007-5d90-fe75-97c3-c693.ngrok-free.app";
   static const login="/api/login_users";
   static const register="/api/user_register";
   static const viewCategoty="/api/view_categories";
@@ -17,10 +17,22 @@ class APIConstants{
   static const saveOrderAddress='/api/orderAddressSave/';
   static const totalOrderPrice='/api/allOrderPrice/';
   static const chat='/api/chat';
+
   static const viewOrderAddress='/api/viewOrderAddress/';
+  static const viewSingleOrderAddress='/api/viewSingleOrderAddress/';
+  static const updateOrderAddress='/api/updateOrderAddress/';
+
   static const favoriteItem='/api/favoriteItem';
   static const placeOrder='/api/placeOrder';
   static const payment='/api/payment';
+
   static const viewfoods='/api/foodsView/';
+  static const viewSingleFood='/api/singleFoodData/';
+  static const rateFood='/api/ratingfood/';
+
   static const ratePets='/api/ratingpet/';
+  static const viewChat='/api/viewChat/';
+
+  static const viewOrder='/api/viewOrders/';
+  static const searchOrderItem='/api/searchOrderItem/';
 }

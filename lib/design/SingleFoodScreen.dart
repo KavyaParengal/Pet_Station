@@ -3,17 +3,47 @@ import 'package:expandable_text/expandable_text.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_image_slideshow/flutter_image_slideshow.dart';
 import 'package:flutter_rating_bar/flutter_rating_bar.dart';
+import 'package:pet_station/config/constants.dart';
 import 'package:pet_station/design/cartScreen.dart';
+import 'package:pet_station/models/foodModel.dart';
+import 'package:pet_station/services/rateFood.dart';
+import 'package:pet_station/services/viewSingleFoodData.dart';
 import 'package:readmore/readmore.dart';
 
 class SingleFoodScreen extends StatefulWidget {
-  const SingleFoodScreen({Key? key}) : super(key: key);
+
+  final int foodId;
 
   @override
   State<SingleFoodScreen> createState() => _SingleFoodScreenState();
+
+  SingleFoodScreen({required this.foodId});
 }
 
 class _SingleFoodScreenState extends State<SingleFoodScreen> {
+
+  ViewFoodModel? foodDetails;
+
+  Future<ViewFoodModel?> fetchFoodDetails(int foodId) async {
+    try {
+      final details = await ViewSingleFoodData.getFoodDetails(foodId) ;
+      foodDetails = details;
+      setState(() {
+        print('----------${foodDetails}');
+      });
+
+    } catch (e) {
+      print('Failed to fetch food details: $e');
+      return null;
+    }
+  }
+
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    fetchFoodDetails(widget.foodId);
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -43,7 +73,7 @@ class _SingleFoodScreenState extends State<SingleFoodScreen> {
         ],
       ),
 
-      body: SingleChildScrollView(
+      body: foodDetails!=null? SingleChildScrollView(
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
@@ -73,19 +103,19 @@ class _SingleFoodScreenState extends State<SingleFoodScreen> {
                   isLoop: true,
                   children: [
                     Padding(padding: EdgeInsets.all(8),
-                      child: Image.asset('images/food/image1.1.webp'),
+                      child: Image.network(APIConstants.url+foodDetails!.image1),
                     ),
                     Padding(padding: EdgeInsets.all(8),
-                      child: Image.asset('images/food/image1.2.webp'),
+                      child: Image.network(APIConstants.url+foodDetails!.image2),
                     ),
                     Padding(padding: EdgeInsets.all(8),
-                      child: Image.asset('images/food/image1.3.webp'),
+                      child: Image.network(APIConstants.url+foodDetails!.image3),
                     ),
                     Padding(padding: EdgeInsets.all(8),
-                      child: Image.asset('images/food/image1.4.webp'),
+                      child: Image.network(APIConstants.url+foodDetails!.image4),
                     ),
                     Padding(padding: EdgeInsets.all(8),
-                      child: Image.asset('images/food/image1.5.webp'),
+                      child: Image.network(APIConstants.url+foodDetails!.image5),
                     ),
                   ],
                 ),
@@ -100,7 +130,7 @@ class _SingleFoodScreenState extends State<SingleFoodScreen> {
                     children: [
                       Container(
                         constraints: BoxConstraints(maxWidth: MediaQuery.of(context).size.width-50),
-                        child: Text("Nature's HUG Junior Growth Toy & Small Breed Vegan Dry Dog Food - 2.27 kg",style: TextStyle(
+                        child: Text(foodDetails!.productName,style: TextStyle(
                           fontWeight: FontWeight.bold,
                           fontSize: 20,
                         ),),
@@ -110,7 +140,7 @@ class _SingleFoodScreenState extends State<SingleFoodScreen> {
                   SizedBox(height: 10,),
                   Container(
                     constraints: BoxConstraints(maxWidth: MediaQuery.of(context).size.width-50),
-                    child: Text("Supports bone structure and immunity",style: TextStyle(
+                    child: Text(foodDetails!.benefit,style: TextStyle(
                         fontWeight: FontWeight.bold,
                         fontSize: 18,
                         color: Colors.grey
@@ -120,7 +150,7 @@ class _SingleFoodScreenState extends State<SingleFoodScreen> {
                   Row(
                     children: [
                       RatingBar.builder(
-                          initialRating: 3.5,
+                          initialRating: foodDetails!.rating,
                           minRating: 1,
                           direction: Axis.horizontal,
                           allowHalfRating: true,
@@ -129,34 +159,32 @@ class _SingleFoodScreenState extends State<SingleFoodScreen> {
                           itemBuilder: (context, _){
                             return Icon(Icons.star,color: Colors.amber,);
                           },
-                          onRatingUpdate: (rating){}
+                          onRatingUpdate: (rating){
+                            RateFoodAPI.rateFood(context, foodDetails!.id, rating);
+                          }
                       ),
                       SizedBox(width: 5,),
-                      Text('(450)')
+                      Text('(${foodDetails!.rating_count})')
                     ],
                   ),
                   SizedBox(height: 15,),
-                  Text('₨. 1111',style: TextStyle(
+                  Text('₨. ${foodDetails!.price}',style: TextStyle(
                     fontWeight: FontWeight.bold,
                     fontSize: 20,
                   ),),
                   SizedBox(height: 15,),
-                  Text('Delivery within 11 days',style: TextStyle(
+                  Text('Delivery within ${foodDetails!.expdate} days',style: TextStyle(
                     fontWeight: FontWeight.bold,
                     color: Colors.grey.shade600,
                     fontSize: 16,
                   ),),
                   SizedBox(height: 14,),
-                  ReadMoreText("Revolutionising pet nutrition, Nature's HUG is now in India! This puppy dry food is made of neither animal nor plant protein. "
-                      "Instead, it has protein NH+ - a complete yeast protein which has the same amino acid profile as animal protein! Nature's HUG "
-                      "Junior Growth Toy & Small Breed dog food is specifically made to provide ideal nutrition to puppies from an early age. "
-                      "This formula will help your pup develop to their full potential. The addition of superfoods like kale, kelp and flaxseeds "
-                      "support bone structure, immunity and skin and coat health.",trimLines: 2,
+                  ReadMoreText("${foodDetails!.description}",trimLines: 2,
                     textScaleFactor: 1,
                     colorClickableText: Colors.teal.shade800,
                     trimMode: TrimMode.Line,
                     trimCollapsedText: 'Show more',
-                    trimExpandedText: '   Show less',
+                    trimExpandedText: '  Show less',
                     style: TextStyle(color: Colors.black, fontSize: 16),
                     moreStyle: TextStyle(
                         fontSize: 15,
@@ -171,7 +199,7 @@ class _SingleFoodScreenState extends State<SingleFoodScreen> {
               ),
             )
           ],
-        ),),
+        ),) : Center(child: CircularProgressIndicator(),),
       bottomNavigationBar: Container(
         height: 70,
         margin: EdgeInsets.symmetric(vertical: 10,horizontal: 20),

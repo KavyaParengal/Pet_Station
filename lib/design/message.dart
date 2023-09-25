@@ -2,6 +2,9 @@
 import 'package:custom_clippers/custom_clippers.dart';
 import 'package:flutter/material.dart';
 import 'package:pet_station/services/chat.dart';
+import 'package:pet_station/services/viewChat.dart';
+
+import '../models/chat.dart';
 
 class MessageScreen extends StatefulWidget {
   const MessageScreen({Key? key}) : super(key: key);
@@ -11,6 +14,24 @@ class MessageScreen extends StatefulWidget {
 }
 
 class _MessageScreenState extends State<MessageScreen> {
+
+  List<Data> _chatDetails=[];
+
+  Future<void> fetchchat() async {
+    ViewChatAPI viewOrderAddress = ViewChatAPI();
+    List<Data> data = await viewOrderAddress.getChatdetails();
+
+    setState(() {
+      _chatDetails = data;
+    });
+  }
+
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    fetchchat();
+  }
 
   TextEditingController messageController = TextEditingController();
 
@@ -39,65 +60,79 @@ class _MessageScreenState extends State<MessageScreen> {
             ),
           ],
       ),
-      body: ListView(
-        padding: EdgeInsets.only(top:20, left: 20, right: 20,bottom: 80),
-        children: [
-          Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Padding(
-                  padding: EdgeInsets.only(right: 80),
-                child: ClipPath(
-                  clipper: UpperNipMessageClipper(MessageType.receive),
-                  child: Container(
-                    padding: EdgeInsets.all(20),
-                    decoration: BoxDecoration(
-                      color: Colors.grey.shade300,
-                      boxShadow: [
-                        BoxShadow(
-                          color: Colors.grey.withOpacity(0.5),
-                          spreadRadius: 2,
-                          blurRadius: 10,
-                          offset: Offset(3, 3)
-                        )
-                      ]
+      body: SingleChildScrollView(
+        physics: ScrollPhysics(),
+        child: Column(
+          children: [
+            _chatDetails.isNotEmpty ? ListView.builder(
+              physics: NeverScrollableScrollPhysics(),
+              shrinkWrap: true,
+                itemCount: _chatDetails.length,
+                itemBuilder: (context,index){
+                  return Padding(
+                    padding: const EdgeInsets.only(left: 8,right: 8),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Container(
+                          alignment: Alignment.centerRight,
+                          child: Padding(
+                            padding: EdgeInsets.only(top: 20,left: 80),
+                            child: ClipPath(
+                              clipper: LowerNipMessageClipper(MessageType.send),
+                              child: Container(
+                                padding: EdgeInsets.all(20),
+                                decoration: BoxDecoration(
+                                    color: Colors.teal.shade800,
+                                    boxShadow: [
+                                      BoxShadow(
+                                          color: Colors.grey.withOpacity(0.5),
+                                          spreadRadius: 2,
+                                          blurRadius: 10,
+                                          offset: Offset(3, 3)
+                                      )
+                                    ]
+                                ),
+                                child: Text('${_chatDetails[index].message}',style: TextStyle(
+                                    fontSize: 16,
+                                    color: Colors.white
+                                ),),
+                              ),
+                            ),
+                          ),
+                        ),
+                        Padding(
+                          padding: EdgeInsets.only(right: 80),
+                          child: ClipPath(
+                            clipper: UpperNipMessageClipper(MessageType.receive),
+                            child: Container(
+                              padding: EdgeInsets.only(left: 20,top: 10,right: 20,bottom: 20),
+                              decoration: BoxDecoration(
+                                  color: Colors.grey.shade300,
+                                  boxShadow: [
+                                    BoxShadow(
+                                        color: Colors.grey.withOpacity(0.5),
+                                        spreadRadius: 2,
+                                        blurRadius: 10,
+                                        offset: Offset(3, 3)
+                                    )
+                                  ]
+                              ),
+                              child: Text('${_chatDetails[index].reply}',style: TextStyle(
+                                  fontSize: 16,
+                                  color: Colors.black
+                              ),),
+                            ),
+                          ),
+                        ),
+                      ],
                     ),
-                    child: Text('Hi, how are you ?Hi, how are you ?Hi, how are you ?',style: TextStyle(
-                      fontSize: 16
-                    ),),
-                  ),
-                ),
-              ),
-              Container(
-                alignment: Alignment.centerRight,
-                child: Padding(
-                  padding: EdgeInsets.only(top: 20,left: 80),
-                  child: ClipPath(
-                    clipper: LowerNipMessageClipper(MessageType.send),
-                    child: Container(
-                      padding: EdgeInsets.only(left: 20,top: 10,right: 20,bottom: 20),
-                      decoration: BoxDecoration(
-                          color: Colors.teal.shade800,
-                          boxShadow: [
-                            BoxShadow(
-                                color: Colors.grey.withOpacity(0.5),
-                                spreadRadius: 2,
-                                blurRadius: 10,
-                                offset: Offset(3, 3)
-                            )
-                          ]
-                      ),
-                      child: Text('Hello, i amm fine !Hello, i amm fine !Hello, i amm fine !',style: TextStyle(
-                          fontSize: 16,
-                        color: Colors.white
-                      ),),
-                    ),
-                  ),
-                ),
-              )
-            ],
-          )
-        ],
+                  );
+                }
+            ) : Center(child: CircularProgressIndicator()),
+            SizedBox(height: 70,)
+          ],
+        ),
       ),
       bottomSheet: Container(
         height: 65,

@@ -1,12 +1,12 @@
 class AddtoCartModel {
-  Data? datas;
+  CartData? datas;
   String? message;
   bool? success;
 
   AddtoCartModel({this.datas, this.message, this.success});
 
   AddtoCartModel.fromJson(Map<String, dynamic> json) {
-    datas = json['data'] != null ? Data.fromJson(json['data']) : null;
+    datas = json['data'] != null ? CartData.fromJson(json['data']) : null;
     message = json['message'];
     success = json['success'];
   }
@@ -22,7 +22,7 @@ class AddtoCartModel {
   }
 }
 
-class Data {
+class CartData {
   int? id;
   String? itemname;
   String? breedname;
@@ -31,10 +31,11 @@ class Data {
   String? totalPrice;
   String? category;
   String? cartStatus;
+  String? expday;
   int? item;
   int? user;
 
-  Data(
+  CartData(
       {this.id,
         this.itemname,
         this.breedname,
@@ -43,10 +44,11 @@ class Data {
         this.totalPrice,
         this.category,
         this.cartStatus,
+        this.expday,
         this.item,
         this.user});
 
-  Data.fromJson(Map<String, dynamic> json) {
+  CartData.fromJson(Map<String, dynamic> json) {
     id = json['id'];
     itemname = json['itemname'];
     breedname = json['breedname'];
@@ -55,6 +57,7 @@ class Data {
     totalPrice = json['total_price'];
     category = json['category'];
     cartStatus = json['cart_status'];
+    expday = json['expday'];
     item = json['item_id'];
     user = json['user'];
   }
@@ -69,6 +72,7 @@ class Data {
     data['total_price'] = this.totalPrice;
     data['category'] = this.category;
     data['cart_status'] = this.cartStatus;
+    data['expday'] = this.expday;
     data['item_id'] = this.item;
     data['user'] = this.user;
     return data;

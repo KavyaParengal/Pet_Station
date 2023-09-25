@@ -2,6 +2,7 @@ import 'dart:convert';
 
 import 'package:flutter/material.dart';
 import 'package:pet_station/config/constants.dart';
+import 'package:pet_station/design/message.dart';
 import 'package:pet_station/models/chat.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:http/http.dart' as http;
@@ -19,9 +20,10 @@ class ChatApi{
       var response = await http.post(Uri.parse(urls),body: data);
       var body = json.decode(response.body);
       if (body['success'] == true) {
-        ScaffoldMessenger.of(context).showSnackBar(
-            SnackBar(content: Text(body['message']),
-            ));
+        // ScaffoldMessenger.of(context).showSnackBar(
+        //     SnackBar(content: Text(body['message']),
+        //     ));
+        Navigator.push(context, MaterialPageRoute(builder: (context)=>MessageScreen()));
       }
       else {
         ScaffoldMessenger.of(context).showSnackBar(

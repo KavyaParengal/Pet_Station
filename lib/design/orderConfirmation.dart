@@ -1,16 +1,21 @@
 
 import 'dart:convert';
 
+import 'package:expansion_widget/expansion_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:pet_station/config/constants.dart';
 import 'package:pet_station/design/changeAddress.dart';
 import 'package:pet_station/design/orderSuccessMessage.dart';
 import 'package:pet_station/models/orderAddress.dart';
+import 'package:pet_station/services/allService.dart';
 import 'package:pet_station/services/apiService.dart';
+import 'package:pet_station/services/paymentApi.dart';
 import 'package:pet_station/services/placeOrder.dart';
 import 'package:pet_station/services/viewAddress.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+
+import '../models/addtoCart.dart';
 
 class OrderConfirmation extends StatefulWidget {
   const OrderConfirmation({Key? key}) : super(key: key);
@@ -82,6 +87,8 @@ class _OrderConfirmationState extends State<OrderConfirmation> {
     }
   }
 
+
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -105,6 +112,7 @@ class _OrderConfirmationState extends State<OrderConfirmation> {
       ),
 
       body: SingleChildScrollView(
+        physics: ScrollPhysics(),
         child: _orderAddress.isNotEmpty ? Column(
           children: [
             Padding(
@@ -171,30 +179,113 @@ class _OrderConfirmationState extends State<OrderConfirmation> {
                 ),
               ),
             ),
+
             Container(
               width: MediaQuery.of(context).size.width,
-              height: MediaQuery.of(context).size.height*.07,
-              decoration: const BoxDecoration(
-                color: Colors.white
+              decoration: BoxDecoration(
+                color: Colors.white,
               ),
-              child: Padding(
-                padding: const EdgeInsets.all(12.0),
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    const Text('Expected Delivery',style: TextStyle(
-                    fontWeight: FontWeight.w500,
-                    fontSize: 18,
-                    color: Colors.black,
-                    ),),
-                    Text('18th Sep',style: TextStyle(
-                      fontSize: 15,
-                      color: Colors.grey.shade700,
-                    ),),
-                  ]
+              child: ExpansionWidget(
+                initiallyExpanded: false,
+                titleBuilder: (double animationValue, _, bool isExpanded, toggleFunction,) {
+                  return Padding(
+                    padding: EdgeInsets.all(12),
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        Text(
+                          'Expected Delivery',
+                          style: TextStyle(
+                            fontWeight: FontWeight.w500,
+                            fontSize: 18,
+                            color: Colors.black,
+                          ),
+                        ),
+                        InkWell(
+                          onTap: toggleFunction,
+                          child: Icon(
+                            isExpanded
+                                ? Icons.keyboard_arrow_up
+                                : Icons.keyboard_arrow_down,
+                            size: 30,
+                          ),
+                        ),
+                      ],
+                    ),
+                  );
+                },
+                content: Container(
+                  width: MediaQuery.of(context).size.width,
+                  child: FutureBuilder<List<CartData>>(
+                    future: ViewCategoryApi.getSinglecartItems(outid), builder: (BuildContext content, snapshot) {
+                      if (snapshot.hasData) {
+                        return ListView.builder(
+                          physics: NeverScrollableScrollPhysics(),
+                          shrinkWrap: true,
+                          itemCount: snapshot.data!.length,
+                          itemBuilder: (context, index) {
+                            return Padding(
+                              padding: const EdgeInsets.only(left: 12,right: 12,bottom: 12),
+                              child: Row(
+                                children: [
+                                  Container(
+                                    height: 90,
+                                    width: 80,
+                                    decoration: BoxDecoration(
+                                      borderRadius: BorderRadius.circular(16),
+                                      image: DecorationImage(
+                                        image: NetworkImage(APIConstants.url + snapshot.data![index].image.toString()),
+                                        fit: BoxFit.cover,
+                                      ),
+                                    ),
+                                  ),
+                                  SizedBox(width: 10),
+                                  Column(
+                                    crossAxisAlignment: CrossAxisAlignment.start,
+                                    children: [
+                                      Text(
+                                        "Delivered in ${snapshot.data![index].expday} days",
+                                        style: TextStyle(
+                                            color: Colors.teal.shade800,
+                                            fontWeight: FontWeight.bold,
+                                            fontSize: 16
+                                        ),
+                                      ),
+                                      SizedBox(height: 3),
+                                      Text(
+                                        "${snapshot.data![index].itemname}",
+                                        style: TextStyle(
+                                          fontWeight: FontWeight.w400,
+                                          fontSize: 18,
+                                          color: Colors.grey,
+                                        ),
+                                      ),
+                                      SizedBox(height: 3),
+                                      Text(
+                                        "${snapshot.data![index].breedname}",
+                                        style: TextStyle(
+                                          fontWeight: FontWeight.w400,
+                                        ),
+                                      ),
+                                    ],
+                                  ),
+                                ],
+                              ),
+                            );
+                          },
+                        );
+                      }
+                      else{
+                        print('no data');
+                      }
+                      return const Center(
+                        child: CircularProgressIndicator(),
+                      );
+                  })
                 ),
               ),
             ),
+
             const SizedBox(height: 8,),
             Container(
               width: MediaQuery.of(context).size.width,
@@ -333,6 +424,7 @@ class _OrderConfirmationState extends State<OrderConfirmation> {
       bottomNavigationBar: InkWell(
         onTap: () {
           PlaceOrderAPI.placeOrder(context);
+          PaymentAPI.payment(context, _loaddata);
           //Navigator.push(context, MaterialPageRoute(builder: (context)=>const OrderSuccessMessage()));
         },
         child: Container(

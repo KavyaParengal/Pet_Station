@@ -186,30 +186,22 @@ class _DrawerScreenState extends State<DrawerScreen> {
               ],
             ),
 
-            Row(
-              children: [
-                const Icon(Icons.settings,color: Colors.white,size: 32,),
-                const SizedBox(width: 12,),
-                TextButton(
-                    child: const Text('Settings',style: TextStyle(fontSize: 20,fontWeight: FontWeight.w400,color: Colors.white),),
-                  onPressed: (){},
-                ),
-                const SizedBox(width: 12,),
-                Container(
-                  height: 20,
-                  width: 2,
-                  color: Colors.white,
-                ),
-                const SizedBox(width: 12,),
-                TextButton(
-                  child: const Text('Logout',style: TextStyle(fontSize: 20,fontWeight: FontWeight.w400,color: Colors.white),),
-                  onPressed: () async {
-                    SharedPreferences localStorage = await  SharedPreferences.getInstance();
-                    localStorage.setString('role', 'null');
-                    Navigator.push(context, MaterialPageRoute(builder: (context)=>const Login_Page()));
-                  },
-                ),
-              ],
+            Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: Row(
+                children: [
+                  const Icon(Icons.logout,color: Colors.white,size: 26,),
+                  const SizedBox(width: 2,),
+                  TextButton(
+                    child: const Text('Logout',style: TextStyle(fontSize: 22,fontWeight: FontWeight.w400,color: Colors.white),),
+                    onPressed: () async {
+                      SharedPreferences localStorage = await  SharedPreferences.getInstance();
+                      localStorage.setString('role', 'null');
+                      Navigator.push(context, MaterialPageRoute(builder: (context)=>const Login_Page()));
+                    },
+                  ),
+                ],
+              ),
             )
           ],
         ),

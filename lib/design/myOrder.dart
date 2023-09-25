@@ -1,5 +1,9 @@
 
 import 'package:flutter/material.dart';
+import 'package:pet_station/config/constants.dart';
+import 'package:pet_station/models/orderItems.dart';
+import 'package:pet_station/services/searchOrderItem.dart';
+import 'package:pet_station/services/viewOrders.dart';
 
 class MyOrder extends StatefulWidget {
   const MyOrder({Key? key}) : super(key: key);
@@ -10,22 +14,69 @@ class MyOrder extends StatefulWidget {
 
 class _MyOrderState extends State<MyOrder> {
 
+  List<OrderData> _orderItems=[];
+
+  List<OrderData> filterdlist = [];
+  TextEditingController breedController=TextEditingController();
+
+  Future<void> fetchOrderItems() async {
+    ViewOrderItems viewOrderItems = ViewOrderItems();
+    List<OrderData> data = await viewOrderItems.getOrderItems();
+
+
+     setState(() {
+       _orderItems = data;
+       filterdlist = _orderItems;
+     });
+
+    getSerch();
+
+
+
+
+
+  }
+
+  getSerch(){
+    if(mounted){
+      breedController.addListener(() {
+        setState(() {
+          filterdlist = _orderItems
+              .where((element) => element.breed!
+              .toLowerCase().contains(breedController.text.toLowerCase())).toList();
+        });
+
+      });
+    }
+  }
+
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    fetchOrderItems();
+
+
+  }
+
   @override
   Widget build(BuildContext context) {
+
+    print(filterdlist);
     return Scaffold(
       appBar: AppBar(
         backgroundColor: Colors.teal.shade800,
         leading: IconButton(
             onPressed: (){Navigator.pop(context);},
-            icon: Icon(Icons.arrow_back)
+            icon: const Icon(Icons.arrow_back)
         ),
-        title: Text('My Orders',style: TextStyle(
+        title: const Text('My Orders',style: TextStyle(
           fontWeight: FontWeight.w500,
           fontSize: 20,
           color: Colors.white
         ),),
       ),
-      body: CustomScrollView(
+      body: filterdlist.isNotEmpty? CustomScrollView(
         slivers: <Widget>[
           SliverAppBar(
             forceElevated: true,
@@ -43,8 +94,9 @@ class _MyOrderState extends State<MyOrder> {
                           decoration: BoxDecoration(
                             border: Border.all(color: Colors.grey.shade300)
                           ),
-                          child: TextFormField(
-                            decoration: InputDecoration(
+                          child: TextField(
+                            controller: breedController,
+                            decoration: const InputDecoration(
                               prefixIcon: Icon(Icons.search),
                               hintText: "Search your order here",
                               enabledBorder: InputBorder.none,
@@ -53,13 +105,13 @@ class _MyOrderState extends State<MyOrder> {
                           ),
                         )
                     ),
-                    SizedBox(width: 8,),
+                    const SizedBox(width: 8,),
                     InkWell(
                       onTap: (){
 
                       },
                       child: Container(
-                        child: Row(
+                        child: const Row(
                           children: [
                             Icon(Icons.filter_list_rounded,color: Colors.black,),
                             SizedBox(width: 4,),
@@ -80,7 +132,9 @@ class _MyOrderState extends State<MyOrder> {
             delegate: SliverChildBuilderDelegate(
                   (BuildContext context, int index) {
                 return GestureDetector(
-                  onTap: (){},
+                  onTap: (){
+
+                  },
                   child: Column(
                     children: [
                       Padding(
@@ -88,18 +142,18 @@ class _MyOrderState extends State<MyOrder> {
                         child: Row(
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: [
-                            Image.asset('images/cats/billy_cat1.png',width: 85,height: 85,),
+                            Image.network(APIConstants.url+filterdlist[index].image.toString(),width: 85,height: 85,),
                              Column(
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
-                                Text('Delivered on jun 09, 2023',style: TextStyle(fontSize: 17,color: Colors.black,fontWeight: FontWeight.w500),maxLines: 2,),
-                                SizedBox(height: 8,),
-                                Text('Name',style: TextStyle(fontSize: 16,color: Colors.grey.shade600)),
-                                SizedBox(height: 8,),
-                                Text('Name',style: TextStyle(fontSize: 14,color: Colors.grey)),
+                                Text('Delivery with in ${filterdlist[index].expday.toString()} days',style: TextStyle(fontSize: 17,color: Colors.black,fontWeight: FontWeight.w500),maxLines: 2,),
+                                const SizedBox(height: 8,),
+                                Text(filterdlist[index].breed.toString(),style: TextStyle(fontSize: 16,color: Colors.grey.shade600)),
+                                const SizedBox(height: 8,),
+                                Text(filterdlist[index].productName.toString(),style: const TextStyle(fontSize: 14,color: Colors.grey)),
                               ],
                             ),
-                            Icon(Icons.arrow_forward_ios,size: 15,)
+                            const Icon(Icons.arrow_forward_ios,size: 15,)
                           ],
                         ),
                       ),
@@ -108,11 +162,11 @@ class _MyOrderState extends State<MyOrder> {
                   ),
                 );
               },
-              childCount: 7,
+              childCount: filterdlist.length,
             ),
-          ),
+          )
         ],
-      ),
+      ):const Center(child: CircularProgressIndicator(),)
     );
   }
 }

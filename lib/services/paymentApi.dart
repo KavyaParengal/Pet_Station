@@ -8,7 +8,7 @@ import 'package:http/http.dart' as http;
 
 class PaymentAPI{
 
-  static Future<void> placeOrder(BuildContext context,String amount) async {
+  static Future<void> payment(BuildContext context,String amount) async {
 
     String datetime1='';
     DateTime datetime = DateTime.now();
@@ -26,9 +26,9 @@ class PaymentAPI{
       var response = await http.post(Uri.parse(urls),body: data);
       var body = json.decode(response.body);
       if (body['success'] == true) {
-        ScaffoldMessenger.of(context).showSnackBar(
-            SnackBar(content: Text(body['message']),
-            ));
+        // ScaffoldMessenger.of(context).showSnackBar(
+        //     SnackBar(content: Text(body['message']),
+        //     ));
       }
       else {
         ScaffoldMessenger.of(context).showSnackBar(

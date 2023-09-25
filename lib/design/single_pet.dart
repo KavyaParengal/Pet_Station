@@ -44,7 +44,7 @@ class _SinglePetState extends State<SinglePet> {
 
         petDetails = details;
         setState(() {
-           print(petDetails!.rating);
+           print(petDetails);
         });
 
     } catch (e) {
