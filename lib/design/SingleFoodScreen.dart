@@ -1,5 +1,6 @@
 
 import 'package:expandable_text/expandable_text.dart';
+import 'package:expansion_widget/expansion_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_image_slideshow/flutter_image_slideshow.dart';
 import 'package:flutter_rating_bar/flutter_rating_bar.dart';
@@ -48,6 +49,7 @@ class _SingleFoodScreenState extends State<SingleFoodScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: Colors.grey.shade50,
       appBar: AppBar(
         backgroundColor: Colors.teal.shade800,
         elevation: 0,
@@ -178,26 +180,188 @@ class _SingleFoodScreenState extends State<SingleFoodScreen> {
                     color: Colors.grey.shade600,
                     fontSize: 16,
                   ),),
-                  SizedBox(height: 14,),
-                  ReadMoreText("${foodDetails!.description}",trimLines: 2,
-                    textScaleFactor: 1,
-                    colorClickableText: Colors.teal.shade800,
-                    trimMode: TrimMode.Line,
-                    trimCollapsedText: 'Show more',
-                    trimExpandedText: '  Show less',
-                    style: TextStyle(color: Colors.black, fontSize: 16),
-                    moreStyle: TextStyle(
-                        fontSize: 15,
-                        fontWeight: FontWeight.bold,
-                        color: Colors.teal.shade800),
-                    lessStyle: TextStyle(
-                        fontSize: 15,
-                        fontWeight: FontWeight.bold,
-                        color: Colors.teal.shade800),
-                  ),
                 ],
               ),
-            )
+            ),
+            Container(
+              width: MediaQuery.of(context).size.width,
+              child: ExpansionWidget(
+                initiallyExpanded: false,
+                titleBuilder: (double animationValue, _, bool isExpanded, toggleFunction,) {
+                  return Padding(
+                    padding: EdgeInsets.all(12),
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        Text(
+                          'Product Description',
+                          style: TextStyle(
+                            fontWeight: FontWeight.w700,
+                            fontSize: 19,
+                            color: Colors.teal.shade800,
+                          ),
+                        ),
+                        InkWell(
+                          onTap: toggleFunction,
+                          child: Icon(
+                            isExpanded
+                                ? Icons.arrow_drop_up
+                                : Icons.arrow_drop_down,
+                            size: 35,
+                          ),
+                        ),
+                      ],
+                    ),
+                  );
+                },
+                content: Padding(
+                  padding: const EdgeInsets.all(12.0),
+                  child: Container(
+                    width: MediaQuery.of(context).size.width,
+                    child: Expanded(
+                      child: Text('${foodDetails!.description}',textAlign: TextAlign.justify,style: TextStyle(
+                          color: Colors.black, fontSize: 16
+                      ),),
+                    ),
+                  ),
+                ),
+              ),
+            ),
+            SizedBox(height: 6,),
+            Container(
+              width: MediaQuery.of(context).size.width,
+              child: ExpansionWidget(
+                initiallyExpanded: false,
+                titleBuilder: (double animationValue, _, bool isExpanded, toggleFunction,) {
+                  return Padding(
+                    padding: EdgeInsets.all(12),
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        Text(
+                          'Additional Info',
+                          style: TextStyle(
+                            fontWeight: FontWeight.w700,
+                            fontSize: 19,
+                            color: Colors.teal.shade800,
+                          ),
+                        ),
+                        InkWell(
+                          onTap: toggleFunction,
+                          child: Icon(
+                            isExpanded
+                                ? Icons.arrow_drop_up
+                                : Icons.arrow_drop_down,
+                            size: 35,
+                          ),
+                        ),
+                      ],
+                    ),
+                  );
+                },
+                content: Padding(
+                  padding: const EdgeInsets.all(12.0),
+                  child: Container(
+                      width: MediaQuery.of(context).size.width,
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        RichText(
+                          text: TextSpan(
+                            text: 'Product Name : ',
+                            style: TextStyle(
+                              fontWeight: FontWeight.bold,
+                              fontSize: 16,
+                              color: Colors.black,
+                            ),
+                            children: [
+                              TextSpan(text: foodDetails!.productName,style: TextStyle(
+                                fontSize: 15,
+                                color: Colors.grey.shade600,
+                                fontWeight: FontWeight.w400
+                              ),),
+                            ],
+                          ),
+                        ),
+                        SizedBox(height: 6,),
+                        RichText(
+                          text: TextSpan(
+                            text: 'Product Type : ',
+                            style: TextStyle(
+                              fontWeight: FontWeight.bold,
+                              fontSize: 16,
+                              color: Colors.black,
+                            ),
+                            children: [
+                              TextSpan(text: foodDetails!.productType,style: TextStyle(
+                                  fontSize: 15,
+                                  color: Colors.grey.shade600,
+                                  fontWeight: FontWeight.w400
+                              ),),
+                            ],
+                          ),
+                        ),
+                        SizedBox(height: 6,),
+                        RichText(
+                          text: TextSpan(
+                            text: 'Net Weight/Net Quantity/Net Volume : ',
+                            style: TextStyle(
+                              fontWeight: FontWeight.bold,
+                              fontSize: 16,
+                              color: Colors.black,
+                            ),
+                            children: [
+                              TextSpan(text: foodDetails!.netWeight,style: TextStyle(
+                                  fontSize: 15,
+                                  color: Colors.grey.shade600,
+                                  fontWeight: FontWeight.w400
+                              ),),
+                            ],
+                          ),
+                        ),
+                        SizedBox(height: 6,),
+                        RichText(
+                          text: TextSpan(
+                            text: 'Marketed by : ',
+                            style: TextStyle(
+                              fontWeight: FontWeight.bold,
+                              fontSize: 16,
+                              color: Colors.black,
+                            ),
+                            children: [
+                              TextSpan(text: foodDetails!.marketedBy,style: TextStyle(
+                                  fontSize: 15,
+                                  color: Colors.grey.shade600,
+                                  fontWeight: FontWeight.w400
+                              ),),
+                            ],
+                          ),
+                        ),
+                        SizedBox(height: 6,),
+                        RichText(
+                          text: TextSpan(
+                            text: 'MRP : ',
+                            style: TextStyle(
+                              fontWeight: FontWeight.bold,
+                              fontSize: 16,
+                              color: Colors.black,
+                            ),
+                            children: [
+                              TextSpan(text: '₹ ${foodDetails!.price} (Inclusive of all taxes)',style: TextStyle(
+                                  fontSize: 15,
+                                  color: Colors.grey.shade600,
+                                  fontWeight: FontWeight.w400
+                              ),),
+                            ],
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                ),
+              ),
+            ),
+            SizedBox(height: 15,)
           ],
         ),) : Center(child: CircularProgressIndicator(),),
       bottomNavigationBar: Container(

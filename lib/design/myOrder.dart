@@ -2,7 +2,6 @@
 import 'package:flutter/material.dart';
 import 'package:pet_station/config/constants.dart';
 import 'package:pet_station/models/orderItems.dart';
-import 'package:pet_station/services/searchOrderItem.dart';
 import 'package:pet_station/services/viewOrders.dart';
 
 class MyOrder extends StatefulWidget {
@@ -23,29 +22,25 @@ class _MyOrderState extends State<MyOrder> {
     ViewOrderItems viewOrderItems = ViewOrderItems();
     List<OrderData> data = await viewOrderItems.getOrderItems();
 
-
      setState(() {
        _orderItems = data;
        filterdlist = _orderItems;
      });
 
-    getSerch();
-
-
-
-
-
+    getSearch();
   }
 
-  getSerch(){
+  getSearch(){
     if(mounted){
       breedController.addListener(() {
         setState(() {
           filterdlist = _orderItems
               .where((element) => element.breed!
               .toLowerCase().contains(breedController.text.toLowerCase())).toList();
+          if (filterdlist.isEmpty) {
+            filterdlist = [];
+          }
         });
-
       });
     }
   }
@@ -76,7 +71,7 @@ class _MyOrderState extends State<MyOrder> {
           color: Colors.white
         ),),
       ),
-      body: filterdlist.isNotEmpty? CustomScrollView(
+      body: CustomScrollView(
         slivers: <Widget>[
           SliverAppBar(
             forceElevated: true,
@@ -105,25 +100,25 @@ class _MyOrderState extends State<MyOrder> {
                           ),
                         )
                     ),
-                    const SizedBox(width: 8,),
-                    InkWell(
-                      onTap: (){
-
-                      },
-                      child: Container(
-                        child: const Row(
-                          children: [
-                            Icon(Icons.filter_list_rounded,color: Colors.black,),
-                            SizedBox(width: 4,),
-                            Text('Filters',style: TextStyle(
-                                fontWeight: FontWeight.w300,
-                                fontSize: 16,
-                                color: Colors.black
-                            ),),
-                          ],
-                        ),
-                      ),
-                    )
+                    // const SizedBox(width: 8,),
+                    // InkWell(
+                    //   onTap: (){
+                    //
+                    //   },
+                    //   child: Container(
+                    //     child: const Row(
+                    //       children: [
+                    //         Icon(Icons.filter_list_rounded,color: Colors.black,),
+                    //         SizedBox(width: 4,),
+                    //         Text('Filters',style: TextStyle(
+                    //             fontWeight: FontWeight.w300,
+                    //             fontSize: 16,
+                    //             color: Colors.black
+                    //         ),),
+                    //       ],
+                    //     ),
+                    //   ),
+                    // )
                   ],
                 ),
               ),
@@ -166,7 +161,7 @@ class _MyOrderState extends State<MyOrder> {
             ),
           )
         ],
-      ):const Center(child: CircularProgressIndicator(),)
+      ),
     );
   }
 }

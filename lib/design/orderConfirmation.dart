@@ -303,8 +303,8 @@ class _OrderConfirmationState extends State<OrderConfirmation> {
                         fontSize: 18,
                         color: Colors.black,
                       ),),
-                      Text('₹${_loaddata}',style: const TextStyle(
-                        fontSize: 15,
+                      Text('₹ ${_loaddata}',style: const TextStyle(
+                        fontSize: 16,
                         color: Colors.black,
                       ),),
                     ]

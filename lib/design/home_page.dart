@@ -4,7 +4,6 @@ import 'package:flutter/material.dart';
 import 'package:pet_station/config/constants.dart';
 import 'package:pet_station/design/SingleFoodScreen.dart';
 import 'package:pet_station/design/cartScreen.dart';
-import 'package:pet_station/design/foodScreen.dart';
 import 'package:pet_station/design/notification.dart';
 import 'package:pet_station/design/single_pet.dart';
 import 'package:pet_station/models/foodModel.dart';
@@ -13,8 +12,6 @@ import 'package:pet_station/models/viewCategoryItems.dart';
 import 'package:pet_station/provider/fav_provider.dart';
 import 'package:pet_station/services/allService.dart';
 import 'package:http/http.dart' as http;
-import 'package:pet_station/services/favoriteItemService.dart';
-import 'package:pet_station/services/foodViewService.dart';
 import 'package:pet_station/services/searchitem.dart';
 import 'package:provider/provider.dart';
 
@@ -95,7 +92,6 @@ class _HomeScreenState extends State<HomeScreen> {
       setState(() {
         itemload=false;
       });
-      print('========${_fooddata[0].productName}');
       return _fooddata;
     }
     else{
@@ -115,18 +111,19 @@ class _HomeScreenState extends State<HomeScreen> {
 
   int checkindex=0;
   late int categorId;
+  String categoryType='';
 
   @override
   Widget build(BuildContext context) {
 
     final object = Provider.of<FavProvider_class>(context);
 
+
     var size = MediaQuery.of(context).size;
     final double itemHeight = (size.height - kToolbarHeight - 200) / 1.9;
     final double itemWidth = size.width / 2.18;
 
     bool foodVisible=false;
-    String categoryType='';
 
     return AnimatedContainer(
       transform: Matrix4.translationValues(xOffset, yOffset, 0)..scale(scaleFactor),
@@ -202,7 +199,6 @@ class _HomeScreenState extends State<HomeScreen> {
                       onFieldSubmitted: (String text){
                         setState(() {
                           breed=text;
-
                           SearchItem.searchItems(context, breed);
                           setState(() {
                             isLoaded=false;
@@ -231,12 +227,10 @@ class _HomeScreenState extends State<HomeScreen> {
 
                         setState(() {
                           checkindex = index;
-                          categorId=_categortData[index].id;
                           categoryType=_categortData[index].category_name;
                           print(categoryType);
                           _categortData[index].category_name=='Food'? getFoodItems(_categortData[index].id) :
                           getCategoryItems(_categortData[index].id);
-                          //  c_id = snapshot.data![index].id; // Update the selected category ID
                         });
                       },
                       child: Container(
@@ -273,8 +267,6 @@ class _HomeScreenState extends State<HomeScreen> {
                   }
               ),
             ),
-
-
             itemload?const Center(child: CircularProgressIndicator(),):Padding(
               padding: const EdgeInsets.all(4.0),
               child:  Column(
@@ -284,7 +276,7 @@ class _HomeScreenState extends State<HomeScreen> {
                       child: categoryType=="Food" ?  GridView.builder(
                         physics: const NeverScrollableScrollPhysics(),
                         shrinkWrap: true,
-                        itemCount:_fooddata.length,
+                        itemCount: _fooddata.length,
                         gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
                             childAspectRatio: (itemWidth / itemHeight),
                             crossAxisCount: 2,
@@ -292,7 +284,6 @@ class _HomeScreenState extends State<HomeScreen> {
                             mainAxisSpacing: 4.0
                         ),
                         itemBuilder: (BuildContext context, int index){
-                          print(_fooddata[index].productName);
                           return GridTile(
                             child: Container(
                               decoration: BoxDecoration(
@@ -302,7 +293,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                 children: [
                                   GestureDetector(
                                     onTap: (){
-                                      //Navigator.push(context, MaterialPageRoute(builder: (context)=>SingleFoodScreen()));
+                                      Navigator.push(context, MaterialPageRoute(builder: (context)=>SingleFoodScreen(foodId: _fooddata[index].id)));
                                     },
                                     child: Container(
                                       height: MediaQuery.of(context).size.height/4,
@@ -314,23 +305,22 @@ class _HomeScreenState extends State<HomeScreen> {
                                               color: Colors.grey.shade100,
                                             ),
                                           ),
-                                          const Positioned(
+                                          Positioned(
                                             right: 1,
-                                            // child: IconButton(
-                                            //   onPressed: (){
-                                            //     object.favorites(APIConstants.url+_data[index].image1.toString(), _data[index].name.toString(), _data[index].breed.toString(), _data[index].price.toString());
-                                            //   },
-                                            //   icon: object.icn_change(APIConstants.url+_data[index].image1.toString()) ?
-                                            //   const Icon(Icons.favorite,color: Colors.red,) :
-                                            //   Icon(Icons.favorite_outline,color: Colors.grey.shade800,),
-                                            // ),
+                                            child: IconButton(
+                                              onPressed: (){
+                                                object.favorites(APIConstants.url+_fooddata[index].image1.toString(), _fooddata[index].productName.toString(), _fooddata[index].companyName.toString(), _data[index].price.toString());
+                                              },
+                                              icon: object.icn_change(APIConstants.url+_fooddata[index].image1.toString()) ?
+                                              Icon(Icons.favorite,color: Colors.red,) :
+                                              Icon(Icons.favorite_outline,color: Colors.grey.shade800,),
+                                            ),
                                             // child: IconButton(
                                             //     onPressed: (){
                                             //       FavoriteItemAPI.FavoriteItem(context: context,productId: _data[index].id);
                                             //     },
                                             //     icon: Icon(Icons.favorite_outline,color: Colors.grey.shade800,)
                                             // ),
-                                            child: Icon(Icons.favorite),
                                           ),
                                           Positioned(
                                             bottom: 13,
@@ -343,15 +333,15 @@ class _HomeScreenState extends State<HomeScreen> {
                                                   borderRadius: BorderRadius.circular(22),
                                                   color: Colors.grey.shade400.withOpacity(.5)
                                               ),
-                                              child:const Row(
+                                              child: Row(
                                                 children: [
-                                                  Text('4',style: TextStyle(fontSize: 13,fontWeight: FontWeight.w600),),
+                                                  Text('${_fooddata[index].rating.toStringAsFixed(1)}',style: TextStyle(fontSize: 13,fontWeight: FontWeight.w600),),
                                                   SizedBox(width: 3,),
                                                   Icon(Icons.star,size: 15,),
                                                   SizedBox(width: 4,),
                                                   Text('|'),
                                                   SizedBox(width: 4,),
-                                                  Text('4.8 k',style: TextStyle(fontSize: 13,fontWeight: FontWeight.w600),)
+                                                  Text('${_fooddata[index].rating_count}',style: TextStyle(fontSize: 13,fontWeight: FontWeight.w600),)
                                                 ],
                                               ),
                                             ),
@@ -372,11 +362,13 @@ class _HomeScreenState extends State<HomeScreen> {
                                         ),),
                                         Container(
                                           constraints: BoxConstraints(maxWidth: itemWidth-20),
-                                          child: Text(_fooddata[index].productName.toString(),style: TextStyle(
-                                              fontWeight: FontWeight.w400,
-                                              fontSize: 15,
-                                              color: Colors.grey.shade600
-                                          ),),
+                                          child: Text('${_fooddata[index].productName.toString()}',style: TextStyle(
+                                            fontWeight: FontWeight.w400,
+                                            fontSize: 15,
+                                            color: Colors.grey.shade600,
+                                          ),maxLines: 2,
+                                            overflow: TextOverflow.ellipsis,
+                                          ),
                                         ),
                                         const SizedBox(height: 4,),
                                         Text("₨. ${_fooddata[index].price}",style: const TextStyle(
