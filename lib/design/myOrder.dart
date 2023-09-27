@@ -1,6 +1,8 @@
 
 import 'package:flutter/material.dart';
 import 'package:pet_station/config/constants.dart';
+import 'package:pet_station/design/SingleFoodScreen.dart';
+import 'package:pet_station/design/single_pet.dart';
 import 'package:pet_station/models/orderItems.dart';
 import 'package:pet_station/services/viewOrders.dart';
 
@@ -56,8 +58,6 @@ class _MyOrderState extends State<MyOrder> {
 
   @override
   Widget build(BuildContext context) {
-
-    print(filterdlist);
     return Scaffold(
       appBar: AppBar(
         backgroundColor: Colors.teal.shade800,
@@ -128,7 +128,8 @@ class _MyOrderState extends State<MyOrder> {
                   (BuildContext context, int index) {
                 return GestureDetector(
                   onTap: (){
-
+                    filterdlist[index].category=="Food" ? Navigator.push(context, MaterialPageRoute(builder: (context)=>SingleFoodScreen( foodId : filterdlist[index].productId!))) :
+                    Navigator.push(context, MaterialPageRoute(builder: (context)=>SinglePet(pid: filterdlist[index].productId!)));
                   },
                   child: Column(
                     children: [
@@ -161,7 +162,7 @@ class _MyOrderState extends State<MyOrder> {
             ),
           )
         ],
-      ),
+      )
     );
   }
 }

@@ -1,12 +1,15 @@
 class APIConstants{
-  static const url = "https://7e0f-2401-4900-3152-5d9c-45a9-cd2b-5947-2f25.ngrok-free.app";
+  static const url = "https://8de2-2401-4900-647b-34fa-78ef-ea30-39bc-7740.ngrok-free.app";
   static const login="/api/login_users";
   static const register="/api/user_register";
   static const viewCategoty="/api/view_categories";
   static const viewItemInSingleCategory="/api/singleCategorydatas/";
   static const viewSinglePetDetails='/api/singlePetDetails/';
   static const viewAllPetDetails='/api/allpetdetails';
+
   static const addtoCartItem='/api/addtocart';
+  static const foodTOCart='/api/foodtocart';
+
   static const cartItemsview='/api/singlecartitem/';
   static const quantityIncrement='/api/cartincrementqnty/';
   static const quantityDecrement='/api/cartdecrementqnty/';
@@ -23,6 +26,10 @@ class APIConstants{
   static const updateOrderAddress='/api/updateOrderAddress/';
 
   static const favoriteItem='/api/favoriteItem';
+  static const favoriteFoodItem='/api/favoriteFoodItem';
+  static const viewFavoriteItem='/api/viewFavoriteItem/';
+  static const deleteFavoriteItem='/api/deleteFavoriteItem/';
+
   static const placeOrder='/api/placeOrder';
   static const payment='/api/payment';
 

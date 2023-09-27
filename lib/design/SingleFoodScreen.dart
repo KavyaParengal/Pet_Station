@@ -7,6 +7,7 @@ import 'package:flutter_rating_bar/flutter_rating_bar.dart';
 import 'package:pet_station/config/constants.dart';
 import 'package:pet_station/design/cartScreen.dart';
 import 'package:pet_station/models/foodModel.dart';
+import 'package:pet_station/services/foodtocart.dart';
 import 'package:pet_station/services/rateFood.dart';
 import 'package:pet_station/services/viewSingleFoodData.dart';
 import 'package:readmore/readmore.dart';
@@ -390,6 +391,7 @@ class _SingleFoodScreenState extends State<SingleFoodScreen> {
             ),
             InkWell(
               onTap: (){
+                FoodToCart.foodToCart(context: context, foodId: foodDetails!.id);
               },
               child: Container(
                 height: 60,

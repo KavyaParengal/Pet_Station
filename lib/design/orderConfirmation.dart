@@ -87,10 +87,12 @@ class _OrderConfirmationState extends State<OrderConfirmation> {
     }
   }
 
-
-
   @override
   Widget build(BuildContext context) {
+
+    var size = MediaQuery.of(context).size;
+    final double itemWidth = size.width / 1.5;
+
     return Scaffold(
       backgroundColor: Colors.grey.shade200,
       appBar: AppBar(
@@ -252,12 +254,19 @@ class _OrderConfirmationState extends State<OrderConfirmation> {
                                         ),
                                       ),
                                       SizedBox(height: 3),
-                                      Text(
-                                        "${snapshot.data![index].itemname}",
-                                        style: TextStyle(
-                                          fontWeight: FontWeight.w400,
-                                          fontSize: 18,
-                                          color: Colors.grey,
+                                      Container(
+                                        constraints: BoxConstraints(
+                                          maxWidth: itemWidth ,
+                                        ),
+                                        child: Text(
+                                          "${snapshot.data![index].itemname}",
+                                          style: TextStyle(
+                                            fontWeight: FontWeight.w400,
+                                            fontSize: 16,
+                                            color: Colors.grey,
+                                          ),
+                                          maxLines: 2,
+                                          overflow: TextOverflow.ellipsis,
                                         ),
                                       ),
                                       SizedBox(height: 3),

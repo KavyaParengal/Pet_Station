@@ -106,6 +106,10 @@ class _CartScreenState extends State<CartScreen> {
 
   @override
   Widget build(BuildContext context) {
+
+    var size = MediaQuery.of(context).size;
+    final double itemWidth = size.width / 3;
+
     return Scaffold(
       appBar: AppBar(
         toolbarHeight: 60,
@@ -153,6 +157,7 @@ class _CartScreenState extends State<CartScreen> {
                                   deleteCartItem.deleteCartItems(snapshot.data![index].id!.toInt());
                                 });
                               },
+                              direction: DismissDirection.endToStart,
                               key:UniqueKey(),
                               background: Container(
                                 decoration: BoxDecoration(
@@ -196,20 +201,24 @@ class _CartScreenState extends State<CartScreen> {
                                             ),
                                           ),
                                         ),
-                                        const SizedBox(
-                                          width: 18,
-                                        ),
+                                        SizedBox(width: 10,),
                                         Column(
                                           crossAxisAlignment:
                                               CrossAxisAlignment.start,
                                           children: [
-                                            Text(
-                                              snapshot.data![index].itemname
-                                                  .toString(),
-                                              style: TextStyle(
-                                                  fontSize: 16,
-                                                  color: Colors.black),
-                                              maxLines: 2,
+                                            Container(
+                                              constraints: BoxConstraints(
+                                                maxWidth: itemWidth ,
+                                              ),
+                                              child: Text(
+                                                snapshot.data![index].itemname
+                                                    .toString(),
+                                                style: TextStyle(
+                                                    fontSize: 16,
+                                                    color: Colors.black),
+                                                maxLines: 2,
+                                                overflow: TextOverflow.ellipsis,
+                                              ),
                                             ),
                                             SizedBox(
                                               height: 10,
@@ -234,7 +243,7 @@ class _CartScreenState extends State<CartScreen> {
                                                     color: Colors.grey)))
                                           ],
                                         ),
-                                        const Spacer(),
+                                        Spacer(),
                                         Container(
                                           width: 100,
                                           height: 42,

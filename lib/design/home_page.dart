@@ -6,13 +6,18 @@ import 'package:pet_station/design/SingleFoodScreen.dart';
 import 'package:pet_station/design/cartScreen.dart';
 import 'package:pet_station/design/notification.dart';
 import 'package:pet_station/design/single_pet.dart';
+import 'package:pet_station/models/favoriteItemModel.dart';
 import 'package:pet_station/models/foodModel.dart';
 import 'package:pet_station/models/viewCategory.dart';
 import 'package:pet_station/models/viewCategoryItems.dart';
 import 'package:pet_station/provider/fav_provider.dart';
 import 'package:pet_station/services/allService.dart';
 import 'package:http/http.dart' as http;
+import 'package:pet_station/services/deleteFavoriteItem.dart';
+import 'package:pet_station/services/favoriteFoodItem.dart';
+import 'package:pet_station/services/favoriteItemService.dart';
 import 'package:pet_station/services/searchitem.dart';
+import 'package:pet_station/services/viewFavoriteItem.dart';
 import 'package:provider/provider.dart';
 
 class HomeScreen extends StatefulWidget {
@@ -27,9 +32,10 @@ class _HomeScreenState extends State<HomeScreen> {
   double xOffset=0;
   double yOffset=0;
   double scaleFactor=1;
-  List<ViewCategoryItemsModel> _data=[];
+  List<ViewCategoryItemsModel> _petdata=[];
   List<ViewCategoryModel> _categortData=[];
   List<ViewFoodModel> _fooddata=[];
+  List<FavoriteData> _favoriteItem=[];
   bool isDrawerOpen=false;
   bool isLoaded=false;
   bool itemload=false;
@@ -64,17 +70,17 @@ class _HomeScreenState extends State<HomeScreen> {
     var response=await http.get(Uri.parse(urls));
     if(response.statusCode==200){
       var body=json.decode(response.body);
-      _data=List<ViewCategoryItemsModel>.from(
+      _petdata=List<ViewCategoryItemsModel>.from(
           body['data'].map((e)=>ViewCategoryItemsModel.fromJson(e)).toList());
       setState(() {
         itemload=false;
       });
-      return _data;
+      return _petdata;
     }
     else{
       itemload=false;
-      _data=[];
-      return _data;
+      _petdata=[];
+      return _petdata;
     }
   }
 
@@ -101,11 +107,19 @@ class _HomeScreenState extends State<HomeScreen> {
     }
   }
 
+  Future<void> fetchFavoriteItems() async {
+    List<FavoriteData> data = await ViewFavoriteItems().getFavoriteItems();
+    setState(() {
+      _favoriteItem = data;
+    });
+  }
+
   @override
   void initState() {
     // TODO: implement initState
     super.initState();
     getCategories();
+    fetchFavoriteItems();
   }
 
 
@@ -307,20 +321,27 @@ class _HomeScreenState extends State<HomeScreen> {
                                           ),
                                           Positioned(
                                             right: 1,
-                                            child: IconButton(
-                                              onPressed: (){
-                                                object.favorites(APIConstants.url+_fooddata[index].image1.toString(), _fooddata[index].productName.toString(), _fooddata[index].companyName.toString(), _data[index].price.toString());
-                                              },
-                                              icon: object.icn_change(APIConstants.url+_fooddata[index].image1.toString()) ?
-                                              Icon(Icons.favorite,color: Colors.red,) :
-                                              Icon(Icons.favorite_outline,color: Colors.grey.shade800,),
-                                            ),
                                             // child: IconButton(
-                                            //     onPressed: (){
-                                            //       FavoriteItemAPI.FavoriteItem(context: context,productId: _data[index].id);
-                                            //     },
-                                            //     icon: Icon(Icons.favorite_outline,color: Colors.grey.shade800,)
+                                            //   onPressed: (){
+                                            //     object.favorites(APIConstants.url+_fooddata[index].image1.toString(), _fooddata[index].productName.toString(), _fooddata[index].companyName.toString(), _data[index].price.toString());
+                                            //   },
+                                            //   icon: object.icn_change(APIConstants.url+_fooddata[index].image1.toString()) ?
+                                            //   Icon(Icons.favorite,color: Colors.red,) :
+                                            //   Icon(Icons.favorite_outline,color: Colors.grey.shade800,),
                                             // ),
+                                              child: IconButton(
+                                                  onPressed: (){
+                                                    // setState(() {
+                                                    //   _favoriteItem[index].favStatus! == "1" ? DeleteFavoriteItemAPI.deleteFavoriteItems(context,_favoriteItem[index].id!) :
+                                                    //   FavoriteFoodItemAPI.favoriteFoodItem(context: context,foodId: _fooddata[index].id);
+                                                    // });
+                                                    // print('object===${ _favoriteItem[index].favStatus}');
+                                                  },
+                                                  icon:
+                                                  // _favoriteItem[index].favStatus! == "1" ?
+                                                  // Icon(Icons.favorite,color: Colors.red,) :
+                                                  Icon(Icons.favorite_outline)
+                                              ),
                                           ),
                                           Positioned(
                                             bottom: 13,
@@ -387,7 +408,7 @@ class _HomeScreenState extends State<HomeScreen> {
                       GridView.builder(
                         physics: const NeverScrollableScrollPhysics(),
                         shrinkWrap: true,
-                        itemCount:_data.length,
+                        itemCount:_petdata.length,
                         gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
                             childAspectRatio: (itemWidth / itemHeight),
                             crossAxisCount: 2,
@@ -404,8 +425,8 @@ class _HomeScreenState extends State<HomeScreen> {
                                 children: [
                                   GestureDetector(
                                     onTap: (){
-                                      int pid=_data[index].id;
-                                      Navigator.push(context, MaterialPageRoute(builder: (context)=>SinglePet(pid: _data[index].id)));
+                                      int pid=_petdata[index].id;
+                                      Navigator.push(context, MaterialPageRoute(builder: (context)=>SinglePet(pid: _petdata[index].id)));
                                     },
                                     child: Container(
                                       height: MediaQuery.of(context).size.height/4,
@@ -413,26 +434,31 @@ class _HomeScreenState extends State<HomeScreen> {
                                         children: [
                                           Container(
                                             decoration: BoxDecoration(
-                                              image: DecorationImage(image: NetworkImage(APIConstants.url+_data[index].image1.toString())),
+                                              image: DecorationImage(image: NetworkImage(APIConstants.url+_petdata[index].image1.toString())),
                                               color: Colors.grey.shade100,
                                             ),
                                           ),
                                           Positioned(
                                             right: 1,
-                                              child: IconButton(
+                                              // child: IconButton(
+                                              //   onPressed: (){
+                                              //     object.favorites(APIConstants.url+_data[index].image1.toString(), _data[index].name.toString(), _data[index].breed.toString(), _data[index].price.toString());
+                                              //   },
+                                              //   icon: object.icn_change(APIConstants.url+_data[index].image1.toString()) ?
+                                              //   const Icon(Icons.favorite,color: Colors.red,) :
+                                              //   Icon(Icons.favorite_outline,color: Colors.grey.shade800,),
+                                              // ),
+                                            child: IconButton(
                                                 onPressed: (){
-                                                  object.favorites(APIConstants.url+_data[index].image1.toString(), _data[index].name.toString(), _data[index].breed.toString(), _data[index].price.toString());
+                                                  // _favoriteItem[index].favStatus! == "0" ? DeleteFavoriteItemAPI.deleteFavoriteItems(context,_favoriteItem[index].id!) :
+                                                  //   FavoriteItemAPI.FavoriteItem(context: context,productId: _petdata[index].id);
+                                                  // print('object===${ _favoriteItem[index].favStatus}');
                                                 },
-                                                icon: object.icn_change(APIConstants.url+_data[index].image1.toString()) ?
-                                                const Icon(Icons.favorite,color: Colors.red,) :
-                                                Icon(Icons.favorite_outline,color: Colors.grey.shade800,),
-                                              ),
-                                            // child: IconButton(
-                                            //     onPressed: (){
-                                            //       FavoriteItemAPI.FavoriteItem(context: context,productId: _data[index].id);
-                                            //     },
-                                            //     icon: Icon(Icons.favorite_outline,color: Colors.grey.shade800,)
-                                            // ),
+                                                icon:
+                                                // _favoriteItem[index].favStatus! == "0" ?
+                                                // Icon(Icons.favorite,color: Colors.red,) :
+                                                Icon(Icons.favorite_outline)
+                                            ),
                                           ),
                                           Positioned(
                                             bottom: 13,
@@ -447,13 +473,13 @@ class _HomeScreenState extends State<HomeScreen> {
                                               ),
                                               child: Row(
                                                 children: [
-                                                  Text('${_data[index].rating.toStringAsFixed(1)}',style: TextStyle(fontSize: 13,fontWeight: FontWeight.w600),),
+                                                  Text('${_petdata[index].rating.toStringAsFixed(1)}',style: TextStyle(fontSize: 13,fontWeight: FontWeight.w600),),
                                                   SizedBox(width: 3,),
                                                   Icon(Icons.star,size: 15,),
                                                   SizedBox(width: 4,),
                                                   Text('|'),
                                                   SizedBox(width: 4,),
-                                                  Text('${_data[index].rating_count}',style: TextStyle(fontSize: 13,fontWeight: FontWeight.w600),)
+                                                  Text('${_petdata[index].rating_count}',style: TextStyle(fontSize: 13,fontWeight: FontWeight.w600),)
                                                 ],
                                               ),
                                             ),
@@ -465,27 +491,26 @@ class _HomeScreenState extends State<HomeScreen> {
                                   Padding(
                                     padding:const EdgeInsets.symmetric(horizontal: 15,vertical: 10),
                                     child: Row(
-                                      //mainAxisAlignment: MainAxisAlignment.spaceBetween,
                                       children: [
                                         Column(
                                           crossAxisAlignment: CrossAxisAlignment.start ,
                                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
                                           children: [
-                                            Text(_data[index].name.toString(),style: const TextStyle(
+                                            Text(_petdata[index].name.toString(),style: const TextStyle(
                                                 fontWeight: FontWeight.w700,
                                                 fontSize: 18
                                             ),),
                                             const SizedBox(height: 4,),
                                             Container(
                                               constraints: BoxConstraints(maxWidth: itemWidth-50),
-                                              child: Text(_data[index].breed.toString(),style: const TextStyle(
+                                              child: Text(_petdata[index].breed.toString(),style: const TextStyle(
                                                   fontWeight: FontWeight.w400,
                                                   color: Colors.grey,
                                                   fontSize: 14
                                               ),maxLines: 2,),
                                             ),
                                             const SizedBox(height: 4,),
-                                            Text("₨. ${_data[index].price.toString()}",style: const TextStyle(
+                                            Text("₨. ${_petdata[index].price.toString()}",style: const TextStyle(
                                                 fontWeight: FontWeight.w400,
                                                 fontSize: 14
                                             ),)
