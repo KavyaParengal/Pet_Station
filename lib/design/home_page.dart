@@ -238,7 +238,6 @@ class _HomeScreenState extends State<HomeScreen> {
 
                     return InkWell(
                       onTap: () {
-
                         setState(() {
                           checkindex = index;
                           categoryType=_categortData[index].category_name;
