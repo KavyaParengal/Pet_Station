@@ -1,15 +1,10 @@
-import 'dart:convert';
-
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:pet_station/config/constants.dart';
 import 'package:http/http.dart' as http;
-import 'package:pet_station/design/favorite.dart';
 
-class DeleteFavoriteItemAPI{
-
-  static Future<void> deleteFavoriteItems(BuildContext context, int favId) async {
-    final urls = APIConstants.url + APIConstants.deleteFavoriteItem + favId.toString();
+class DeleteFavoriteItemInHomePage {
+  static Future<void> deleteFavoriteItemInHomePage(BuildContext context, int itemId) async {
+    final urls = APIConstants.url + APIConstants.deleteFavoriteItemInHomePage + itemId.toString();
     print('urls----- ${urls}');
     var response = await http.delete(Uri.parse(urls));
 
@@ -24,5 +19,4 @@ class DeleteFavoriteItemAPI{
       // You can display an error message or take appropriate action here
     }
   }
-
 }

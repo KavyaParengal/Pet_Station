@@ -10,19 +10,15 @@ import 'package:pet_station/design/splash.dart';
 import 'package:pet_station/design/start_page.dart';
 import 'package:provider/provider.dart';
 
-import 'provider/fav_provider.dart';
 
 void main(){
   runApp(
-      ChangeNotifierProvider(
-        create: (context) => FavProvider_class(),
-        child: MaterialApp(
+      MaterialApp(
           home: SplashScreen(),
           //home: FoodScreen(),
           debugShowCheckedModeBanner: false,
           theme: ThemeData(primarySwatch: Colors.blue),
         ),
-      )
   );
 }
 

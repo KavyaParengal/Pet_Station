@@ -71,7 +71,7 @@ class _MyOrderState extends State<MyOrder> {
           color: Colors.white
         ),),
       ),
-      body: CustomScrollView(
+      body: filterdlist.isNotEmpty ? CustomScrollView(
         slivers: <Widget>[
           SliverAppBar(
             forceElevated: true,
@@ -162,7 +162,7 @@ class _MyOrderState extends State<MyOrder> {
             ),
           )
         ],
-      )
+      ) : Center(child: CircularProgressIndicator(),)
     );
   }
 }

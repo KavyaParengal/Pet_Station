@@ -6,11 +6,16 @@ import 'package:flutter_image_slideshow/flutter_image_slideshow.dart';
 import 'package:flutter_rating_bar/flutter_rating_bar.dart';
 import 'package:pet_station/config/constants.dart';
 import 'package:pet_station/design/cartScreen.dart';
+import 'package:pet_station/models/favoriteItemModel.dart';
 import 'package:pet_station/models/foodModel.dart';
+import 'package:pet_station/services/favoriteFoodItem.dart';
 import 'package:pet_station/services/foodtocart.dart';
 import 'package:pet_station/services/rateFood.dart';
+import 'package:pet_station/services/viewFavoriteItem.dart';
 import 'package:pet_station/services/viewSingleFoodData.dart';
 import 'package:readmore/readmore.dart';
+
+import '../services/deleteFavoriteItemInHomePage.dart';
 
 class SingleFoodScreen extends StatefulWidget {
 
@@ -25,6 +30,7 @@ class SingleFoodScreen extends StatefulWidget {
 class _SingleFoodScreenState extends State<SingleFoodScreen> {
 
   ViewFoodModel? foodDetails;
+  List _favoriteFoodItem =[];
 
   Future<ViewFoodModel?> fetchFoodDetails(int foodId) async {
     try {
@@ -40,11 +46,19 @@ class _SingleFoodScreenState extends State<SingleFoodScreen> {
     }
   }
 
+  Future<void> fetchFavoriteItems() async {
+    List<FavoriteData> data = await ViewFavoriteItems().getFavoriteItems();
+    setState(() {
+      _favoriteFoodItem = data.map((e) => e.foodId).toList();
+    });
+  }
+
   @override
   void initState() {
     // TODO: implement initState
     super.initState();
     fetchFoodDetails(widget.foodId);
+    fetchFavoriteItems();
   }
 
   @override
@@ -378,17 +392,21 @@ class _SingleFoodScreenState extends State<SingleFoodScreen> {
                   borderRadius: BorderRadius.circular(20),
                   color: Colors.teal.shade800
               ),
-              // child: Center(
-              //     child: //IconButton(
-              //       // onPressed: (){
-              //       //   object.favorites(APIConstants.url+petDetails!.image1, petDetails!.name, petDetails!.breed, petDetails!.price);
-              //       // },
-              //       // icon: object.icn_change(APIConstants.url+petDetails!.image1) ?
-              //       // Icon(Icons.favorite,color: Colors.white,size: 32,) :
-              //       // Icon(Icons.favorite_outline,color: Colors.white,size: 32,),
-              //     //),
-              // ),
-            ),
+          child: Center(
+            child: _favoriteFoodItem.isNotEmpty ? IconButton(
+                onPressed: () async{
+                  _favoriteFoodItem.contains(foodDetails!.id) ? await DeleteFavoriteItemInHomePage.deleteFavoriteItemInHomePage(context,foodDetails!.id) :
+                  await FavoriteFoodItemAPI.favoriteFoodItem(context: context,foodId: foodDetails!.id);
+                  await fetchFavoriteItems();
+                },
+                icon:
+                _favoriteFoodItem.contains(foodDetails!.id) ?
+                Icon(Icons.favorite,color: Colors.white,size: 32,) :
+                Icon(Icons.favorite_outline,color: Colors.white,size: 32,)
+            ) : CircularProgressIndicator()
+          ),
+        ),
+
             InkWell(
               onTap: (){
                 FoodToCart.foodToCart(context: context, foodId: foodDetails!.id);

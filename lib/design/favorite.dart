@@ -7,9 +7,6 @@ import 'package:pet_station/design/single_pet.dart';
 import 'package:pet_station/models/favoriteItemModel.dart';
 import 'package:pet_station/services/deleteFavoriteItem.dart';
 import 'package:pet_station/services/viewFavoriteItem.dart';
-import 'package:provider/provider.dart';
-
-import '../provider/fav_provider.dart';
 
 class Favorite extends StatefulWidget {
   const Favorite({Key? key}) : super(key: key);
@@ -111,21 +108,14 @@ class _FavoriteState extends State<Favorite> {
                                 ),
                                   Positioned(
                                       right: 1,
-                                      // child: IconButton(
-                                      //   onPressed: (){
-                                      //     //object.favorites(imageStore[index], nameStore[index], breedStore[index], priceStore[index]);
-                                      //   },
-                                      //   icon: object.icn_change(imageStore[index]) ?
-                                      //   Icon(Icons.favorite,color: Colors.red,) :
-                                      //   Icon(Icons.favorite_outline,color: Colors.grey.shade500,),
-                                      // ),
                                     child: IconButton(
-                                      onPressed: (){
+                                      onPressed: () async{
                                         if(_favoriteItem[index].favStatus! == "1") {
 
-                                          setState(() {
-                                            DeleteFavoriteItemAPI.deleteFavoriteItems(context,_favoriteItem[index].id!);
-                                          });
+
+                                          await  DeleteFavoriteItemAPI.deleteFavoriteItems(context,_favoriteItem[index].id!);
+                                          await fetchFavoriteItems();
+
                                         }
                                       },
                                       icon: _favoriteItem[index].favStatus! == "1" ?

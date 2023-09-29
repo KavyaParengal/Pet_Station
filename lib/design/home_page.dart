@@ -10,15 +10,14 @@ import 'package:pet_station/models/favoriteItemModel.dart';
 import 'package:pet_station/models/foodModel.dart';
 import 'package:pet_station/models/viewCategory.dart';
 import 'package:pet_station/models/viewCategoryItems.dart';
-import 'package:pet_station/provider/fav_provider.dart';
 import 'package:pet_station/services/allService.dart';
 import 'package:http/http.dart' as http;
 import 'package:pet_station/services/deleteFavoriteItem.dart';
+import 'package:pet_station/services/deleteFavoriteItemInHomePage.dart';
 import 'package:pet_station/services/favoriteFoodItem.dart';
 import 'package:pet_station/services/favoriteItemService.dart';
 import 'package:pet_station/services/searchitem.dart';
 import 'package:pet_station/services/viewFavoriteItem.dart';
-import 'package:provider/provider.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({Key? key}) : super(key: key);
@@ -35,7 +34,9 @@ class _HomeScreenState extends State<HomeScreen> {
   List<ViewCategoryItemsModel> _petdata=[];
   List<ViewCategoryModel> _categortData=[];
   List<ViewFoodModel> _fooddata=[];
-  List<FavoriteData> _favoriteItem=[];
+  List<FavoriteData> _favoriteItem = [];
+  List _favoritePetItem=[];
+  List _favoriteFoodItem =[];
   bool isDrawerOpen=false;
   bool isLoaded=false;
   bool itemload=false;
@@ -110,7 +111,9 @@ class _HomeScreenState extends State<HomeScreen> {
   Future<void> fetchFavoriteItems() async {
     List<FavoriteData> data = await ViewFavoriteItems().getFavoriteItems();
     setState(() {
-      _favoriteItem = data;
+      _favoriteItem=data;
+      _favoritePetItem = data.map((e) => e.itemId).toList();
+      _favoriteFoodItem = data.map((e) => e.foodId).toList();
     });
   }
 
@@ -130,8 +133,8 @@ class _HomeScreenState extends State<HomeScreen> {
   @override
   Widget build(BuildContext context) {
 
-    final object = Provider.of<FavProvider_class>(context);
-
+    print('_favoritePetItem$_favoritePetItem');
+    print('_favoriteFoodItem$_favoriteFoodItem');
 
     var size = MediaQuery.of(context).size;
     final double itemHeight = (size.height - kToolbarHeight - 200) / 1.9;
@@ -320,25 +323,16 @@ class _HomeScreenState extends State<HomeScreen> {
                                           ),
                                           Positioned(
                                             right: 1,
-                                            // child: IconButton(
-                                            //   onPressed: (){
-                                            //     object.favorites(APIConstants.url+_fooddata[index].image1.toString(), _fooddata[index].productName.toString(), _fooddata[index].companyName.toString(), _data[index].price.toString());
-                                            //   },
-                                            //   icon: object.icn_change(APIConstants.url+_fooddata[index].image1.toString()) ?
-                                            //   Icon(Icons.favorite,color: Colors.red,) :
-                                            //   Icon(Icons.favorite_outline,color: Colors.grey.shade800,),
-                                            // ),
                                               child: IconButton(
-                                                  onPressed: (){
-                                                    // setState(() {
-                                                    //   _favoriteItem[index].favStatus! == "1" ? DeleteFavoriteItemAPI.deleteFavoriteItems(context,_favoriteItem[index].id!) :
-                                                    //   FavoriteFoodItemAPI.favoriteFoodItem(context: context,foodId: _fooddata[index].id);
-                                                    // });
-                                                    // print('object===${ _favoriteItem[index].favStatus}');
+                                                  onPressed: () async{
+                                                    _favoriteFoodItem.contains(_fooddata[index].id) ? await DeleteFavoriteItemInHomePage.deleteFavoriteItemInHomePage(context,_fooddata[index].id) :
+                                                      await FavoriteFoodItemAPI.favoriteFoodItem(context: context,foodId: _fooddata[index].id);
+
+                                                      await fetchFavoriteItems();
                                                   },
                                                   icon:
-                                                  // _favoriteItem[index].favStatus! == "1" ?
-                                                  // Icon(Icons.favorite,color: Colors.red,) :
+                                                  _favoriteFoodItem.contains(_fooddata[index].id) ?
+                                                  Icon(Icons.favorite,color: Colors.red,) :
                                                   Icon(Icons.favorite_outline)
                                               ),
                                           ),
@@ -415,6 +409,7 @@ class _HomeScreenState extends State<HomeScreen> {
                             mainAxisSpacing: 4.0
                         ),
                         itemBuilder: (BuildContext context, int index){
+                          print('--------$_petdata');
                           return GridTile(
                             child: Container(
                               decoration: BoxDecoration(
@@ -439,23 +434,15 @@ class _HomeScreenState extends State<HomeScreen> {
                                           ),
                                           Positioned(
                                             right: 1,
-                                              // child: IconButton(
-                                              //   onPressed: (){
-                                              //     object.favorites(APIConstants.url+_data[index].image1.toString(), _data[index].name.toString(), _data[index].breed.toString(), _data[index].price.toString());
-                                              //   },
-                                              //   icon: object.icn_change(APIConstants.url+_data[index].image1.toString()) ?
-                                              //   const Icon(Icons.favorite,color: Colors.red,) :
-                                              //   Icon(Icons.favorite_outline,color: Colors.grey.shade800,),
-                                              // ),
                                             child: IconButton(
-                                                onPressed: (){
-                                                  // _favoriteItem[index].favStatus! == "0" ? DeleteFavoriteItemAPI.deleteFavoriteItems(context,_favoriteItem[index].id!) :
-                                                  //   FavoriteItemAPI.FavoriteItem(context: context,productId: _petdata[index].id);
-                                                  // print('object===${ _favoriteItem[index].favStatus}');
+                                                onPressed: () async {
+                                                  _favoritePetItem.contains(_petdata[index].id)  ? await DeleteFavoriteItemInHomePage.deleteFavoriteItemInHomePage(context,_petdata[index].id) :
+                                                  await  FavoriteItemAPI.FavoriteItem(context: context,productId: _petdata[index].id);
+                                                  await fetchFavoriteItems();
                                                 },
                                                 icon:
-                                                // _favoriteItem[index].favStatus! == "0" ?
-                                                // Icon(Icons.favorite,color: Colors.red,) :
+                                                _favoritePetItem.contains(_petdata[index].id) ?
+                                                Icon(Icons.favorite,color: Colors.red,) :
                                                 Icon(Icons.favorite_outline)
                                             ),
                                           ),

@@ -148,9 +148,7 @@ class _CartScreenState extends State<CartScreen> {
                           itemCount: snapshot.data?.length,
                           itemBuilder: (context, index) {
                             final item = snapshot.data![index].id;
-
                             count = snapshot.data!.length;
-
                             return Dismissible(
                               onDismissed: (DismissDirection direction) {
                                 setState(() {
@@ -312,7 +310,9 @@ class _CartScreenState extends State<CartScreen> {
                             );
                           });
                     } else {
-                      print('no data');
+                      Center(
+                        child: Text('No Item in Cart',style: TextStyle(color: Colors.black),),
+                      );
                     }
                     return const Center(
                       child: CircularProgressIndicator(),

@@ -35,7 +35,7 @@ class OrderData {
   String? orderdate;
   String? breed;
   String? quantity;
-  int? totalPrice;
+  double? totalPrice;
   String? image;
   String? category;
   String? expday;

@@ -7,13 +7,17 @@ import 'package:flutter_rating_bar/flutter_rating_bar.dart';
 import 'package:pet_station/config/constants.dart';
 import 'package:pet_station/design/cartScreen.dart';
 import 'package:pet_station/design/login_page.dart';
+import 'package:pet_station/models/favoriteItemModel.dart';
 import 'package:pet_station/models/viewCategoryItems.dart';
 import 'package:pet_station/services/allService.dart';
+import 'package:pet_station/services/deleteFavoriteItemInHomePage.dart';
+import 'package:pet_station/services/favoriteFoodItem.dart';
+import 'package:pet_station/services/favoriteItemService.dart';
 import 'package:pet_station/services/ratePets.dart';
+import 'package:pet_station/services/viewFavoriteItem.dart';
 import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
-import '../provider/fav_provider.dart';
 
 class SinglePet extends StatefulWidget {
 
@@ -30,12 +34,24 @@ class _SinglePetState extends State<SinglePet> {
   ViewCategoryApi viewPetdetails=ViewCategoryApi();
   ViewCategoryItemsModel? petDetails;
 
+  List _favoritePetItem=[];
+
+
+  late SharedPreferences prefs;
+  late int outid;
+
   @override
   void initState() {
     super.initState();
-
     fetchPetDetails(widget.pid);
     getoutId();
+  }
+
+  Future<void> fetchFavoriteItems() async {
+    List<FavoriteData> data = await ViewFavoriteItems().getFavoriteItems();
+    setState(() {
+      _favoritePetItem = data.map((e) => e.itemId).toList();
+    });
   }
 
   Future<ViewCategoryItemsModel?> fetchPetDetails(int id) async {
@@ -48,24 +64,21 @@ class _SinglePetState extends State<SinglePet> {
         });
 
     } catch (e) {
-      // Handle errors here, e.g., show an error message
       print('Failed to fetch pet details: $e');
-      return null; // Return null in case of an error
+      return null;
     }
   }
-
-  late SharedPreferences prefs;
-  late int outid;
 
   void getoutId()async {
     prefs = await SharedPreferences.getInstance();
     outid = (prefs.getInt('user_id') ?? 0 ) ;
+
+    fetchFavoriteItems();
   }
 
 
   @override
   Widget build(BuildContext context) {
-    final object = Provider.of<FavProvider_class>(context,listen: false);
 
     return Scaffold(
       appBar: AppBar(
@@ -215,20 +228,22 @@ class _SinglePetState extends State<SinglePet> {
                   borderRadius: BorderRadius.circular(20),
                   color: Colors.teal.shade800
               ),
-              // child: Center(
-              //     child: //IconButton(
-              //       // onPressed: (){
-              //       //   object.favorites(APIConstants.url+petDetails!.image1, petDetails!.name, petDetails!.breed, petDetails!.price);
-              //       // },
-              //       // icon: object.icn_change(APIConstants.url+petDetails!.image1) ?
-              //       // Icon(Icons.favorite,color: Colors.white,size: 32,) :
-              //       // Icon(Icons.favorite_outline,color: Colors.white,size: 32,),
-              //     //),
-              // ),
+              child: Center(
+                child: _favoritePetItem.isNotEmpty ? IconButton(
+                    onPressed: () async{
+                      _favoritePetItem.contains(petDetails!.id) ? await DeleteFavoriteItemInHomePage.deleteFavoriteItemInHomePage(context,petDetails!.id) :
+                      await FavoriteItemAPI.FavoriteItem(context: context, productId: petDetails!.id);
+                      await fetchFavoriteItems();
+                    },
+                    icon:
+                    _favoritePetItem.contains(petDetails!.id) ?
+                    Icon(Icons.favorite,color: Colors.white,size: 32,) :
+                    Icon(Icons.favorite_outline,color: Colors.white,size: 32,)
+                ) : CircularProgressIndicator(),
+              ),
             ),
             InkWell(
               onTap: (){
-                //Navigator.push(context, MaterialPageRoute(builder: (context)=>Login_Page()));
                 viewPetdetails.addtoCart(context: context, userId: outid, productId: widget.pid);
               },
               child: Container(
