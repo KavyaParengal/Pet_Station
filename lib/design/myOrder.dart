@@ -52,12 +52,14 @@ class _MyOrderState extends State<MyOrder> {
     // TODO: implement initState
     super.initState();
     fetchOrderItems();
-
-
   }
 
   @override
   Widget build(BuildContext context) {
+
+    var size = MediaQuery.of(context).size;
+    final double itemWidth = size.width / 2;
+
     return Scaffold(
       appBar: AppBar(
         backgroundColor: Colors.teal.shade800,
@@ -146,7 +148,15 @@ class _MyOrderState extends State<MyOrder> {
                                 const SizedBox(height: 8,),
                                 Text(filterdlist[index].breed.toString(),style: TextStyle(fontSize: 16,color: Colors.grey.shade600)),
                                 const SizedBox(height: 8,),
-                                Text(filterdlist[index].productName.toString(),style: const TextStyle(fontSize: 14,color: Colors.grey)),
+                                Container(
+                                    constraints: BoxConstraints(
+                                      maxWidth: itemWidth ,
+                                    ),
+                                    child: Text(filterdlist[index].productName.toString(),style:
+                                    const TextStyle(fontSize: 14,color: Colors.grey),
+                                      maxLines: 1,
+                                      overflow: TextOverflow.ellipsis,
+                                    )),
                               ],
                             ),
                             const Icon(Icons.arrow_forward_ios,size: 15,)

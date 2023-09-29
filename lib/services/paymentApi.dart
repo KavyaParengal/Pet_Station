@@ -22,18 +22,19 @@ class PaymentAPI{
         "date": datetime1,
         "amount":amount
       };
+      print(data);
       final urls = APIConstants.url + APIConstants.payment;
+      print(urls);
       var response = await http.post(Uri.parse(urls),body: data);
       var body = json.decode(response.body);
-      if (body['success'] == true) {
+      if (response.statusCode==201) {
         // ScaffoldMessenger.of(context).showSnackBar(
         //     SnackBar(content: Text(body['message']),
         //     ));
+        print('hau');
       }
       else {
-        ScaffoldMessenger.of(context).showSnackBar(
-            SnackBar(content: Text(body['message']),
-            ));
+        print('error');
       }
     }
     catch(e){

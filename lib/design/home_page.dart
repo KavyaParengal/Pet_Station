@@ -90,7 +90,6 @@ class _HomeScreenState extends State<HomeScreen> {
       itemload=true;
     });
     final urls=APIConstants.url + APIConstants.viewfoods + id.toString();
-    print(urls);
     var response=await http.get(Uri.parse(urls));
     if(response.statusCode==200){
       var body=json.decode(response.body);
@@ -132,9 +131,6 @@ class _HomeScreenState extends State<HomeScreen> {
 
   @override
   Widget build(BuildContext context) {
-
-    print('_favoritePetItem$_favoritePetItem');
-    print('_favoriteFoodItem$_favoriteFoodItem');
 
     var size = MediaQuery.of(context).size;
     final double itemHeight = (size.height - kToolbarHeight - 200) / 1.9;
@@ -409,7 +405,6 @@ class _HomeScreenState extends State<HomeScreen> {
                             mainAxisSpacing: 4.0
                         ),
                         itemBuilder: (BuildContext context, int index){
-                          print('--------$_petdata');
                           return GridTile(
                             child: Container(
                               decoration: BoxDecoration(

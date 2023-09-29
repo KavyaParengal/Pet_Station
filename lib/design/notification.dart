@@ -1,6 +1,8 @@
 
 
 import 'package:flutter/material.dart';
+import 'package:pet_station/models/notification.dart';
+import 'package:pet_station/services/viewNotifications.dart';
 
 class NotificationPage extends StatefulWidget {
   const NotificationPage({Key? key}) : super(key: key);
@@ -17,6 +19,23 @@ class _NotificationPageState extends State<NotificationPage> {
     {'title':'Notification title','content':'Notification content','date':'2023-08-21'}
   ];
 
+  List<NotificationModel> notificationDetails = [];
+
+  Future<void> fetchNotificationItems() async {
+    List<NotificationModel> data = await ViewNotificationAPI.getNotifications();
+    setState(() {
+      notificationDetails = data;
+      print(notificationDetails);
+    });
+  }
+
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    fetchNotificationItems();
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -31,9 +50,9 @@ class _NotificationPageState extends State<NotificationPage> {
           icon: Icon(Icons.arrow_back),
         ),
       ),
-      body: ListView.builder(
+      body: notificationDetails.isNotEmpty ? ListView.builder(
         shrinkWrap: true,
-        itemCount: notifys.length,
+        itemCount: notificationDetails.length,
         itemBuilder: (context,index){
           return Padding(
             padding: const EdgeInsets.only(top: 18,right: 12,left: 12),
@@ -53,14 +72,14 @@ class _NotificationPageState extends State<NotificationPage> {
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
-                          Text(notifys[index]['title'],style: TextStyle(fontSize: 18,fontWeight: FontWeight.bold)),
+                          Text(notificationDetails[index].notificationTitle.toString(),style: TextStyle(fontSize: 18,fontWeight: FontWeight.bold)),
                           SizedBox(height: 5,),
-                          Text(notifys[index]['content'],style: TextStyle(fontSize: 16),textAlign: TextAlign.justify,),
+                          Text(notificationDetails[index].notificationContent.toString(),style: TextStyle(fontSize: 15,color: Colors.grey.shade600),textAlign: TextAlign.justify,),
                         ],
                       ),
                     ),
                     SizedBox(width: 14,),
-                    Text(notifys[index]['date'],style: TextStyle(fontSize: 15))
+                    Text(notificationDetails[index].date.toString(),style: TextStyle(fontSize: 15))
                   ],
                 ),
                 SizedBox(height: 12,),
@@ -74,7 +93,7 @@ class _NotificationPageState extends State<NotificationPage> {
         },
 
 
-      ),
+      ) : Center(child: CircularProgressIndicator(),)
     );
   }
 }
