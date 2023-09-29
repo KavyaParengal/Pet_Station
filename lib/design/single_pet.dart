@@ -57,12 +57,10 @@ class _SinglePetState extends State<SinglePet> {
   Future<ViewCategoryItemsModel?> fetchPetDetails(int id) async {
     try {
       final details = await ViewCategoryApi.getPetDetails(id);
-
         petDetails = details;
         setState(() {
            print(petDetails);
         });
-
     } catch (e) {
       print('Failed to fetch pet details: $e');
       return null;
@@ -72,10 +70,8 @@ class _SinglePetState extends State<SinglePet> {
   void getoutId()async {
     prefs = await SharedPreferences.getInstance();
     outid = (prefs.getInt('user_id') ?? 0 ) ;
-
     fetchFavoriteItems();
   }
-
 
   @override
   Widget build(BuildContext context) {
@@ -185,8 +181,9 @@ class _SinglePetState extends State<SinglePet> {
                                     itemBuilder: (context, _){
                                       return Icon(Icons.star,color: Colors.amber,);
                                     },
-                                    onRatingUpdate: (rating) {
-                                      RatePetsAPI.ratePets(context, widget.pid, rating);
+                                    onRatingUpdate: (rating) async {
+                                      await RatePetsAPI.ratePets(context, widget.pid, rating);
+                                      await fetchPetDetails(widget.pid);
                                       print(rating);
                                     }
                                 ),

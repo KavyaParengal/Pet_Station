@@ -46,7 +46,6 @@ class _CartScreenState extends State<CartScreen> {
     setState(() {
 
     });
-
     fetchTotalPrice();
   }
 
@@ -131,7 +130,7 @@ class _CartScreenState extends State<CartScreen> {
               "Your Cart",
               style: TextStyle(color: Colors.black),
             ),
-            count!=null?Text("${count} items", style: Theme.of(context).textTheme.caption):CircularProgressIndicator(),
+            Text("${count} items", style: Theme.of(context).textTheme.caption),
           ],
         ),
       ),
@@ -254,11 +253,11 @@ class _CartScreenState extends State<CartScreen> {
                                             children: [
                                               GestureDetector(
                                                 onTap: () async{
-                                                  //counter++;
                                                   await cartdecrement.cartQutyDecre(snapshot.data![index].id!.toInt());
                                                   setState(() {
 
                                                   });
+                                                  await fetchTotalPrice();
                                                 },
                                                 child: Container(
                                                     width: 30,
@@ -284,6 +283,7 @@ class _CartScreenState extends State<CartScreen> {
                                                   setState(() {
 
                                                   });
+                                                  await fetchTotalPrice();
                                                 },
                                                 child: Container(
                                                     width: 30,
