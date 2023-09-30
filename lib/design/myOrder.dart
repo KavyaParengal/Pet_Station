@@ -172,7 +172,7 @@ class _MyOrderState extends State<MyOrder> {
             ),
           )
         ],
-      ) : Center(child: CircularProgressIndicator(),)
+      ) :Center(child: CircularProgressIndicator(),)
     );
   }
 }

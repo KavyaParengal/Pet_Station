@@ -27,6 +27,7 @@ class OrderConfirmation extends StatefulWidget {
 class _OrderConfirmationState extends State<OrderConfirmation> {
 
   String paymentType='';
+  String orderAddress='';
   bool isRadioButtonSelected = false;
 
   late SharedPreferences prefs;
@@ -115,7 +116,7 @@ class _OrderConfirmationState extends State<OrderConfirmation> {
       ),
 
       body: SingleChildScrollView(
-        physics: ScrollPhysics(),
+        physics: const ScrollPhysics(),
         child: _orderAddress.isNotEmpty ? Column(
           children: [
             Padding(
@@ -133,7 +134,7 @@ class _OrderConfirmationState extends State<OrderConfirmation> {
                       Row(
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
-                          Text('${_changedAddress?.addressType??_orderAddress[0].addressType} Delivery',style: TextStyle(
+                          Text('${_changedAddress?.addressType??_orderAddress[0].addressType} Delivery',style: const TextStyle(
                             fontWeight: FontWeight.w500,
                             fontSize: 19,
                             color: Colors.black,
@@ -141,6 +142,7 @@ class _OrderConfirmationState extends State<OrderConfirmation> {
                           InkWell(
                             onTap: () async {
                               _orderAddress[0] = await Navigator.push(context, MaterialPageRoute(builder: (context)=>const ChangeAddress()));
+
                              setState(() {
 
                              });
@@ -154,7 +156,7 @@ class _OrderConfirmationState extends State<OrderConfirmation> {
                         ],
                       ),
                       const SizedBox(height: 15,),
-                      Text(_orderAddress[0].name!,style: TextStyle(
+                      Text(_orderAddress[0].name!,style: const TextStyle(
                         fontWeight: FontWeight.w500,
                         fontSize: 15,
                         color: Colors.black,
@@ -186,18 +188,18 @@ class _OrderConfirmationState extends State<OrderConfirmation> {
 
             Container(
               width: MediaQuery.of(context).size.width,
-              decoration: BoxDecoration(
+              decoration: const BoxDecoration(
                 color: Colors.white,
               ),
               child: ExpansionWidget(
                 initiallyExpanded: false,
                 titleBuilder: (double animationValue, _, bool isExpanded, toggleFunction,) {
                   return Padding(
-                    padding: EdgeInsets.all(12),
+                    padding: const EdgeInsets.all(12),
                     child: Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
-                        Text(
+                        const Text(
                           'Expected Delivery',
                           style: TextStyle(
                             fontWeight: FontWeight.w500,
@@ -224,7 +226,7 @@ class _OrderConfirmationState extends State<OrderConfirmation> {
                     future: ViewCategoryApi.getSinglecartItems(outid), builder: (BuildContext content, snapshot) {
                       if (snapshot.hasData) {
                         return ListView.builder(
-                          physics: NeverScrollableScrollPhysics(),
+                          physics: const NeverScrollableScrollPhysics(),
                           shrinkWrap: true,
                           itemCount: snapshot.data!.length,
                           itemBuilder: (context, index) {
@@ -243,7 +245,7 @@ class _OrderConfirmationState extends State<OrderConfirmation> {
                                       ),
                                     ),
                                   ),
-                                  SizedBox(width: 10),
+                                  const SizedBox(width: 10),
                                   Column(
                                     crossAxisAlignment: CrossAxisAlignment.start,
                                     children: [
@@ -255,14 +257,14 @@ class _OrderConfirmationState extends State<OrderConfirmation> {
                                             fontSize: 16
                                         ),
                                       ),
-                                      SizedBox(height: 3),
+                                      const SizedBox(height: 3),
                                       Container(
                                         constraints: BoxConstraints(
                                           maxWidth: itemWidth ,
                                         ),
                                         child: Text(
                                           "${snapshot.data![index].itemname}",
-                                          style: TextStyle(
+                                          style: const TextStyle(
                                             fontWeight: FontWeight.w400,
                                             fontSize: 16,
                                             color: Colors.grey,
@@ -271,10 +273,10 @@ class _OrderConfirmationState extends State<OrderConfirmation> {
                                           overflow: TextOverflow.ellipsis,
                                         ),
                                       ),
-                                      SizedBox(height: 3),
+                                      const SizedBox(height: 3),
                                       Text(
                                         "${snapshot.data![index].breedname}",
-                                        style: TextStyle(
+                                        style: const TextStyle(
                                           fontWeight: FontWeight.w400,
                                         ),
                                       ),
@@ -429,14 +431,15 @@ class _OrderConfirmationState extends State<OrderConfirmation> {
             ),
           ],
         ) :
-          Center(child: CircularProgressIndicator(),)
+          const Center(child: CircularProgressIndicator(),)
       ),
 
       bottomNavigationBar: InkWell(
         onTap: () {
-          PlaceOrderAPI.placeOrder(context);
-          PaymentAPI.payment(context, _loaddata);
-          //Navigator.push(context, MaterialPageRoute(builder: (context)=>const OrderSuccessMessage()));
+          orderAddress='${_orderAddress[0].buildingName}, ${_orderAddress[0].area}, ${_orderAddress[0].city}, ${_orderAddress[0].state} - ${_orderAddress[0].pincode}';
+
+          print(orderAddress);
+          PlaceOrderAPI.placeOrder(context,orderAddress,'${_orderAddress[0].name}','${_orderAddress[0].contact}');
         },
         child: Container(
           decoration: BoxDecoration(

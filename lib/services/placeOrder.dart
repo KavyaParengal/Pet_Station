@@ -8,7 +8,7 @@ import 'package:pet_station/design/orderSuccessMessage.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class PlaceOrderAPI{
-  static Future<void> placeOrder(BuildContext context) async {
+  static Future<void> placeOrder(BuildContext context,String orderAddress,String userName, String contactNum) async {
 
     String datetime1='';
     DateTime datetime = DateTime.now();
@@ -19,8 +19,12 @@ class PlaceOrderAPI{
     try{
       var data={
         "user": userId.toString(),
-        "date": datetime1
+        "date": datetime1,
+        "orderAddress" : orderAddress,
+        "userName" : userName,
+        "contactNum" : contactNum,
       };
+      print(data);
       final urls = APIConstants.url + APIConstants.placeOrder;
       var response = await http.post(Uri.parse(urls),body: data);
       var body = json.decode(response.body);
