@@ -16,7 +16,7 @@ class ChangeAddress extends StatefulWidget {
 class _ChangeAddressState extends State<ChangeAddress> {
   String address = '';
   bool isRadioButtonSelected = false;
-  int selectedAddressIndex = -1;
+  int selectedAddressIndex=-1;
 
   List<Data> _orderAddress=[];
 
@@ -153,6 +153,8 @@ class _ChangeAddressState extends State<ChangeAddress> {
                             groupValue: selectedAddressIndex,
                             activeColor: Colors.teal.shade800,
                             onChanged: (value) {
+
+                              Navigator.pop(context,_orderAddress[value!]);
                               setState(() {
                                 selectedAddressIndex = value as int;
                                 print(selectedAddressIndex);

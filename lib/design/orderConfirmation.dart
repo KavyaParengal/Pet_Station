@@ -87,6 +87,7 @@ class _OrderConfirmationState extends State<OrderConfirmation> {
     }
   }
 
+  Data? _changedAddress;
   @override
   Widget build(BuildContext context) {
 
@@ -119,64 +120,65 @@ class _OrderConfirmationState extends State<OrderConfirmation> {
           children: [
             Padding(
               padding: const EdgeInsets.all(22),
-              child: Expanded(
-                child: Container(
-                  decoration: BoxDecoration(
-                    color: Colors.white,
-                    borderRadius: BorderRadius.circular(10),
-                  ),
-                  child: Padding(
-                    padding: const EdgeInsets.all(16),
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          children: [
-                            Text('${_orderAddress[0].addressType} Delivery',style: TextStyle(
+              child: Container(
+                decoration: BoxDecoration(
+                  color: Colors.white,
+                  borderRadius: BorderRadius.circular(10),
+                ),
+                child: Padding(
+                  padding: const EdgeInsets.all(16),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          Text('${_changedAddress?.addressType??_orderAddress[0].addressType} Delivery',style: TextStyle(
+                            fontWeight: FontWeight.w500,
+                            fontSize: 19,
+                            color: Colors.black,
+                          ),),
+                          InkWell(
+                            onTap: () async {
+                              _orderAddress[0] = await Navigator.push(context, MaterialPageRoute(builder: (context)=>const ChangeAddress()));
+                             setState(() {
+
+                             });
+                            },
+                            child: Text('Change address',style: TextStyle(
                               fontWeight: FontWeight.w500,
-                              fontSize: 19,
-                              color: Colors.black,
+                              fontSize: 13,
+                              color: Colors.teal.shade800,
                             ),),
-                            InkWell(
-                              onTap: (){
-                                Navigator.push(context, MaterialPageRoute(builder: (context)=>const ChangeAddress()));
-                              },
-                              child: Text('Change address',style: TextStyle(
-                                fontWeight: FontWeight.w500,
-                                fontSize: 13,
-                                color: Colors.teal.shade800,
-                              ),),
-                            ),
-                          ],
-                        ),
-                        const SizedBox(height: 15,),
-                        Text(_orderAddress[0].name!,style: TextStyle(
-                          fontWeight: FontWeight.w500,
-                          fontSize: 15,
-                          color: Colors.black,
-                        ),),
-                        const SizedBox(height: 10,),
-                        Text('${_orderAddress[0].buildingName}, ${_orderAddress[0].area}, ${_orderAddress[0].city}, ${_orderAddress[0].state}-${_orderAddress[0].pincode}',style: TextStyle(
-                          fontSize: 15,
-                          color: Colors.grey.shade600,
-                        ),),
-                        const SizedBox(height: 10,),
-                        Row(
-                          children: [
-                            Text('Phone : ',style: TextStyle(
-                              fontSize: 15,
-                              color: Colors.grey.shade600,
-                            ),),
-                            Text('${_orderAddress[0].contact}',style: TextStyle(
-                              fontWeight: FontWeight.w500,
-                              fontSize: 14,
-                              color: Colors.grey.shade800,
-                            ),),
-                          ],
-                        ),
-                      ],
-                    ),
+                          ),
+                        ],
+                      ),
+                      const SizedBox(height: 15,),
+                      Text(_orderAddress[0].name!,style: TextStyle(
+                        fontWeight: FontWeight.w500,
+                        fontSize: 15,
+                        color: Colors.black,
+                      ),),
+                      const SizedBox(height: 10,),
+                      Text('${_orderAddress[0].buildingName}, ${_orderAddress[0].area}, ${_orderAddress[0].city}, ${_orderAddress[0].state}-${_orderAddress[0].pincode}',style: TextStyle(
+                        fontSize: 15,
+                        color: Colors.grey.shade600,
+                      ),),
+                      const SizedBox(height: 10,),
+                      Row(
+                        children: [
+                          Text('Phone : ',style: TextStyle(
+                            fontSize: 15,
+                            color: Colors.grey.shade600,
+                          ),),
+                          Text('${_orderAddress[0].contact}',style: TextStyle(
+                            fontWeight: FontWeight.w500,
+                            fontSize: 14,
+                            color: Colors.grey.shade800,
+                          ),),
+                        ],
+                      ),
+                    ],
                   ),
                 ),
               ),
