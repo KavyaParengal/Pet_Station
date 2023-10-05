@@ -139,7 +139,8 @@ class _CartScreenState extends State<CartScreen> {
           children: [
             Container(
                 child: FutureBuilder<List<CartData>>(
-                  future: ViewCategoryApi.getSinglecartItems(outid), builder: (BuildContext content, snapshot) {
+                  future: ViewCategoryApi.getSinglecartItems(outid),
+                  builder: (BuildContext content, snapshot) {
                     if (snapshot.hasData) {
                       return ListView.builder(
                           physics: NeverScrollableScrollPhysics(),
