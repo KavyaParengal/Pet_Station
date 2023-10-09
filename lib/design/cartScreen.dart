@@ -63,9 +63,8 @@ class _CartScreenState extends State<CartScreen> {
       });
     }
     catch(e){
-      // Handle errors here, e.g., show an error message
       print('Failed to fetch user details: $e');
-      return null; // Return null in case of an error
+      return null;
     }
   }
 
@@ -141,212 +140,185 @@ class _CartScreenState extends State<CartScreen> {
                 child: FutureBuilder<List<CartData>>(
                   future: ViewCategoryApi.getSinglecartItems(outid),
                   builder: (BuildContext content, snapshot) {
-                    if (snapshot.hasData) {
-                      return ListView.builder(
-                          physics: NeverScrollableScrollPhysics(),
-                          shrinkWrap: true,
-                          itemCount: snapshot.data?.length,
-                          itemBuilder: (context, index) {
-                            final item = snapshot.data![index].id;
-                            count = snapshot.data!.length;
-                            return Dismissible(
-                              onDismissed: (DismissDirection direction) {
-                                setState(() {
-                                  deleteCartItem.deleteCartItems(snapshot.data![index].id!.toInt());
-                                });
-                              },
-                              direction: DismissDirection.endToStart,
-                              key:UniqueKey(),
-                              background: Container(
-                                decoration: BoxDecoration(
-                                    color: Colors.red.withOpacity(0.3)),
-                                child: const Row(
-                                  children: [
-                                    Spacer(),
-                                    Icon(
-                                      Icons.delete,
-                                      size: 41,
-                                    )
-                                  ],
-                                ),
+                    if (snapshot.hasError) {
+                      return Text('Error: ${snapshot.error}');
+                    }
+                    if (snapshot.connectionState == ConnectionState.waiting) {
+                      return Center(child: CircularProgressIndicator());
+                    }
+                    if (!snapshot.hasData || snapshot.data!.isEmpty) {
+                      return Center(child: Text('No Item in Cart'));
+                    }
+                    return ListView.builder(
+                        physics: NeverScrollableScrollPhysics(),
+                        shrinkWrap: true,
+                        itemCount: snapshot.data?.length,
+                        itemBuilder: (context, index) {
+                          final item = snapshot.data![index].id;
+                          count = snapshot.data!.length;
+                          return Dismissible(
+                            onDismissed: (DismissDirection direction) async{
+                              setState(() {
+                                deleteCartItem.deleteCartItems(snapshot.data![index].id!.toInt());
+                              });
+                              await fetchTotalPrice();
+                            },
+                            direction: DismissDirection.endToStart,
+                            key:UniqueKey(),
+                            background: Container(
+                              decoration: BoxDecoration(
+                                  color: Colors.red.withOpacity(0.3)),
+                              child: const Row(
+                                children: [
+                                  Spacer(),
+                                  Icon(
+                                    Icons.delete,
+                                    size: 41,
+                                  )
+                                ],
                               ),
-                              child: Padding(
-                                padding: const EdgeInsets.only(
-                                    top: 5, left: 8, right: 8),
-                                child: Column(
-                                  children: [
-                                    Row(
-                                      children: [
-                                        InkWell(
-                                          onTap: (){
-                                            int? pid=snapshot.data![index].item?.toInt();
-                                            Navigator.push(context, MaterialPageRoute(builder: (context)=>SinglePet(pid: snapshot.data![index].item!.toInt())));
-                                          },
-                                          child: SizedBox(
-                                            width: 120,
-                                            child: AspectRatio(
-                                              aspectRatio: 0.88,
-                                              child: Container(
-                                                padding: EdgeInsets.all(10),
-                                                decoration: BoxDecoration(
-                                                    color: Colors.grey.shade300,
-                                                    borderRadius:
-                                                        BorderRadius.circular(15)),
-                                                child: Image.network(
-                                                    APIConstants.url + snapshot.data![index].image.toString()
-                                                ),
+                            ),
+                            child: Padding(
+                              padding: const EdgeInsets.only(
+                                  top: 5, left: 8, right: 8),
+                              child: Column(
+                                children: [
+                                  Row(
+                                    children: [
+                                      InkWell(
+                                        onTap: (){
+                                          Navigator.push(context, MaterialPageRoute(builder: (context)=>SinglePet(pid: snapshot.data![index].item!.toInt())));
+                                        },
+                                        child: SizedBox(
+                                          width: 120,
+                                          child: AspectRatio(
+                                            aspectRatio: 0.88,
+                                            child: Container(
+                                              padding: EdgeInsets.all(10),
+                                              decoration: BoxDecoration(
+                                                  color: Colors.grey.shade300,
+                                                  borderRadius:
+                                                  BorderRadius.circular(15)),
+                                              child: Image.network(
+                                                  APIConstants.url + snapshot.data![index].image.toString()
                                               ),
                                             ),
                                           ),
                                         ),
-                                        SizedBox(width: 10,),
-                                        Column(
-                                          crossAxisAlignment:
-                                              CrossAxisAlignment.start,
-                                          children: [
-                                            Container(
-                                              constraints: BoxConstraints(
-                                                maxWidth: itemWidth ,
-                                              ),
-                                              child: Text(
-                                                snapshot.data![index].itemname
-                                                    .toString(),
-                                                style: TextStyle(
-                                                    fontSize: 16,
-                                                    color: Colors.black),
-                                                maxLines: 2,
-                                                overflow: TextOverflow.ellipsis,
-                                              ),
+                                      ),
+                                      SizedBox(width: 10,),
+                                      Column(
+                                        crossAxisAlignment:
+                                        CrossAxisAlignment.start,
+                                        children: [
+                                          Container(
+                                            constraints: BoxConstraints(
+                                              maxWidth: itemWidth ,
                                             ),
-                                            SizedBox(
-                                              height: 10,
-                                            ),
-                                            Text(
-                                              snapshot.data![index].breedname
+                                            child: Text(
+                                              snapshot.data![index].itemname
                                                   .toString(),
                                               style: TextStyle(
-                                                  fontSize: 13,
+                                                  fontSize: 16,
                                                   color: Colors.black),
                                               maxLines: 2,
-                                              overflow: TextOverflow.visible,
+                                              overflow: TextOverflow.ellipsis,
                                             ),
-                                            SizedBox(
-                                              height: 10,
+                                          ),
+                                          SizedBox(
+                                            height: 10,
+                                          ),
+                                          Text(
+                                            snapshot.data![index].breedname
+                                                .toString(),
+                                            style: TextStyle(
+                                                fontSize: 13,
+                                                color: Colors.black),
+                                            maxLines: 2,
+                                            overflow: TextOverflow.visible,
+                                          ),
+                                          SizedBox(
+                                            height: 10,
+                                          ),
+                                          Text.rich(TextSpan(
+                                              text:
+                                              "₨. ${snapshot.data?[index].totalPrice.toString()}",
+                                              style: TextStyle(
+                                                  fontWeight: FontWeight.w600,
+                                                  color: Colors.grey)))
+                                        ],
+                                      ),
+                                      Spacer(),
+                                      Container(
+                                        width: 100,
+                                        height: 42,
+                                        decoration: BoxDecoration(
+                                            border: Border.all(
+                                                color: Colors.grey.shade300)),
+                                        child: Row(
+                                          mainAxisAlignment:
+                                          MainAxisAlignment.spaceEvenly,
+                                          children: [
+                                            GestureDetector(
+                                              onTap: () async{
+                                                await cartdecrement.cartQutyDecre(snapshot.data![index].id!.toInt());
+                                                setState(() {
+
+                                                });
+                                                await fetchTotalPrice();
+                                              },
+                                              child: Container(
+                                                  width: 30,
+                                                  height: 30,
+                                                  child: Icon(
+                                                    Icons.remove,
+                                                    color: Colors.teal.shade800,
+                                                    size: 18,
+                                                  )),
                                             ),
-                                            Text.rich(TextSpan(
-                                                text:
-                                                    "₨. ${snapshot.data?[index].totalPrice.toString()}",
-                                                style: TextStyle(
-                                                    fontWeight: FontWeight.w600,
-                                                    color: Colors.grey)))
+                                            Text(
+                                              '${snapshot.data![index].quantity}',
+                                              style: const TextStyle(
+                                                color: Colors.black,
+                                                fontSize: 16,
+                                                fontWeight: FontWeight.w500,
+                                              ),
+                                            ),
+                                            GestureDetector(
+                                              onTap: () async{
+                                                //counter++;
+                                                await cartincrement.cartQutyIncre(snapshot.data![index].id!.toInt());
+                                                setState(() {
+
+                                                });
+                                                await fetchTotalPrice();
+                                              },
+                                              child: Container(
+                                                  width: 30,
+                                                  height: 30,
+                                                  child: Icon(
+                                                    Icons.add,
+                                                    color: Colors.teal.shade800,
+                                                    size: 18,
+                                                  )),
+                                            ),
                                           ],
                                         ),
-                                        Spacer(),
-                                        Container(
-                                          width: 100,
-                                          height: 42,
-                                          decoration: BoxDecoration(
-                                              border: Border.all(
-                                                  color: Colors.grey.shade300)),
-                                          child: Row(
-                                            mainAxisAlignment:
-                                                MainAxisAlignment.spaceEvenly,
-                                            children: [
-                                              GestureDetector(
-                                                onTap: () async{
-                                                  await cartdecrement.cartQutyDecre(snapshot.data![index].id!.toInt());
-                                                  setState(() {
-
-                                                  });
-                                                  await fetchTotalPrice();
-                                                },
-                                                child: Container(
-                                                    width: 30,
-                                                    height: 30,
-                                                    child: Icon(
-                                                      Icons.remove,
-                                                      color: Colors.teal.shade800,
-                                                      size: 18,
-                                                    )),
-                                              ),
-                                              Text(
-                                                '${snapshot.data![index].quantity}',
-                                                style: const TextStyle(
-                                                  color: Colors.black,
-                                                  fontSize: 16,
-                                                  fontWeight: FontWeight.w500,
-                                                ),
-                                              ),
-                                              GestureDetector(
-                                                onTap: () async{
-                                                  //counter++;
-                                                  await cartincrement.cartQutyIncre(snapshot.data![index].id!.toInt());
-                                                  setState(() {
-
-                                                  });
-                                                  await fetchTotalPrice();
-                                                },
-                                                child: Container(
-                                                    width: 30,
-                                                    height: 30,
-                                                    child: Icon(
-                                                      Icons.add,
-                                                      color: Colors.teal.shade800,
-                                                      size: 18,
-                                                    )),
-                                              ),
-                                            ],
-                                          ),
-                                        ),
-                                      ],
-                                    ),
-                                    //SizedBox(height: 20,),
-                                    Divider(
-                                      thickness: 1,
-                                      color: Colors.grey.shade200,
-                                    )
-                                  ],
-                                ),
+                                      ),
+                                    ],
+                                  ),
+                                  //SizedBox(height: 20,),
+                                  Divider(
+                                    thickness: 1,
+                                    color: Colors.grey.shade200,
+                                  )
+                                ],
                               ),
-                            );
-                          });
-                    } else {
-                      Center(
-                        child: Text('No Item in Cart',style: TextStyle(color: Colors.black),),
-                      );
-                    }
-                    return const Center(
-                      child: CircularProgressIndicator(),
-                    );
+                            ),
+                          );
+                        });
                   },
             )),
-
-            // Container(
-            //   margin: EdgeInsets.symmetric(vertical: 10,horizontal: 10),
-            //   padding: EdgeInsets.all(15),
-            //   decoration: BoxDecoration(
-            //     color: Colors.white,
-            //     borderRadius: BorderRadius.circular(10),
-            //     boxShadow: [
-            //       BoxShadow(
-            //         color: Colors.teal.withOpacity(0.3),
-            //         spreadRadius: 1,
-            //         blurRadius: 5
-            //       )
-            //     ]),
-            //   child: Column(
-            //     children: [
-            //       Row(
-            //         mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            //         children: [
-            //           Text(
-            //             "Sub-Total"
-            //           )
-            //         ],
-            //       )
-            //     ],
-            //   ),
-            // )
           ],
         ),
       ),
@@ -379,7 +351,17 @@ class _CartScreenState extends State<CartScreen> {
               ),
               InkWell(
                 onTap: () {
-                  CheckAndNavigate();
+                  if(_loaddata != 'None' && _loaddata != 0){
+                    CheckAndNavigate();
+                  }
+                  else{
+                    ScaffoldMessenger.of(context).showSnackBar(
+                      const SnackBar(
+                        content: Text('No Items in Cart! Please add Items'),
+                        backgroundColor: Colors.black,
+                      ),
+                    );
+                  }
                 },
                 child: Container(
                   height: 50,

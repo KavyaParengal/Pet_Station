@@ -1,5 +1,3 @@
-
-
 import 'package:flutter/material.dart';
 import 'package:pet_station/models/notification.dart';
 import 'package:pet_station/services/viewNotifications.dart';
@@ -12,13 +10,6 @@ class NotificationPage extends StatefulWidget {
 }
 
 class _NotificationPageState extends State<NotificationPage> {
-
-  List<Map> notifys=[
-    {'title':'Notification title','content':'Notification content','date':'2023-08-21'},
-    {'title':'Notification title','content':'Notification content','date':'2023-08-21'},
-    {'title':'Notification title','content':'Notification content','date':'2023-08-21'}
-  ];
-
   List<NotificationModel> notificationDetails = [];
 
   Future<void> fetchNotificationItems() async {
@@ -31,7 +22,6 @@ class _NotificationPageState extends State<NotificationPage> {
 
   @override
   void initState() {
-    // TODO: implement initState
     super.initState();
     fetchNotificationItems();
   }
@@ -42,20 +32,26 @@ class _NotificationPageState extends State<NotificationPage> {
       appBar: AppBar(
         backgroundColor: Colors.teal.shade800,
         toolbarHeight: 60,
-        title: Text('Notifications',),
+        title: Text('Notifications'),
         leading: IconButton(
-          onPressed: (){
+          onPressed: () {
             Navigator.pop(context);
           },
           icon: Icon(Icons.arrow_back),
         ),
       ),
-      body: notificationDetails.isNotEmpty ? ListView.builder(
+      body: _buildNotificationList(),
+    );
+  }
+
+  Widget _buildNotificationList() {
+    if (notificationDetails.isNotEmpty) {
+      return ListView.builder(
         shrinkWrap: true,
         itemCount: notificationDetails.length,
-        itemBuilder: (context,index){
+        itemBuilder: (context, index) {
           return Padding(
-            padding: const EdgeInsets.only(top: 18,right: 12,left: 12),
+            padding: const EdgeInsets.only(top: 18, right: 12, left: 12),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.center,
               children: [
@@ -64,25 +60,36 @@ class _NotificationPageState extends State<NotificationPage> {
                   children: [
                     CircleAvatar(
                       backgroundColor: Colors.white60,
-                      child: Icon(Icons.notifications_outlined,color: Colors.teal.shade800,size: 36,),
+                      child: Icon(
+                        Icons.notifications_outlined,
+                        color: Colors.teal.shade800,
+                        size: 36,
+                      ),
                     ),
-                    SizedBox(width: 16,),
+                    SizedBox(width: 16),
                     Expanded(
                       flex: 6,
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
-                          Text(notificationDetails[index].notificationTitle.toString(),style: TextStyle(fontSize: 18,fontWeight: FontWeight.bold)),
-                          SizedBox(height: 5,),
-                          Text(notificationDetails[index].notificationContent.toString(),style: TextStyle(fontSize: 15,color: Colors.grey.shade600),textAlign: TextAlign.justify,),
+                          Text(
+                            notificationDetails[index].notificationTitle.toString(),
+                            style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+                          ),
+                          SizedBox(height: 5),
+                          Text(
+                            notificationDetails[index].notificationContent.toString(),
+                            style: TextStyle(fontSize: 15, color: Colors.grey.shade600),
+                            textAlign: TextAlign.justify,
+                          ),
                         ],
                       ),
                     ),
-                    SizedBox(width: 14,),
-                    Text(notificationDetails[index].date.toString(),style: TextStyle(fontSize: 15))
+                    SizedBox(width: 14),
+                    Text(notificationDetails[index].date.toString(), style: TextStyle(fontSize: 15)),
                   ],
                 ),
-                SizedBox(height: 12,),
+                SizedBox(height: 12),
                 Divider(
                   color: Colors.grey[300],
                   thickness: 2,
@@ -91,9 +98,11 @@ class _NotificationPageState extends State<NotificationPage> {
             ),
           );
         },
-
-
-      ) : Center(child: CircularProgressIndicator(),)
-    );
+      );
+    } else if (notificationDetails.isEmpty) {
+      return Center(child: Text('No Notifications'));
+    } else {
+      return Center(child: CircularProgressIndicator());
+    }
   }
 }

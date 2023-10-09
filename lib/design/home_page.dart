@@ -212,7 +212,7 @@ class _HomeScreenState extends State<HomeScreen> {
                       onFieldSubmitted: (String text){
                         setState(() {
                           breed=text;
-                          SearchItem.searchItems(context, breed);
+                          SearchItem.searchItems(context, breed.trim());
                           setState(() {
                             isLoaded=false;
                           });

@@ -55,6 +55,7 @@ class _Login_PageState extends State<Login_Page> {
     }
   }
 
+  final _formKey = GlobalKey<FormState>();
 
   @override
   Widget build(BuildContext context) {
@@ -104,50 +105,69 @@ class _Login_PageState extends State<Login_Page> {
                                 offset: Offset(0, 7)
                               )]
                             ),
-                            child: Column(
-                              children: [
-                                Container(
-                                  padding: EdgeInsets.all(10),
-                                  decoration: BoxDecoration(
-                                    border: Border(bottom: BorderSide(color: Colors.grey.shade200))
-                                  ),
-                                  child: TextField(
-                                    controller: unameController,
-                                    decoration: InputDecoration(
-                                      hintText: "User Name",
-                                      hintStyle: TextStyle(color: Colors.grey),
-                                      border: InputBorder.none
-                                    ),
-                                  ),
-                                ),
-                                Container(
-                                  padding: EdgeInsets.all(10),
-                                  decoration: BoxDecoration(
+                            child: Form(
+                              key: _formKey,
+                              autovalidateMode: AutovalidateMode.always,
+                              child: Column(
+                                children: [
+                                  Container(
+                                    padding: EdgeInsets.all(10),
+                                    decoration: BoxDecoration(
                                       border: Border(bottom: BorderSide(color: Colors.grey.shade200))
-                                  ),
-                                  child: TextField(
-                                    controller: pwdController,
-                                    obscureText: passwordVisible,
-                                    decoration: InputDecoration(
-                                        suffixIcon: IconButton(
-                                          icon: Icon(passwordVisible
-                                              ? Icons.visibility_off
-                                              : Icons.visibility,color: Colors.teal.shade800,),
-                                          onPressed: () {
-                                            setState(
-                                                  () {
-                                                passwordVisible = !passwordVisible;
-                                              },
-                                            );
-                                          },
-                                        ),
-                                        hintText: "Password",
+                                    ),
+                                    child: TextFormField(
+                                      validator: (value) {
+                                        if (value == null || value.trim().isEmpty) {
+                                          return 'This field is required';
+                                        }
+                                        return null;
+                                      },
+                                      controller: unameController,
+                                      decoration: InputDecoration(
+                                        hintText: "User Name",
                                         hintStyle: TextStyle(color: Colors.grey),
                                         border: InputBorder.none
+                                      ),
                                     ),
                                   ),
-                                )
-                              ],
+                                  Container(
+                                    padding: EdgeInsets.all(10),
+                                    decoration: BoxDecoration(
+                                        border: Border(bottom: BorderSide(color: Colors.grey.shade200))
+                                    ),
+                                    child: TextFormField(
+                                      validator: (value) {
+                                        if (value == null || value.trim().isEmpty) {
+                                          return 'This field is required';
+                                        }
+                                        if (value.trim().length < 6) {
+                                          return 'Password must be at least 6 characters in length';
+                                        }
+                                        return null;
+                                      },
+                                      controller: pwdController,
+                                      obscureText: passwordVisible,
+                                      decoration: InputDecoration(
+                                          suffixIcon: IconButton(
+                                            icon: Icon(passwordVisible
+                                                ? Icons.visibility_off
+                                                : Icons.visibility,color: Colors.teal.shade800,),
+                                            onPressed: () {
+                                              setState(
+                                                    () {
+                                                  passwordVisible = !passwordVisible;
+                                                },
+                                              );
+                                            },
+                                          ),
+                                          hintText: "Password",
+                                          hintStyle: TextStyle(color: Colors.grey),
+                                          border: InputBorder.none
+                                      ),
+                                    ),
+                                  )
+                                ],
+                              ),
                             ),
                           ),
                           SizedBox(height: 40,),
@@ -172,7 +192,9 @@ class _Login_PageState extends State<Login_Page> {
                               child: TextButton(
                                 child: Text('Login',style: TextStyle(color: Colors.white,fontWeight: FontWeight.bold,fontSize: 18),),
                                 onPressed: (){
-                                  _pressLoginButton();
+                                  if (_formKey.currentState!.validate()) {
+                                    _pressLoginButton();
+                                  }
                                   //Navigator.push(context, MaterialPageRoute(builder: (context)=>HomePage()));
                                 },
                               ),

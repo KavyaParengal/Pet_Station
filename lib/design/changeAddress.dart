@@ -36,6 +36,8 @@ class _ChangeAddressState extends State<ChangeAddress> {
     fetchOrderAddress();
   }
 
+  final _formKey = GlobalKey<FormState>();
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(

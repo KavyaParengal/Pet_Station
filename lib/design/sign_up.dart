@@ -60,6 +60,8 @@ class _Sign_UpState extends State<Sign_Up> {
     }
   }
 
+  final _formKey = GlobalKey<FormState>();
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -106,92 +108,135 @@ class _Sign_UpState extends State<Sign_Up> {
                                   offset: Offset(0, 7)
                               )]
                           ),
-                          child: Column(
-                            children: [
-                              Container(
-                                padding: EdgeInsets.all(10),
-                                decoration: BoxDecoration(
-                                    border: Border(bottom: BorderSide(color: Colors.grey.shade200))
-                                ),
-                                child: TextField(
-                                  controller: fullnameController,
-                                  decoration: InputDecoration(
-                                      hintText: "Full Name",
-                                      hintStyle: TextStyle(color: Colors.grey),
-                                      border: InputBorder.none
+                          child: Form(
+                            key: _formKey,
+                            autovalidateMode: AutovalidateMode.always,
+                            child: Column(
+                              children: [
+                                Container(
+                                  padding: EdgeInsets.all(10),
+                                  decoration: BoxDecoration(
+                                      border: Border(bottom: BorderSide(color: Colors.grey.shade200))
+                                  ),
+                                  child: TextFormField(
+                                    validator: (value) {
+                                      if (value == null || value.trim().isEmpty) {
+                                        return 'This field is required';
+                                      }
+                                      return null;
+                                    },
+                                    controller: fullnameController,
+                                    decoration: InputDecoration(
+                                        hintText: "Full Name",
+                                        hintStyle: TextStyle(color: Colors.grey),
+                                        border: InputBorder.none
+                                    ),
                                   ),
                                 ),
-                              ),
-                              Container(
-                                padding: EdgeInsets.all(10),
-                                decoration: BoxDecoration(
-                                    border: Border(bottom: BorderSide(color: Colors.grey.shade200))
-                                ),
-                                child: TextField(
-                                  controller: contactController,
-                                  decoration: InputDecoration(
-                                      hintText: "Phone Number",
-                                      hintStyle: TextStyle(color: Colors.grey),
-                                      border: InputBorder.none
+                                Container(
+                                  padding: EdgeInsets.all(10),
+                                  decoration: BoxDecoration(
+                                      border: Border(bottom: BorderSide(color: Colors.grey.shade200))
+                                  ),
+                                  child: TextFormField(
+                                    validator: (value) {
+                                      if (value == null || value.trim().isEmpty) {
+                                        return 'This field is required';
+                                      }
+                                      if (value.length != 10) {
+                                        return 'Mobile Number must be of 10 digit';
+                                      }
+                                      return null;
+                                    },
+                                    controller: contactController,
+                                    decoration: InputDecoration(
+                                        hintText: "Phone Number",
+                                        hintStyle: TextStyle(color: Colors.grey),
+                                        border: InputBorder.none
+                                    ),
                                   ),
                                 ),
-                              ),
-                              Container(
-                                padding: EdgeInsets.all(10),
-                                decoration: BoxDecoration(
-                                    border: Border(bottom: BorderSide(color: Colors.grey.shade200))
-                                ),
-                                child: TextField(
-                                  controller: emailController,
-                                  decoration: InputDecoration(
-                                      hintText: "Email",
-                                      hintStyle: TextStyle(color: Colors.grey),
-                                      border: InputBorder.none
+                                Container(
+                                  padding: EdgeInsets.all(10),
+                                  decoration: BoxDecoration(
+                                      border: Border(bottom: BorderSide(color: Colors.grey.shade200))
+                                  ),
+                                  child: TextFormField(
+                                    validator: (value) {
+                                      if (value == null || value.trim().isEmpty) {
+                                        return 'Please enter your email address';
+                                      }
+                                      if (!RegExp(r'\S+@\S+\.\S+').hasMatch(value)) {
+                                        return 'Please enter a valid email address';
+                                      }
+                                      return null;
+                                    },
+                                    controller: emailController,
+                                    decoration: InputDecoration(
+                                        hintText: "Email",
+                                        hintStyle: TextStyle(color: Colors.grey),
+                                        border: InputBorder.none
+                                    ),
                                   ),
                                 ),
-                              ),
-                              Container(
-                                padding: EdgeInsets.all(10),
-                                decoration: BoxDecoration(
-                                    border: Border(bottom: BorderSide(color: Colors.grey.shade200))
-                                ),
-                                child: TextField(
-                                  controller: unameController,
-                                  decoration: InputDecoration(
-                                      hintText: "Username",
-                                      hintStyle: TextStyle(color: Colors.grey),
-                                      border: InputBorder.none
+                                Container(
+                                  padding: EdgeInsets.all(10),
+                                  decoration: BoxDecoration(
+                                      border: Border(bottom: BorderSide(color: Colors.grey.shade200))
+                                  ),
+                                  child: TextFormField(
+                                    validator: (value) {
+                                      if (value == null || value.trim().isEmpty) {
+                                        return 'This field is required';
+                                      }
+                                      return null;
+                                    },
+                                    controller: unameController,
+                                    decoration: InputDecoration(
+                                        hintText: "Username",
+                                        hintStyle: TextStyle(color: Colors.grey),
+                                        border: InputBorder.none
+                                    ),
                                   ),
                                 ),
-                              ),
-                              Container(
-                                padding: EdgeInsets.all(10),
-                                decoration: BoxDecoration(
-                                    border: Border(bottom: BorderSide(color: Colors.grey.shade200))
-                                ),
-                                child: TextField(
-                                  controller: pwdController,
-                                  obscureText: passwordVisible,
-                                  decoration: InputDecoration(
-                                      suffixIcon: IconButton(
-                                        icon: Icon(passwordVisible
-                                            ? Icons.visibility_off
-                                            : Icons.visibility,color: Colors.teal.shade800,),
-                                        onPressed: () {
-                                          setState(
-                                                () {
-                                              passwordVisible = !passwordVisible;
-                                            },
-                                          );
-                                        },
-                                      ),
-                                      hintText: "Password",
-                                      hintStyle: TextStyle(color: Colors.grey),
-                                      border: InputBorder.none
+                                Container(
+                                  padding: EdgeInsets.all(10),
+                                  decoration: BoxDecoration(
+                                      border: Border(bottom: BorderSide(color: Colors.grey.shade200))
                                   ),
-                                ),
-                              )
-                            ],
+                                  child: TextFormField(
+                                    validator: (value) {
+                                      if (value == null || value.trim().isEmpty) {
+                                        return 'This field is required';
+                                      }
+                                      if (value.trim().length < 6) {
+                                        return 'Password must be at least 6 characters in length';
+                                      }
+                                      return null;
+                                    },
+                                    controller: pwdController,
+                                    obscureText: passwordVisible,
+                                    decoration: InputDecoration(
+                                        suffixIcon: IconButton(
+                                          icon: Icon(passwordVisible
+                                              ? Icons.visibility_off
+                                              : Icons.visibility,color: Colors.teal.shade800,),
+                                          onPressed: () {
+                                            setState(
+                                                  () {
+                                                passwordVisible = !passwordVisible;
+                                              },
+                                            );
+                                          },
+                                        ),
+                                        hintText: "Password",
+                                        hintStyle: TextStyle(color: Colors.grey),
+                                        border: InputBorder.none
+                                    ),
+                                  ),
+                                )
+                              ],
+                            ),
                           ),
                         ),
                         SizedBox(height: 60,),
@@ -213,7 +258,9 @@ class _Sign_UpState extends State<Sign_Up> {
                               child: Text('Sign UP',style: TextStyle(color: Colors.white,fontWeight: FontWeight.bold,fontSize: 18),),
                               onPressed: (){
                                 //Navigator.push(context, MaterialPageRoute(builder: (context)=>Login_Page()));
-                                registerUser();
+                                if (_formKey.currentState!.validate()) {
+                                  registerUser();
+                                }
                               },
                             ),
                           ),
