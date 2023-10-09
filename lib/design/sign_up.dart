@@ -61,6 +61,26 @@ class _Sign_UpState extends State<Sign_Up> {
   }
 
   final _formKey = GlobalKey<FormState>();
+  FocusNode fullnameFocusNode = FocusNode();
+  FocusNode phoneFocusNode = FocusNode();
+  FocusNode emailFocusNode = FocusNode();
+  FocusNode usernameFocusNode = FocusNode();
+  FocusNode passwordFocusNode = FocusNode();
+
+  @override
+  void initState() {
+    super.initState();
+  }
+
+  @override
+  void dispose() {
+    fullnameFocusNode.dispose();
+    phoneFocusNode.dispose();
+    emailFocusNode.dispose();
+    usernameFocusNode.dispose();
+    passwordFocusNode.dispose();
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -110,7 +130,6 @@ class _Sign_UpState extends State<Sign_Up> {
                           ),
                           child: Form(
                             key: _formKey,
-                            autovalidateMode: AutovalidateMode.always,
                             child: Column(
                               children: [
                                 Container(
@@ -124,6 +143,10 @@ class _Sign_UpState extends State<Sign_Up> {
                                         return 'This field is required';
                                       }
                                       return null;
+                                    },
+                                    focusNode: fullnameFocusNode,
+                                    onFieldSubmitted: (term) {
+                                      FocusScope.of(context).requestFocus(phoneFocusNode);
                                     },
                                     controller: fullnameController,
                                     decoration: InputDecoration(
@@ -148,6 +171,11 @@ class _Sign_UpState extends State<Sign_Up> {
                                       }
                                       return null;
                                     },
+                                    keyboardType: TextInputType.phone,
+                                    focusNode: phoneFocusNode,
+                                    onFieldSubmitted: (term) {
+                                      FocusScope.of(context).requestFocus(emailFocusNode);
+                                    },
                                     controller: contactController,
                                     decoration: InputDecoration(
                                         hintText: "Phone Number",
@@ -171,6 +199,11 @@ class _Sign_UpState extends State<Sign_Up> {
                                       }
                                       return null;
                                     },
+                                    keyboardType: TextInputType.emailAddress,
+                                    focusNode: emailFocusNode,
+                                    onFieldSubmitted: (term) {
+                                      FocusScope.of(context).requestFocus(usernameFocusNode);
+                                    },
                                     controller: emailController,
                                     decoration: InputDecoration(
                                         hintText: "Email",
@@ -190,6 +223,10 @@ class _Sign_UpState extends State<Sign_Up> {
                                         return 'This field is required';
                                       }
                                       return null;
+                                    },
+                                    focusNode: usernameFocusNode,
+                                    onFieldSubmitted: (term) {
+                                      FocusScope.of(context).requestFocus(passwordFocusNode);
                                     },
                                     controller: unameController,
                                     decoration: InputDecoration(
@@ -214,6 +251,7 @@ class _Sign_UpState extends State<Sign_Up> {
                                       }
                                       return null;
                                     },
+                                    focusNode: passwordFocusNode,
                                     controller: pwdController,
                                     obscureText: passwordVisible,
                                     decoration: InputDecoration(

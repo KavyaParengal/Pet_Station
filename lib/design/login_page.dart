@@ -56,6 +56,20 @@ class _Login_PageState extends State<Login_Page> {
   }
 
   final _formKey = GlobalKey<FormState>();
+  FocusNode usernameFocusNode = FocusNode();
+  FocusNode passwordFocusNode = FocusNode();
+
+  @override
+  void initState() {
+    super.initState();
+  }
+
+  @override
+  void dispose() {
+    usernameFocusNode.dispose();
+    passwordFocusNode.dispose();
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -107,7 +121,6 @@ class _Login_PageState extends State<Login_Page> {
                             ),
                             child: Form(
                               key: _formKey,
-                              autovalidateMode: AutovalidateMode.always,
                               child: Column(
                                 children: [
                                   Container(
@@ -121,6 +134,10 @@ class _Login_PageState extends State<Login_Page> {
                                           return 'This field is required';
                                         }
                                         return null;
+                                      },
+                                      focusNode: usernameFocusNode,
+                                      onFieldSubmitted: (term) {
+                                        FocusScope.of(context).requestFocus(passwordFocusNode);
                                       },
                                       controller: unameController,
                                       decoration: InputDecoration(
@@ -144,6 +161,9 @@ class _Login_PageState extends State<Login_Page> {
                                           return 'Password must be at least 6 characters in length';
                                         }
                                         return null;
+                                      },
+                                      focusNode: passwordFocusNode, // Assign FocusNode
+                                      onFieldSubmitted: (term) {
                                       },
                                       controller: pwdController,
                                       obscureText: passwordVisible,
