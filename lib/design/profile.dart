@@ -57,12 +57,11 @@ class _ProfilePageState extends State<ProfilePage> {
     }
   }
 
-
+  final _formKey = GlobalKey<FormState>();
 
   @override
   void initState() {
     super.initState();
-    // Fetch the user details when the widget initializes
     getoutId();
   }
 
@@ -127,125 +126,156 @@ class _ProfilePageState extends State<ProfilePage> {
                 child: Padding(
                   padding: EdgeInsets.all(20),
                   child: SingleChildScrollView(
-                    child: Column(
-                      children: [
-                        SizedBox(height: 70,),
-                        Container(
-                          padding: EdgeInsets.all(10),
-                          decoration: BoxDecoration(
-                              color: Colors.white,
-                              borderRadius: BorderRadius.circular(10),
-                              boxShadow:[
-                                BoxShadow(
-                                  color: Colors.teal.shade800,
-                                  blurRadius: 16,
-                                  offset: Offset(2, 7)
-                              )]
-                          ),
-                          child: Column(
-                            children: [
-                              Container(
-                                padding: EdgeInsets.all(10),
-                                decoration: BoxDecoration(
-                                    border: Border(bottom: BorderSide(color: Colors.grey.shade200))
-                                ),
-                                child: Column(
-                                  crossAxisAlignment: CrossAxisAlignment.start,
-                                  children: [
-                                    Text('Name',style: TextStyle(
-                                        fontWeight: FontWeight.bold,
-                                        fontSize: 20,
-                                        color: Colors.grey.shade700
-                                    ),),
-                                    TextField(
-                                      controller: fullnameController,
-                                      decoration: InputDecoration(
-                                          hintText: "${name}",
-                                          hintStyle: TextStyle(color: Colors.grey),
-                                          border: InputBorder.none,
+                    child: Form(
+                      key: _formKey,
+                      child: Column(
+                        children: [
+                          SizedBox(height: 70,),
+                          Container(
+                            padding: EdgeInsets.all(10),
+                            decoration: BoxDecoration(
+                                color: Colors.white,
+                                borderRadius: BorderRadius.circular(10),
+                                boxShadow:[
+                                  BoxShadow(
+                                    color: Colors.teal.shade800,
+                                    blurRadius: 16,
+                                    offset: Offset(2, 7)
+                                )]
+                            ),
+                            child: Column(
+                              children: [
+                                Container(
+                                  padding: EdgeInsets.all(10),
+                                  decoration: BoxDecoration(
+                                      border: Border(bottom: BorderSide(color: Colors.grey.shade200))
+                                  ),
+                                  child: Column(
+                                    crossAxisAlignment: CrossAxisAlignment.start,
+                                    children: [
+                                      Text('Name',style: TextStyle(
+                                          fontWeight: FontWeight.bold,
+                                          fontSize: 20,
+                                          color: Colors.grey.shade700
+                                      ),),
+                                      TextFormField(
+                                        validator: (value) {
+                                          if (value == null || value.isEmpty) {
+                                            return 'This field is required';
+                                          }
+                                          return null;
+                                        },
+                                        controller: fullnameController,
+                                        decoration: InputDecoration(
+                                            hintText: "${name}",
+                                            hintStyle: TextStyle(color: Colors.grey),
+                                            border: InputBorder.none,
 
+                                        ),
                                       ),
-                                    ),
-                                  ],
+                                    ],
+                                  ),
                                 ),
-                              ),
-                              Container(
-                                padding: EdgeInsets.all(10),
-                                decoration: BoxDecoration(
-                                    border: Border(bottom: BorderSide(color: Colors.grey.shade200))
+                                Container(
+                                  padding: EdgeInsets.all(10),
+                                  decoration: BoxDecoration(
+                                      border: Border(bottom: BorderSide(color: Colors.grey.shade200))
+                                  ),
+                                  child: Column(
+                                    crossAxisAlignment: CrossAxisAlignment.start,
+                                    children: [
+                                      Text('Phone Number',style: TextStyle(
+                                          fontWeight: FontWeight.bold,
+                                          fontSize: 20,
+                                          color: Colors.grey.shade700
+                                      ),),
+                                      TextFormField(
+                                        validator: (value) {
+                                          if (value == null || value.trim().isEmpty) {
+                                            return 'This field is required';
+                                          }
+                                          if (value.length != 10) {
+                                            return 'Phone Number must be of 10 digit';
+                                          }
+                                          return null;
+                                        },
+                                        keyboardType: TextInputType.phone,
+                                        controller: contactController,
+                                        decoration: InputDecoration(
+                                            hintText: "${contact}",
+                                            hintStyle: TextStyle(color: Colors.grey),
+                                            border: InputBorder.none
+                                        ),
+                                      ),
+                                    ],
+                                  ),
                                 ),
-                                child: Column(
-                                  crossAxisAlignment: CrossAxisAlignment.start,
-                                  children: [
-                                    Text('Phone Number',style: TextStyle(
+                                Container(
+                                  padding: EdgeInsets.all(10),
+                                  decoration: BoxDecoration(
+                                      border: Border(bottom: BorderSide(color: Colors.grey.shade200))
+                                  ),
+                                  child: Column(
+                                    crossAxisAlignment: CrossAxisAlignment.start,
+                                    children: [
+                                      Text('Email',style: TextStyle(
                                         fontWeight: FontWeight.bold,
                                         fontSize: 20,
                                         color: Colors.grey.shade700
-                                    ),),
-                                    TextField(
-                                      controller: contactController,
-                                      decoration: InputDecoration(
-                                          hintText: "${contact}",
-                                          hintStyle: TextStyle(color: Colors.grey),
-                                          border: InputBorder.none
+                                      ),),
+                                      TextFormField(
+                                        validator: (value) {
+                                          if (value == null || value.trim().isEmpty) {
+                                            return 'Please enter your email address';
+                                          }
+                                          if (!RegExp(r'\S+@\S+\.\S+').hasMatch(value)) {
+                                            return 'Please enter a valid email address';
+                                          }
+                                          return null;
+                                        },
+                                        keyboardType: TextInputType.emailAddress,
+                                        controller: emailController,
+                                        decoration: InputDecoration(
+                                            hintText: "${email}",
+                                            hintStyle: TextStyle(color: Colors.grey),
+                                            border: InputBorder.none
+                                        ),
                                       ),
-                                    ),
-                                  ],
+                                    ],
+                                  ),
                                 ),
-                              ),
-                              Container(
-                                padding: EdgeInsets.all(10),
-                                decoration: BoxDecoration(
-                                    border: Border(bottom: BorderSide(color: Colors.grey.shade200))
-                                ),
-                                child: Column(
-                                  crossAxisAlignment: CrossAxisAlignment.start,
-                                  children: [
-                                    Text('Email',style: TextStyle(
-                                      fontWeight: FontWeight.bold,
-                                      fontSize: 20,
-                                      color: Colors.grey.shade700
-                                    ),),
-                                    TextField(
-                                      controller: emailController,
-                                      decoration: InputDecoration(
-                                          hintText: "${email}",
-                                          hintStyle: TextStyle(color: Colors.grey),
-                                          border: InputBorder.none
-                                      ),
-                                    ),
-                                  ],
-                                ),
-                              ),
-                            ],
-                          ),
-                        ),
-                        SizedBox(height: 65,),
-                        Container(
-                          height: 50,
-                          margin: EdgeInsets.symmetric(horizontal: 100),
-                          decoration: BoxDecoration(
-                            borderRadius: BorderRadius.circular(10,),
-                              color: Colors.teal.shade800,
-                              boxShadow: [
-                                BoxShadow(
-                                  color: Colors.grey.shade400,
-                                  blurRadius: 2,
-                                  offset: Offset(4,4),
-                                  spreadRadius: 1
-                              )]
-                          ),
-                          child: Center(
-                            child: TextButton(
-                              child: Text('Edit Profile',style: TextStyle(color: Colors.white,fontWeight: FontWeight.bold,fontSize: 18),),
-                              onPressed: (){
-                                //Navigator.push(context, MaterialPageRoute(builder: (context)=>HomePage()));
-                                updateUserProfile.updateProfile(context, fullnameController.text, contactController.text, emailController.text);
-                              },
+                              ],
                             ),
                           ),
-                        ),
-                      ],
+                          SizedBox(height: 65,),
+                          Container(
+                            height: 50,
+                            margin: EdgeInsets.symmetric(horizontal: 100),
+                            decoration: BoxDecoration(
+                              borderRadius: BorderRadius.circular(10,),
+                                color: Colors.teal.shade800,
+                                boxShadow: [
+                                  BoxShadow(
+                                    color: Colors.grey.shade400,
+                                    blurRadius: 2,
+                                    offset: Offset(4,4),
+                                    spreadRadius: 1
+                                )]
+                            ),
+                            child: Center(
+                              child: TextButton(
+                                child: Text('Edit Profile',style: TextStyle(color: Colors.white,fontWeight: FontWeight.bold,fontSize: 18),),
+                                onPressed: (){
+                                  if (_formKey.currentState!.validate()) {
+                                    updateUserProfile.updateProfile(context, fullnameController.text, contactController.text, emailController.text);
+                                  }
+                                  //Navigator.push(context, MaterialPageRoute(builder: (context)=>HomePage()));
+                                },
+                              ),
+                            ),
+                          ),
+                        ],
+                      ),
                     ),
                   ),
                 ),

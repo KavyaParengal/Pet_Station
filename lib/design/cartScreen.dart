@@ -228,14 +228,19 @@ class _CartScreenState extends State<CartScreen> {
                                           SizedBox(
                                             height: 10,
                                           ),
-                                          Text(
-                                            snapshot.data![index].breedname
-                                                .toString(),
-                                            style: TextStyle(
-                                                fontSize: 13,
-                                                color: Colors.black),
-                                            maxLines: 2,
-                                            overflow: TextOverflow.visible,
+                                          Container(
+                                            constraints: BoxConstraints(
+                                              maxWidth: itemWidth ,
+                                            ),
+                                            child: Text(
+                                              snapshot.data![index].breedname
+                                                  .toString(),
+                                              style: TextStyle(
+                                                  fontSize: 13,
+                                                  color: Colors.black),
+                                              maxLines: 2,
+                                              overflow: TextOverflow.visible,
+                                            ),
                                           ),
                                           SizedBox(
                                             height: 10,

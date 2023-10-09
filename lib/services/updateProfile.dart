@@ -14,14 +14,13 @@ class UpdateProfile{
   Future<UserRegisterModel> updateProfile(BuildContext context, String name, String phoneNum, String email) async{
 
     SharedPreferences prefs = await SharedPreferences.getInstance();
-    int userId = (prefs.getInt('login_id') ?? 0 ) ;
+    int userId = (prefs.getInt('user_id') ?? 0 ) ;
 
     var userData= {
       "fullnameController": name,
       "phoneController": phoneNum,
       "emailController":email,
     };
-
     try{
       var response = await Api().putData(userData, APIConstants.updateProfile+userId.toString());
       var body = json.decode(response.body);

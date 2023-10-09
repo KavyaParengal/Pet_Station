@@ -26,10 +26,10 @@ class UserRegisterModel{
 
   factory UserRegisterModel.fromJson(Map<String, dynamic> json){
     return UserRegisterModel(
-      id: json['id'],
-      fullnameController: json['fullnameController'],
-      phoneController: json['phoneController'],
-      emailController: json['emailController'],
+      id: json['id']==null?0:json['id'],
+      fullnameController: json['fullnameController']==null?'':json['fullnameController'],
+      phoneController: json['phoneController']==null?'':json['phoneController'],
+      emailController: json['emailController']==null?'':json['emailController'],
       usernmController: json['usernmController'],
       pwdController: json['pwdController'],
       role: json['role'],
