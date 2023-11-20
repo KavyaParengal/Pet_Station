@@ -1,11 +1,10 @@
 
-import 'package:expandable_text/expandable_text.dart';
 import 'package:expansion_widget/expansion_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_image_slideshow/flutter_image_slideshow.dart';
 import 'package:flutter_rating_bar/flutter_rating_bar.dart';
 import 'package:pet_station/config/constants.dart';
-import 'package:pet_station/design/cartScreen.dart';
+import 'package:pet_station/screens/cartScreen.dart';
 import 'package:pet_station/models/favoriteItemModel.dart';
 import 'package:pet_station/models/foodModel.dart';
 import 'package:pet_station/services/favoriteFoodItem.dart';
@@ -13,7 +12,6 @@ import 'package:pet_station/services/foodtocart.dart';
 import 'package:pet_station/services/rateFood.dart';
 import 'package:pet_station/services/viewFavoriteItem.dart';
 import 'package:pet_station/services/viewSingleFoodData.dart';
-import 'package:readmore/readmore.dart';
 
 import '../services/deleteFavoriteItemInHomePage.dart';
 

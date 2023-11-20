@@ -1,7 +1,7 @@
 
 import 'package:flutter/material.dart';
 import 'package:pet_station/config/constants.dart';
-import 'package:pet_station/design/home_page.dart';
+import 'package:pet_station/screens/home_page.dart';
 import 'package:pet_station/main.dart';
 import 'package:pet_station/models/userregister.dart';
 import 'package:pet_station/services/updateProfile.dart';

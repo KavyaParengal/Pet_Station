@@ -1,8 +1,8 @@
 
 import 'package:flutter/material.dart';
-import 'package:pet_station/design/deliveryAddress.dart';
-import 'package:pet_station/design/editAddress.dart';
-import 'package:pet_station/design/orderConfirmation.dart';
+import 'package:pet_station/screens/deliveryAddress.dart';
+import 'package:pet_station/screens/editAddress.dart';
+import 'package:pet_station/screens/orderConfirmation.dart';
 import 'package:pet_station/models/orderAddress.dart';
 import 'package:pet_station/services/viewAddress.dart';
 

@@ -3,7 +3,7 @@ import 'dart:convert';
 
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
-import 'package:pet_station/design/login_page.dart';
+import 'package:pet_station/screens/login_page.dart';
 import 'package:pet_station/services/apiService.dart';
 
 class Sign_Up extends StatefulWidget {

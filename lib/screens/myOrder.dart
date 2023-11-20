@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:pet_station/config/constants.dart';
-import 'package:pet_station/design/SingleFoodScreen.dart';
-import 'package:pet_station/design/single_pet.dart';
+import 'package:pet_station/screens/SingleFoodScreen.dart';
+import 'package:pet_station/screens/single_pet.dart';
 import 'package:pet_station/models/orderItems.dart';
 import 'package:pet_station/services/viewOrders.dart';
 

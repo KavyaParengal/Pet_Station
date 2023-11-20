@@ -1,6 +1,6 @@
 
 import 'package:flutter/material.dart';
-import 'package:pet_station/design/myOrder.dart';
+import 'package:pet_station/screens/myOrder.dart';
 import 'package:pet_station/main.dart';
 
 class OrderSuccessMessage extends StatefulWidget {

@@ -2,8 +2,7 @@ import 'dart:convert';
 
 import 'package:flutter/material.dart';
 import 'package:pet_station/config/constants.dart';
-import 'package:pet_station/design/message.dart';
-import 'package:pet_station/models/chat.dart';
+import 'package:pet_station/screens/message.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:http/http.dart' as http;
 

@@ -3,8 +3,7 @@ import 'dart:convert';
 
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
-import 'package:pet_station/design/home_page.dart';
-import 'package:pet_station/design/sign_up.dart';
+import 'package:pet_station/screens/sign_up.dart';
 import 'package:pet_station/main.dart';
 import 'package:pet_station/services/apiService.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -31,7 +30,7 @@ class _Login_PageState extends State<Login_Page> {
       _isLoading = true;
     });
     var data = {
-      'usernmController': unameController.text.trim(), //username for email
+      'usernmController': unameController.text.trim(),
       'pwdController': pwdController.text.trim()
     };
     print("data${data}");

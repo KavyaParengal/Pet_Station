@@ -3,7 +3,7 @@ import 'dart:convert';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:pet_station/config/constants.dart';
-import 'package:pet_station/design/searchResult.dart';
+import 'package:pet_station/screens/searchResult.dart';
 import 'package:pet_station/models/viewCategoryItems.dart';
 import 'package:pet_station/services/apiService.dart';
 

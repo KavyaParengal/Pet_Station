@@ -3,7 +3,7 @@ import 'dart:convert';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:pet_station/config/constants.dart';
-import 'package:pet_station/design/orderConfirmation.dart';
+import 'package:pet_station/screens/orderConfirmation.dart';
 import 'package:pet_station/models/orderAddress.dart';
 import 'package:pet_station/services/apiService.dart';
 

@@ -1,12 +1,12 @@
 
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
-import 'package:pet_station/design/cartScreen.dart';
-import 'package:pet_station/design/favorite.dart';
-import 'package:pet_station/design/message.dart';
-import 'package:pet_station/design/login_page.dart';
-import 'package:pet_station/design/myOrder.dart';
-import 'package:pet_station/design/profile.dart';
+import 'package:pet_station/screens/cartScreen.dart';
+import 'package:pet_station/screens/favorite.dart';
+import 'package:pet_station/screens/message.dart';
+import 'package:pet_station/screens/login_page.dart';
+import 'package:pet_station/screens/myOrder.dart';
+import 'package:pet_station/screens/profile.dart';
 import 'package:pet_station/models/userregister.dart';
 import 'package:pet_station/services/updateProfile.dart';
 import 'package:pet_station/services/viewProfile.dart';

@@ -4,7 +4,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:pet_station/config/constants.dart';
 import 'package:http/http.dart' as http;
-import 'package:pet_station/design/favorite.dart';
+import 'package:pet_station/screens/favorite.dart';
 
 class DeleteFavoriteItemAPI{
 

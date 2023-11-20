@@ -2,7 +2,7 @@
 import 'dart:async';
 
 import 'package:flutter/material.dart';
-import 'package:pet_station/design/start_page.dart';
+import 'package:pet_station/screens/start_page.dart';
 import 'package:pet_station/main.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 

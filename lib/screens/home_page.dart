@@ -2,10 +2,10 @@ import 'dart:convert';
 
 import 'package:flutter/material.dart';
 import 'package:pet_station/config/constants.dart';
-import 'package:pet_station/design/SingleFoodScreen.dart';
-import 'package:pet_station/design/cartScreen.dart';
-import 'package:pet_station/design/notification.dart';
-import 'package:pet_station/design/single_pet.dart';
+import 'package:pet_station/screens/SingleFoodScreen.dart';
+import 'package:pet_station/screens/cartScreen.dart';
+import 'package:pet_station/screens/notification.dart';
+import 'package:pet_station/screens/single_pet.dart';
 import 'package:pet_station/models/favoriteItemModel.dart';
 import 'package:pet_station/models/foodModel.dart';
 import 'package:pet_station/models/viewCategory.dart';

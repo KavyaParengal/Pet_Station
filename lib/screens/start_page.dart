@@ -1,6 +1,6 @@
 
 import 'package:flutter/material.dart';
-import 'package:pet_station/design/login_page.dart';
+import 'package:pet_station/screens/login_page.dart';
 import 'package:pet_station/main.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 

@@ -3,7 +3,7 @@ import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'package:pet_station/config/constants.dart';
-import 'package:pet_station/design/cartScreen.dart';
+import 'package:pet_station/screens/cartScreen.dart';
 import 'package:pet_station/models/addtoCart.dart';
 import 'package:pet_station/models/viewCategory.dart';
 import 'package:pet_station/models/viewCategoryItems.dart';

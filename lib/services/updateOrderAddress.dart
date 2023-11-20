@@ -3,7 +3,7 @@ import 'dart:convert';
 
 import 'package:flutter/material.dart';
 import 'package:pet_station/config/constants.dart';
-import 'package:pet_station/design/changeAddress.dart';
+import 'package:pet_station/screens/changeAddress.dart';
 import 'package:pet_station/models/orderAddress.dart';
 import 'package:pet_station/services/apiService.dart';
 
